@@ -58,47 +58,38 @@ namespace ConsoleApp2020._3._2
                         }
 
                 }
-            } 
-           
+            }
 
 
+            Console.WriteLine("--------------------------------------------------------------------");
             Console.WriteLine("功能二：随机创建十个对象并计算面积之和\n");
-            Random r = new Random();
-            int num_Rectangle = r.Next(10);
-            System.Threading.Thread.Sleep(100);
-            int num_Square = r.Next(0, 10- num_Rectangle);
-            System.Threading.Thread.Sleep(100);
-            int num_Triangle = 10 - num_Rectangle - num_Square;
-            int num = 0;double s = 0;
-            while (num< num_Rectangle)
+             Random r = new Random(); double s = 0;
+             for(int i = 0; i < 10; i++)
             {
-                Rectangle f =(Rectangle)Factory.CreateRandomShape("Rectangle");
-                Console.WriteLine("创建成功一个长方形，长为" + f.Length + "，宽为：" + f.Width + ",面积为:" + f.getS());
-                System.Threading.Thread.Sleep(100);
-                s += f.getS();
-                num++;
-            }
-            num = 0;
-            while (num < num_Square)
-            {
-                Square f = (Square)Factory.CreateRandomShape("Square");
-                Console.WriteLine("创建成功一个正方形，边长为" + f.Length  + ",面积为:" + f.getS());
-                System.Threading.Thread.Sleep(100);
-                s += f.getS();
-                num++;
-            }
-            num = 0;
-            while (num < num_Triangle)
-            {
-                Triangle f = (Triangle)Factory.CreateRandomShape("Triangle");
-                Console.WriteLine("创建成功一个三角形，三边长为" + f.A+"、"+f.B+"、"+f.B+ ",面积为:" + f.getS());
-                System.Threading.Thread.Sleep(100);
-                s += f.getS();
-                num++;
+                double choose=r.NextDouble();
+                if(choose<0.333)
+                {
+                    Rectangle f = (Rectangle)Factory.CreateRandomShape("Rectangle");
+                    Console.WriteLine(i + 1 + " 创建成功一个长方形，长为" + f.Length + "，宽为：" + f.Width + ",面积为:" + f.getS());
+                    System.Threading.Thread.Sleep(100);
+                    s += f.getS();
+                }else if (0.333 < choose && choose < 0.666)
+                {
+                    Square f = (Square)Factory.CreateRandomShape("Square");
+                    Console.WriteLine(i + 1 + " 创建成功一个正方形，边长为" + f.Length + ",面积为:" + f.getS());
+                    System.Threading.Thread.Sleep(100);
+                    s += f.getS();
+                }
+                else
+                {
+                    Triangle f = (Triangle)Factory.CreateRandomShape("Triangle");
+                    Console.WriteLine(i + 1 + " 创建成功一个三角形，三边长为" + f.A + "、" + f.B + "、" + f.B + ",面积为:" + f.getS());
+                    System.Threading.Thread.Sleep(100);
+                    s += f.getS();
+                }
+
             }
             Console.WriteLine("总面积为：" + s);
-
-
             Console.ReadKey();
 
         }
@@ -188,8 +179,7 @@ namespace ConsoleApp2020._3._2
                 }
                 set
                 {
-                    if (value + b > c && value + c > b && b + c > value) a = value;
-                    else if (b == 0 && c == 0) a = value;
+                    if (value + b > c && value + c > b && b + c > value&&value>0) a = value;
                     else Console.WriteLine("赋值失败");
                 }
             }
@@ -201,8 +191,7 @@ namespace ConsoleApp2020._3._2
                 }
                 set
                 {
-                    if (a + value > c && a + c > value && value + c > a) b = value;
-                    else if (c == 0) b = value;
+                    if (a + value > c && a + c > value && value + c > a&&value>0) b = value;
                     else Console.WriteLine("赋值失败");
                 }
             }
@@ -214,16 +203,16 @@ namespace ConsoleApp2020._3._2
                 }
                 set
                 {
-                    if (a + b > value && a + value > b && b + value > a) c = value;
+                    if (a + b > value && a + value > b && b + value > a&&value>0) c = value;
                     else Console.WriteLine("赋值失败");
                 }
             }
 
             public Triangle(double x, double y, double z)
             {
-                A = x;
-                B = y;
-                C = z;
+                a = x;
+                b = y;
+                c = z;
             }
 
             public override double getS()
@@ -242,23 +231,25 @@ namespace ConsoleApp2020._3._2
                     case "Rectangle":
                             if (args[0] > args[1] && args[1] > 0)
                             s=new Rectangle(args[0], args[1]);
-                            break;
+                            return s;
+                            
 
                     case "Square":
                            if (args[0] > 0) s=new Square(args[0]);
-                           break;
+                            return s;
+                           
 
                     case "Triangle":
-                           if (args[0] < args[1] + args[2] && args[1] < args[0] + args[2] &&
-                           args[2] < args[0] + args[1] && args[0] > 0 && args[1] > 0 && args[2] > 0)
-                           s=new Triangle(args[0], args[1], args[2]);
-                            break;
+                        if(args[0]+args[1]>args[2]&&args[0]+args[2]>args[1]&&args[1]+args[2]>args[0]&&args[0]>0&&args[1]>0&&args[2]>0)
+                            s = new Triangle(args[0], args[1], args[2]);
+                        return s;
+                           
                             
-                   default: break;
+                   default: return null;
 
                 }
               
-                return s;
+                
             }
 
             public static Shape CreateRandomShape(string type)
@@ -272,6 +263,7 @@ namespace ConsoleApp2020._3._2
                         while (flag)
                         {
                             double r1 = 10 * r.NextDouble();
+                            System.Threading.Thread.Sleep(100);
                             double r2 = 10 * r.NextDouble();
 
                              s = Factory.creatShape("Rectangle", new double[] { r1, r2 });
@@ -292,11 +284,13 @@ namespace ConsoleApp2020._3._2
                         while (flag)
                         {
                             double r1 = 10 * r.NextDouble();
+                            System.Threading.Thread.Sleep(100);
                             double r2 = 10 * r.NextDouble();
+                            System.Threading.Thread.Sleep(100);
                             double r3 = 10 * r.NextDouble();
-
-                             s = Factory.creatShape("Triangle", new double[] { r1, r2,r3 });
-                            if (s != null) flag = false;
+                            
+                            s = Factory.creatShape("Triangle", new double[] { r1, r2,r3 });
+                            if(s!=null) flag = false;
                         }
                         break;
                     default:Console.Write("类型错误"); break;
