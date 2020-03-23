@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ArrayOfOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Order>
+    <ID>1</ID>
+    <Goods>
+      <OrderItem>
+        <Good>
+          <GoodsName>apple</GoodsName>
+          <GoodsPrice>10.8</GoodsPrice>
+        </Good>
+        <Count>2</Count>
+      </OrderItem>
+      <OrderItem>
+        <Good>
+          <GoodsName>banana</GoodsName>
+          <GoodsPrice>22.8</GoodsPrice>
+        </Good>
+        <Count>3</Count>
+      </OrderItem>
+      <OrderItem>
+        <Good>
+          <GoodsName>cake</GoodsName>
+          <GoodsPrice>49.99</GoodsPrice>
+        </Good>
+        <Count>1</Count>
+      </OrderItem>
+    </Goods>
+    <Customer>
+      <name>Mike</name>
+      <address>New York</address>
+    </Customer>
+    <Time>2020-03-24T01:13:47.1944736+08:00</Time>
+  </Order>
+</ArrayOfOrder>
