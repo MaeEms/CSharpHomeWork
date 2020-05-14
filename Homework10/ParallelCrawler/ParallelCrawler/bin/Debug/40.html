@@ -1,0 +1,770 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="资源下载： &amp;quot;https://github.com/mengning/mykernel&amp;quot; 实验内容： 1、配置实验环境，完成Linux内核编译。 2、对系统源码进行修改，基于myk" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>基于mykernel 2.0编写一个操作系统内核 - 东寻 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/custom/bundle-custom.min.css?v=1ssrnY3Il79Ok472qeVrpxlSprSXcHhYPgZC5S3wtVM" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=-Yh290MhQyDeXLmvKTSses9H6-49lqbpXFh55zvS0w8" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/ustca/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/ustca/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/ustca/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 544361;
+        var currentBlogApp = 'ustca';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Custom';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/ustca/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/ustca/">东寻</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/ustca/">
+首页</a>
+</li>
+<li>
+
+
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E4%B8%9C%E5%AF%BB">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/ustca/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+98&nbsp; </span>
+<span id="stats_article_count">文章 - 
+2&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+10</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/ustca/p/12874785.html">基于mykernel 2.0编写一个操作系统内核</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>资源下载：<a href="https://github.com/mengning/mykernel">https://github.com/mengning/mykernel</a></p>
+<blockquote>
+<p>实验内容：</p>
+<p>1、配置实验环境，完成Linux内核编译。</p>
+<p>2、对系统源码进行修改，基于mykernel 2.0实现一个简单的操作系统内核。</p>
+<p>3、简要分析操作系统内核核心功能及运行工作机制。</p>
+<p>实验环境：</p>
+<p>VMWare虚拟机下的Ubuntu18.04.4，实验采用的内核版本为linux-5.4.34。</p>
+</blockquote>
+<hr>
+<h2 id="1-内核编译">1 内核编译</h2>
+<h3 id="11-准备工作">1.1 准备工作</h3>
+<h4 id="111-修改镜像源地址">1.1.1 修改镜像源地址</h4>
+<p>为了节省资源下载时间，使用国内镜像源。</p>
+<pre><code>cd /etc/apt/
+sudo cp sources.list sources.list.bk
+sudo gedit sources.list
+</code></pre>
+<pre><code class="language-c">deb http://mirrors.aliyun.com/ubuntu bionic main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu bionic-updates main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu bionic-security main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu bionic-proposed main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu bionic-backports main multiverse restricted universe
+</code></pre>
+<p>将sources.list修改保存后，更新apt源。</p>
+<pre><code>sudo apt-get update
+</code></pre>
+<h4 id="112-添加hosts映射">1.1.2 添加hosts映射</h4>
+<p>新增GitHub资源域名与对应IP的映射。</p>
+<pre><code>sudo vi /etc/hosts
+</code></pre>
+<pre><code>151.101.76.133 raw.githubusercontent.com
+</code></pre>
+<h4 id="113-安装axel">1.1.3 安装axel</h4>
+<p>多线程下载工具，用于下载Linux内核。</p>
+<pre><code>sudo apt install axel
+</code></pre>
+<h3 id="12-下载内核补丁">1.2 下载内核补丁</h3>
+<pre><code>wget https://raw.github.com/mengning/mykernel/master/mykernel-2.0_for_linux-5.4.34.patch
+</code></pre>
+<p>补丁文件如下，根据diff对比，主要做了以下改动：</p>
+<ul>
+<li>在时钟中断时调用自定义的my_timer_handler函数，打印输出&gt;&gt;&gt;&gt;&gt;&gt;&gt;my_timer_handler here&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</li>
+<li>在start_kernel.h与timer.h中分别声明my_start_kernel与my_timer_handler函数</li>
+<li>在main.c中调用my_start_kernel函数</li>
+<li>在Makefile中新增mykernel的编译路径</li>
+<li>创建mykernel的Makefile文件</li>
+<li>编写myinterrupt.c与mymain.c文件，mymain.c中模拟系统运行，每100000次循环输出一次</li>
+</ul>
+<pre><code>diff -Naur linux-5.4.34/arch/x86/kernel/time.c linux-5.4.34-mykernel/arch/x86/kernel/time.c
+--- linux-5.4.34/arch/x86/kernel/time.c	2020-04-21 15:05:05.000000000 +0800
++++ linux-5.4.34-mykernel/arch/x86/kernel/time.c	2020-04-25 21:58:16.436717811 +0800
+@@ -16,6 +16,7 @@
+ #include &lt;linux/irq.h&gt;
+ #include &lt;linux/i8253.h&gt;
+ #include &lt;linux/time.h&gt;
++#include &lt;linux/timer.h&gt;
+ #include &lt;linux/export.h&gt;
+ 
+ #include &lt;asm/vsyscall.h&gt;
+@@ -59,6 +60,7 @@
+ static irqreturn_t timer_interrupt(int irq, void *dev_id)
+ {
+ 	global_clock_event-&gt;event_handler(global_clock_event);
++    	my_timer_handler();
+ 	return IRQ_HANDLED;
+ }
+ 
+diff -Naur linux-5.4.34/include/linux/start_kernel.h linux-5.4.34-mykernel/include/linux/start_kernel.h
+--- linux-5.4.34/include/linux/start_kernel.h	2020-04-21 15:05:05.000000000 +0800
++++ linux-5.4.34-mykernel/include/linux/start_kernel.h	2020-04-25 22:00:17.304717811 +0800
+@@ -9,6 +9,7 @@
+    up something else. */
+ 
+ extern asmlinkage void __init start_kernel(void);
++extern void __init my_start_kernel(void);
+ extern void __init arch_call_rest_init(void);
+ extern void __ref rest_init(void);
+ 
+diff -Naur linux-5.4.34/include/linux/timer.h linux-5.4.34-mykernel/include/linux/timer.h
+--- linux-5.4.34/include/linux/timer.h	2020-04-21 15:05:05.000000000 +0800
++++ linux-5.4.34-mykernel/include/linux/timer.h	2020-04-25 21:56:45.064717811 +0800
+@@ -193,6 +193,8 @@
+ 
+ extern void init_timers(void);
+ extern void run_local_timers(void);
++extern void my_timer_handler(void);
++
+ struct hrtimer;
+ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+diff -Naur linux-5.4.34/init/main.c linux-5.4.34-mykernel/init/main.c
+--- linux-5.4.34/init/main.c	2020-04-21 15:05:05.000000000 +0800
++++ linux-5.4.34-mykernel/init/main.c	2020-04-25 22:01:13.476717811 +0800
+@@ -781,6 +781,7 @@
+ 	arch_post_acpi_subsys_init();
+ 	sfi_init_late();
+ 
++    	my_start_kernel();
+ 	/* Do the rest non-__init'ed, we're now alive */
+ 	arch_call_rest_init();
+ }
+diff -Naur linux-5.4.34/Makefile linux-5.4.34-mykernel/Makefile
+--- linux-5.4.34/Makefile	2020-04-21 15:05:05.000000000 +0800
++++ linux-5.4.34-mykernel/Makefile	2020-04-25 22:02:47.144717811 +0800
+@@ -1012,7 +1012,7 @@
+ export MODORDER := $(extmod-prefix)modules.order
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+-core-y		+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
++core-y		+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ mykernel/
+ 
+ vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+ 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+diff -Naur linux-5.4.34/mykernel/Makefile linux-5.4.34-mykernel/mykernel/Makefile
+--- linux-5.4.34/mykernel/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-5.4.34-mykernel/mykernel/Makefile	2020-04-25 17:14:13.537908421 +0800
+@@ -0,0 +1,6 @@
++#
++# Makefile for the linux mykernel.
++#
++
++obj-y     = mymain.o myinterrupt.o
++
+diff -Naur linux-5.4.34/mykernel/myinterrupt.c linux-5.4.34-mykernel/mykernel/myinterrupt.c
+--- linux-5.4.34/mykernel/myinterrupt.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-5.4.34-mykernel/mykernel/myinterrupt.c	2020-04-25 19:09:50.612555999 +0800
+@@ -0,0 +1,44 @@
++/*
++ *  linux/mykernel/myinterrupt.c
++ *
++ *  Kernel internal my_timer_handler
++ *
++ *  Copyright (C) 2013  Mengning
++ *
++ */
++#include &lt;linux/kernel_stat.h&gt;
++#include &lt;linux/export.h&gt;
++#include &lt;linux/interrupt.h&gt;
++#include &lt;linux/percpu.h&gt;
++#include &lt;linux/init.h&gt;
++#include &lt;linux/mm.h&gt;
++#include &lt;linux/swap.h&gt;
++#include &lt;linux/pid_namespace.h&gt;
++#include &lt;linux/notifier.h&gt;
++#include &lt;linux/thread_info.h&gt;
++#include &lt;linux/time.h&gt;
++#include &lt;linux/jiffies.h&gt;
++#include &lt;linux/posix-timers.h&gt;
++#include &lt;linux/cpu.h&gt;
++#include &lt;linux/syscalls.h&gt;
++#include &lt;linux/delay.h&gt;
++#include &lt;linux/tick.h&gt;
++#include &lt;linux/kallsyms.h&gt;
++#include &lt;linux/irq_work.h&gt;
++#include &lt;linux/sched.h&gt;
++#include &lt;linux/sched/sysctl.h&gt;
++#include &lt;linux/slab.h&gt;
++
++#include &lt;asm/uaccess.h&gt;
++#include &lt;asm/unistd.h&gt;
++#include &lt;asm/div64.h&gt;
++#include &lt;asm/timex.h&gt;
++#include &lt;asm/io.h&gt;
++
++/*
++ * Called by timer interrupt.
++ */
++void my_timer_handler(void)
++{
++	pr_notice(&quot;\n&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;my_timer_handler here&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n\n&quot;);
++}
+diff -Naur linux-5.4.34/mykernel/mymain.c linux-5.4.34-mykernel/mykernel/mymain.c
+--- linux-5.4.34/mykernel/mymain.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-5.4.34-mykernel/mykernel/mymain.c	2020-04-25 19:10:27.635058000 +0800
+@@ -0,0 +1,91 @@
++/*
++ *  linux/mykernel/mymain.c
++ *
++ *  Kernel internal my_start_kernel
++ *
++ *  Copyright (C) 2013  Mengning
++ *
++ */
++#include &lt;linux/types.h&gt;
++#include &lt;linux/module.h&gt;
++#include &lt;linux/proc_fs.h&gt;
++#include &lt;linux/kernel.h&gt;
++#include &lt;linux/syscalls.h&gt;
++#include &lt;linux/stackprotector.h&gt;
++#include &lt;linux/string.h&gt;
++#include &lt;linux/ctype.h&gt;
++#include &lt;linux/delay.h&gt;
++#include &lt;linux/ioport.h&gt;
++#include &lt;linux/init.h&gt;
++#include &lt;linux/initrd.h&gt;
++#include &lt;linux/acpi.h&gt;
++#include &lt;linux/tty.h&gt;
++#include &lt;linux/percpu.h&gt;
++#include &lt;linux/kmod.h&gt;
++#include &lt;linux/vmalloc.h&gt;
++#include &lt;linux/kernel_stat.h&gt;
++#include &lt;linux/start_kernel.h&gt;
++#include &lt;linux/security.h&gt;
++#include &lt;linux/smp.h&gt;
++#include &lt;linux/profile.h&gt;
++#include &lt;linux/rcupdate.h&gt;
++#include &lt;linux/moduleparam.h&gt;
++#include &lt;linux/kallsyms.h&gt;
++#include &lt;linux/writeback.h&gt;
++#include &lt;linux/cpu.h&gt;
++#include &lt;linux/cpuset.h&gt;
++#include &lt;linux/cgroup.h&gt;
++#include &lt;linux/efi.h&gt;
++#include &lt;linux/tick.h&gt;
++#include &lt;linux/interrupt.h&gt;
++#include &lt;linux/taskstats_kern.h&gt;
++#include &lt;linux/delayacct.h&gt;
++#include &lt;linux/unistd.h&gt;
++#include &lt;linux/rmap.h&gt;
++#include &lt;linux/mempolicy.h&gt;
++#include &lt;linux/key.h&gt;
++#include &lt;linux/buffer_head.h&gt;
++#include &lt;linux/debug_locks.h&gt;
++#include &lt;linux/debugobjects.h&gt;
++#include &lt;linux/lockdep.h&gt;
++#include &lt;linux/kmemleak.h&gt;
++#include &lt;linux/pid_namespace.h&gt;
++#include &lt;linux/device.h&gt;
++#include &lt;linux/kthread.h&gt;
++#include &lt;linux/sched.h&gt;
++#include &lt;linux/signal.h&gt;
++#include &lt;linux/idr.h&gt;
++#include &lt;linux/kgdb.h&gt;
++#include &lt;linux/ftrace.h&gt;
++#include &lt;linux/async.h&gt;
++#include &lt;linux/sfi.h&gt;
++#include &lt;linux/shmem_fs.h&gt;
++#include &lt;linux/slab.h&gt;
++#include &lt;linux/perf_event.h&gt;
++#include &lt;linux/file.h&gt;
++#include &lt;linux/ptrace.h&gt;
++#include &lt;linux/blkdev.h&gt;
++#include &lt;linux/elevator.h&gt;
++
++#include &lt;asm/io.h&gt;
++#include &lt;asm/bugs.h&gt;
++#include &lt;asm/setup.h&gt;
++#include &lt;asm/sections.h&gt;
++#include &lt;asm/cacheflush.h&gt;
++
++#ifdef CONFIG_X86_LOCAL_APIC
++#include &lt;asm/smp.h&gt;
++#endif
++
++
++void __init my_start_kernel(void)
++{
++    int i = 0;
++    while(1)
++    {
++        i++;
++        if(i%100000 == 0)
++            pr_notice(&quot;my_start_kernel here  %d \n&quot;,i);
++            
++    }
++}
+diff -Naur linux-5.4.34/mykernel/README.md linux-5.4.34-mykernel/mykernel/README.md
+--- linux-5.4.34/mykernel/README.md	1970-01-01 08:00:00.000000000 +0800
++++ linux-5.4.34-mykernel/mykernel/README.md	2020-04-25 22:18:46.512717811 +0800
+@@ -0,0 +1,21 @@
++mykernel 2.0
++==========
++Develop your own OS kernel by reusing Linux infrastructure, based on x86-64/Linux Kernel 5.4.34.
++
++## Set up mykernel 2.0 in Ubuntu 18.04
++
++```
++sudo apt install build-essential
++sudo apt install axel
++sudo apt install qemu # install QEMU
++sudo apt install libncurses-dev bison flex libssl-dev libelf-dev
++wget https://raw.github.com/mengning/mykernel/master/mykernel-2.0_for_linux-5.3.34.patch
++axel -n 20 https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.34.tar.xz
++xz -d linux-5.4.34.tar.xz
++tar -xvf linux-5.4.34.tar
++cd linux-5.4.34
++patch -p1 &lt; ../mykernel-2.0_for_linux-5.3.34.patch
++make defconfig # Default configuration is based on 'x86_64_defconfig'
++make -j$(nproc)
++qemu-system-x86_64 -kernel arch/x86/boot/bzImage
++```
+</code></pre>
+<h3 id="13-下载内核">1.3 下载内核</h3>
+<pre><code>sudo axel -n 20 https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.34.tar.xz
+xz -d linux-5.4.34.tar.xz
+tar -xvf linux-5.4.34.tar
+</code></pre>
+<h3 id="14-安装补丁">1.4 安装补丁</h3>
+<pre><code>cd linux-5.4.34
+sudo apt install patch
+patch -p1 &lt; ../mykernel-2.0_for_linux-5.4.34.patch
+</code></pre>
+<h3 id="15-编译内核">1.5 编译内核</h3>
+<p>在虚拟机环境下，如果物理机支持超线程，可以配置虚拟机为双核四线程。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200512172134658-1043651807.png" alt=""></p>
+<p>编译时间大致四五分钟左右，如果虚拟机默认配置单核单线程，使用defconfig需要较长的编译时间。</p>
+<pre><code>sudo apt install build-essential libncurses-dev bison flex libssl-dev libelf-dev
+make defconfig
+make -j$(nproc)
+</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200512105200046-1827591872.png" alt=""></p>
+<h3 id="16-安装qemu模拟器">1.6 安装QEMU模拟器</h3>
+<p>此处QEMU用于模拟硬件设备，通过模拟一台独立运行操作系统的虚拟机，运行编译后的系统。</p>
+<pre><code>sudo apt install qemu # install QEMU
+qemu-system-x86_64 -kernel arch/x86/boot/bzImage
+</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200512205400271-1873047463.png" alt=""><br>
+至此，Linux内核编译完成，大致的配置流程为：</p>
+<ul>
+<li>下载内核补丁</li>
+<li>下载系统内核</li>
+<li>通过给系统打补丁后编译运行，观察内核运行与中断的输出</li>
+</ul>
+<hr>
+<h2 id="2-修改内核">2 修改内核</h2>
+<p>首先，在mykernel目录下创建mypcb.h头文件：</p>
+<ul>
+<li>
+<p>Thread结构体模拟指令指针与堆栈指针</p>
+</li>
+<li>
+<p>PCB结构体实现进程控制块，主要包含进程句柄，状态，栈，线程信息，进程函数等，next以链表形式链接进程</p>
+</li>
+</ul>
+<pre><code class="language-c">#define MAX_TASK_NUM        4
+#define KERNEL_STACK_SIZE   1024*2
+
+struct Thread {
+    unsigned long		ip;
+    unsigned long		sp;
+};
+
+typedef struct PCB{
+    int pid;
+    volatile long state;	/* -1 unrunnable, 0 runnable, &gt;0 stopped */
+    unsigned long stack[KERNEL_STACK_SIZE];
+    struct Thread thread;
+    unsigned long	task_entry;
+    struct PCB *next;
+}tPCB;
+
+void my_schedule(void);
+</code></pre>
+<p>之后创建myinterrupt.c文件，实现中断效果以及进程间的切换：</p>
+<pre><code class="language-c">#include &quot;mypcb.h&quot;
+
+extern tPCB task[MAX_TASK_NUM];
+extern tPCB * my_current_task;
+extern volatile int my_need_sched;
+volatile int time_count = 0;
+
+/*
+ * Called by timer interrupt.
+ * it runs in the name of current running process,
+ * so it use kernel stack of current running process
+ */
+void my_timer_handler(void)
+{
+    if(time_count%1000 == 0 &amp;&amp; my_need_sched != 1)
+    {
+        printk(KERN_NOTICE &quot;&gt;&gt;&gt;my_timer_handler here&lt;&lt;&lt;\n&quot;);
+        my_need_sched = 1;
+    } 
+    time_count ++ ;  
+    return;  	
+}
+
+void my_schedule(void)
+{
+    tPCB * next;
+    tPCB * prev;
+
+    if(my_current_task == NULL 
+        || my_current_task-&gt;next == NULL)
+    {
+    	return;
+    }
+    printk(KERN_NOTICE &quot;&gt;&gt;&gt;my_schedule&lt;&lt;&lt;\n&quot;);
+    /* schedule */
+    next = my_current_task-&gt;next;
+    prev = my_current_task;
+    if(next-&gt;state == 0)
+    {        
+    	my_current_task = next; 
+    	printk(KERN_NOTICE &quot;&gt;&gt;&gt;switch %d to %d&lt;&lt;&lt;\n&quot;,prev-&gt;pid,next-&gt;pid);  
+    	/* switch to next process */
+    	asm volatile(	
+        	&quot;pushq %%rbp\n\t&quot;
+        	&quot;movq %%rsp,%0\n\t&quot;
+        	&quot;movq %2,%%rsp\n\t&quot;
+        	&quot;movq $1f,%1\n\t&quot;
+        	&quot;pushq %3\n\t&quot; 
+        	&quot;ret\n\t&quot;
+        	&quot;1:\t&quot;
+        	&quot;popq %%rbp\n\t&quot;
+        	: &quot;=m&quot; (prev-&gt;thread.sp),&quot;=m&quot; (prev-&gt;thread.ip)
+        	: &quot;m&quot; (next-&gt;thread.sp),&quot;m&quot; (next-&gt;thread.ip)
+    	); 
+    }  
+    return;	
+}
+</code></pre>
+<p>最后在mymain.c中，根据0号进程fork出其他进程，形成进程的环状调用：</p>
+<pre><code class="language-c">#include &quot;mypcb.h&quot;
+
+tPCB task[MAX_TASK_NUM];
+tPCB * my_current_task = NULL;
+volatile int my_need_sched = 0;
+
+void my_process(void);
+
+void __init my_start_kernel(void)
+{
+    int pid = 0;
+    int i;
+    /* Initialize process 0*/
+    task[pid].pid = pid;
+    task[pid].state = 0;
+    task[pid].task_entry = task[pid].thread.ip = (unsigned long)my_process;
+    task[pid].thread.sp = (unsigned long)&amp;task[pid].stack[KERNEL_STACK_SIZE-1];
+    task[pid].next = &amp;task[pid];
+    /*fork more process */
+    for(i=1;i&lt;MAX_TASK_NUM;i++)
+    {
+        memcpy(&amp;task[i],&amp;task[0],sizeof(tPCB));
+        task[i].pid = i;
+	    task[i].thread.sp = (unsigned long)(&amp;task[i].stack[KERNEL_STACK_SIZE-1]);
+        task[i].next = task[i-1].next;
+        task[i-1].next = &amp;task[i];
+    }
+    /* start process 0 by task[0] */
+    pid = 0;
+    my_current_task = &amp;task[pid];
+	asm volatile(
+    	&quot;movq %1,%%rsp\n\t&quot;
+    	&quot;pushq %1\n\t&quot;
+    	&quot;pushq %0\n\t&quot;
+    	&quot;ret\n\t&quot;
+    	: 
+    	: &quot;c&quot; (task[pid].thread.ip),&quot;d&quot; (task[pid].thread.sp)
+	);
+} 
+
+int i = 0;
+
+void my_process(void)
+{    
+    while(1)
+    {
+        i++;
+        if(i%10000000 == 0)
+        {
+            printk(KERN_NOTICE &quot;this is process %d -\n&quot;,my_current_task-&gt;pid);
+            if(my_need_sched == 1)
+            {
+                my_need_sched = 0;
+        	    my_schedule();
+        	}
+        	printk(KERN_NOTICE &quot;this is process %d +\n&quot;,my_current_task-&gt;pid);
+        }     
+    }
+}
+</code></pre>
+<p>以上代码的核心在于两段内嵌汇编代码，mymain.c与myinterrupt.c中分别实现了0号进程的启动与进程间切换：</p>
+<pre><code class="language-basic">asm volatile(
+    	&quot;movq %1,%%rsp\n\t&quot; 	/* set task[pid].thread.sp to rsp */
+    	&quot;pushq %1\n\t&quot; 	        /* push rbp */
+    	&quot;pushq %0\n\t&quot; 	        /* push task[pid].thread.ip */
+    	&quot;ret\n\t&quot; 	        /* pop task[pid].thread.ip to rip */
+    	: 
+    	: &quot;c&quot; (task[pid].thread.ip),&quot;d&quot; (task[pid].thread.sp)	/* input c or d mean %ecx/%edx*/
+	);
+</code></pre>
+<p>mymain.c中将0号进程栈顶信息存入rsp寄存器，通过将当前进程rbp与指令指针压栈，再借用ret指令返回0号进程ip指向的my_process函数执行。</p>
+<pre><code class="language-basic">asm volatile(	
+        	&quot;pushq %%rbp\n\t&quot; 	/* save rbp of prev */
+        	&quot;movq %%rsp,%0\n\t&quot; 	/* save rsp of prev */
+        	&quot;movq %2,%%rsp\n\t&quot;     /* restore  rsp of next */
+        	&quot;movq $1f,%1\n\t&quot;       /* save rip of prev */	
+        	&quot;pushq %3\n\t&quot; 
+        	&quot;ret\n\t&quot; 	        /* restore  rip of next */
+        	&quot;1:\t&quot;                  /* next process start here */
+        	&quot;popq %%rbp\n\t&quot;
+        	: &quot;=m&quot; (prev-&gt;thread.sp),&quot;=m&quot; (prev-&gt;thread.ip)
+        	: &quot;m&quot; (next-&gt;thread.sp),&quot;m&quot; (next-&gt;thread.ip)
+    	); 
+</code></pre>
+<p>myinterrupt.c中先将当前的rbp压栈，然后保存当前进程的rsp信息，完成后将其更新为下一个进程的rsp。</p>
+<p>之后将即将运行的进程IP入栈，通过ret指令将下一个进程的IP送入rip寄存器。</p>
+<p>最后将切换后的进程堆栈基地址从堆栈中恢复到rbp寄存器中。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200512200322833-170160456.png" alt=""></p>
+<h2 id="3-核心功能">3 核心功能</h2>
+<p>Linux操作系统主要有以下核心功能：</p>
+<ul>
+<li>
+<p>进程管理</p>
+<p>负责管理CPU资源，以便让各个进程可以以尽量公平的方式访问CPU。<br>
+<img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200513111749221-1833707261.png" alt=""></p>
+</li>
+<li>
+<p>内存管理</p>
+<p>负责管理Memory（内存）资源，以便让各个进程可以安全地共享机器的内存资源。<br>
+<img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200513111757987-633485531.png" alt=""></p>
+</li>
+<li>
+<p>文件系统</p>
+<p>Linux内核将不同功能的外部设备，抽象为统一的文件操作接口（open、close、read、write等）。<br>
+<img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200513111813328-470064601.png" alt=""></p>
+</li>
+<li>
+<p>网络管理</p>
+<p>负责管理系统的网络设备，并实现各类网络标准。<br>
+<img src="https://img2020.cnblogs.com/blog/1805130/202005/1805130-20200513111823310-956344520.png" alt=""></p>
+</li>
+<li>
+<p>硬件驱动</p>
+<p>将系统操作映射到物理设备，除了处理器，内存等个别实体外，一般设备控制操作都由寻址设备相关的代码进行。</p>
+</li>
+<li>
+<p>进程间通信</p>
+<p>不管理硬件，只负责Linux系统中进程之间的通信。</p>
+</li>
+</ul>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 12:31</span>&nbsp;
+<a href="https://www.cnblogs.com/ustca/">东寻</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12874785" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12874785);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 544361, cb_blogApp = 'ustca', cb_blogUserGuid = '3b88d2d7-de5c-4436-70e5-08d73853e76a';
+    var cb_entryId = 12874785, cb_entryCreatedDate = '2020-05-13 12:31', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 东寻
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

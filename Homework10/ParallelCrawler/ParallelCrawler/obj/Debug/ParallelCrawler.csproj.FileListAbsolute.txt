@@ -1,0 +1,10 @@
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\bin\Debug\ParallelCrawler.exe.config
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\bin\Debug\ParallelCrawler.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\bin\Debug\ParallelCrawler.pdb
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.csprojAssemblyReference.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.Form1.resources
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.Properties.Resources.resources
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.csproj.GenerateResource.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.csproj.CoreCompileInputs.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework10\ParallelCrawler\ParallelCrawler\obj\Debug\ParallelCrawler.pdb

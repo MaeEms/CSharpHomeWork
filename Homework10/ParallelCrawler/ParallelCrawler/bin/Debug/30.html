@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="前言 gRPC凭借其严谨的接口定义、高效的传输效率、多样的调用方式等优点，在微服务开发方面占据了一席之地。dotnet core正式支持gRPC也有一段时间了，官方文档也对如何使用gRPC进行了比较详" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>.net core grpc单元测试 - 服务器端 - wjsgzcn - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/wjsgzcn/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/wjsgzcn/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/wjsgzcn/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 598565;
+        var currentBlogApp = 'wjsgzcn';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/wjsgzcn/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/wjsgzcn/">心得</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/wjsgzcn/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/wjsgzcn">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/wjsgzcn/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+4&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+1</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/wjsgzcn/p/12883169.html">.net core grpc单元测试 - 服务器端</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h2>前言</h2>
+<p>gRPC凭借其严谨的接口定义、高效的传输效率、多样的调用方式等优点，在微服务开发方面占据了一席之地。dotnet core正式支持gRPC也有一段时间了，官方文档也对如何使用gRPC进行了比较详细的说明，但是关于如何对gRPC的服务器和客户端进行单元测试，却没有描述。经过查阅官方代码，找到了一些解决方法，总结在此，供大家参考。</p>
+<p>本文重点介绍gRPC服务器端代码的单元测试，包括普通调用、服务器端流、客户端流等调用方式的单元测试，另外，引入sqlite的内存数据库模式，对数据库相关操作进行测试。</p>
+<h2>准备gRPC服务端项目</h2>
+<p>使用dotnet new grpc命令创建一个gRPC服务器项目。</p>
+<p>修改protos/greeter.proto, 添加两个接口方法：</p>
+<div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;">服务器流</span>
+<span style="color: #000000;">rpc SayHellos (HelloRequest) returns (stream HelloReply);
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">客户端流</span>
+rpc Sum (stream HelloRequest) returns (HelloReply);</pre>
+</div>
+</div>
+<div>&nbsp;</div>
+<div>在GreeterService中添加方法的实现：</div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">using</span><span style="color: #000000;"> System;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> System.Collections.Generic;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> System.Linq;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> System.Threading.Tasks;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> Grpc.Core;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> GrpcTest.Server.Models;
+</span><span style="color: #0000ff;">using</span><span style="color: #000000;"> Microsoft.Extensions.Logging;
+
+</span><span style="color: #0000ff;">namespace</span><span style="color: #000000;"> GrpcTest.Server
+{
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> GreeterService : Greeter.GreeterBase
+    {
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">readonly</span> ILogger&lt;GreeterService&gt;<span style="color: #000000;"> _logger;
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">readonly</span><span style="color: #000000;"> ApplicationDbContext _db;
+
+        </span><span style="color: #0000ff;">public</span> GreeterService(ILogger&lt;GreeterService&gt;<span style="color: #000000;"> logger,
+            ApplicationDbContext db)
+        {
+            _logger </span>=<span style="color: #000000;"> logger;
+            _db </span>=<span style="color: #000000;"> db;
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">override</span> Task&lt;HelloReply&gt;<span style="color: #000000;"> SayHello(HelloRequest request, ServerCallContext context)
+        {
+            </span><span style="color: #0000ff;">return</span> Task.FromResult(<span style="color: #0000ff;">new</span><span style="color: #000000;"> HelloReply
+            {
+                Message </span>= <span style="color: #800000;">"</span><span style="color: #800000;">Hello </span><span style="color: #800000;">"</span> +<span style="color: #000000;"> request.Name
+            });
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">override</span> <span style="color: #0000ff;">async</span><span style="color: #000000;"> Task SayHellos(HelloRequest request,
+            IServerStreamWriter</span>&lt;HelloReply&gt;<span style="color: #000000;"> responseStream,
+            ServerCallContext context)
+        {
+            </span><span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> student <span style="color: #0000ff;">in</span><span style="color: #000000;"> _db.Students)
+            {
+                </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (context.CancellationToken.IsCancellationRequested)
+                    </span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+
+                </span><span style="color: #0000ff;">var</span> message =<span style="color: #000000;"> student.Name;
+                _logger.LogInformation($</span><span style="color: #800000;">"</span><span style="color: #800000;">Sending greeting {message}.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+                </span><span style="color: #0000ff;">await</span> responseStream.WriteAsync(<span style="color: #0000ff;">new</span> HelloReply { Message =<span style="color: #000000;"> message });
+            }
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">override</span> <span style="color: #0000ff;">async</span> Task&lt;HelloReply&gt; Sum(IAsyncStreamReader&lt;HelloRequest&gt;<span style="color: #000000;"> requestStream, ServerCallContext context)
+        {
+            </span><span style="color: #0000ff;">var</span> sum = <span style="color: #800080;">0</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">await</span> <span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> request <span style="color: #0000ff;">in</span><span style="color: #000000;"> requestStream.ReadAllAsync())
+            {
+                </span><span style="color: #0000ff;">if</span> (<span style="color: #0000ff;">int</span>.TryParse(request.Name, <span style="color: #0000ff;">out</span> <span style="color: #0000ff;">var</span><span style="color: #000000;"> number))
+                    sum </span>+=<span style="color: #000000;"> number;
+                </span><span style="color: #0000ff;">else</span>
+                    <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span> ArgumentException(<span style="color: #800000;">"</span><span style="color: #800000;">参数必须是可识别的数字</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            }
+
+            </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span> HelloReply { Message = $<span style="color: #800000;">"</span><span style="color: #800000;">sum is {sum}</span><span style="color: #800000;">"</span><span style="color: #000000;"> };
+        }
+    }
+}</span></pre>
+</div>
+<p>SayHello: 简单的返回一个文本消息。</p>
+<p>SayHellos: 从数据库的表中读取所有数据，并且使用服务器端流的方式返回。</p>
+<p>Sum：从客户端流获取输入数据，并计算所有数据的和，如果输入的文本无法转换为数字，抛出异常。</p>
+<h2>单元测试</h2>
+<p>新建xunit项目，并引用刚才建立的gRPC项目，引入如下包：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">ItemGroup</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="Grpc.Core.Testing"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="2.28.1"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="Microsoft.EntityFrameworkCore.Sqlite"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="3.1.3"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="Microsoft.NET.Test.Sdk"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="16.5.0"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="moq"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="4.14.1"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="xunit"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="2.4.0"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="xunit.runner.visualstudio"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="2.4.0"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">PackageReference </span><span style="color: #ff0000;">Include</span><span style="color: #0000ff;">="coverlet.collector"</span><span style="color: #ff0000;"> Version</span><span style="color: #0000ff;">="1.2.0"</span> <span style="color: #0000ff;">/&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">ItemGroup</span><span style="color: #0000ff;">&gt;</span></pre>
+</div>
+<h3>伪造Logger</h3>
+<div>使用如下命令伪造service需要的logger：</div>
+<div>var logger = Mock.Of&lt;ILogger&lt;GreeterService&gt;&gt;();</div>
+<h3>使用sqlite inmemory的DbContext</h3>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span><span style="color: #000000;"> ApplicationDbContext CreateDbContext(){
+            </span><span style="color: #0000ff;">var</span> db = <span style="color: #0000ff;">new</span> ApplicationDbContext(<span style="color: #0000ff;">new</span> DbContextOptionsBuilder&lt;ApplicationDbContext&gt;<span style="color: #000000;">()
+                .UseSqlite(CreateInMemoryDatabase()).Options);
+            db.Database.EnsureCreated();
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> db;
+        }
+
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span><span style="color: #000000;"> DbConnection CreateInMemoryDatabase()
+        {
+            </span><span style="color: #0000ff;">var</span> connection = <span style="color: #0000ff;">new</span> SqliteConnection(<span style="color: #800000;">"</span><span style="color: #800000;">Filename=:memory:</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            connection.Open();
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> connection;
+        }</span></pre>
+</div>
+<p>重点：虽然是内存模式，数据库也必须是open的，并且需要运行EnsureCreated，否则调用数据库功能是会报告找不到表。</p>
+</div>
+<h3>伪造ServerCallContext</h3>
+<p>使用如下代码伪造：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span><span style="color: #000000;"> ServerCallContext CreateTestContext(){
+            </span><span style="color: #0000ff;">return</span> TestServerCallContext.Create(<span style="color: #800000;">"</span><span style="color: #800000;">fooMethod</span><span style="color: #800000;">"</span><span style="color: #000000;">, 
+                </span><span style="color: #0000ff;">null</span><span style="color: #000000;">, 
+                DateTime.UtcNow.AddHours(</span><span style="color: #800080;">1</span><span style="color: #000000;">), 
+                </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Metadata(), 
+                CancellationToken.None, 
+                </span><span style="color: #800000;">"</span><span style="color: #800000;">127.0.0.1</span><span style="color: #800000;">"</span><span style="color: #000000;">, 
+                </span><span style="color: #0000ff;">null</span><span style="color: #000000;">,
+                </span><span style="color: #0000ff;">null</span><span style="color: #000000;">, 
+                (metadata) </span>=&gt;<span style="color: #000000;"> TaskUtils.CompletedTask, 
+                () </span>=&gt; <span style="color: #0000ff;">new</span><span style="color: #000000;"> WriteOptions(), 
+                (writeOptions) </span>=&gt;<span style="color: #000000;"> { });
+}</span></pre>
+</div>
+<p>里面的具体参数要依据实际测试需要进行调整，比如测试客户端取消操作时，修改CancellationToken参数。</p>
+<h3>普通调用的测试</h3>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">[Fact]
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> SayHello()
+        {     
+            </span><span style="color: #0000ff;">var</span> service = <span style="color: #0000ff;">new</span> GreeterService(logger, <span style="color: #0000ff;">null</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">var</span> request = <span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">world</span><span style="color: #800000;">"</span><span style="color: #000000;">};
+            </span><span style="color: #0000ff;">var</span> response =<span style="color: #000000;"> service.SayHello(request, scc).Result;
+
+            </span><span style="color: #0000ff;">var</span> expected = <span style="color: #800000;">"</span><span style="color: #800000;">Hello world</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">var</span> actual =<span style="color: #000000;"> response.Message;
+            Assert.Equal(expected, actual);
+        }</span></pre>
+</div>
+<p>其中scc = 伪造的ServerCallContext，如果被测方法中没有实际使用它，也可以直接传入null。</p>
+<h3>服务器端流的测试</h3>
+<p>服务器端流的方法包含一个IServerStreamWriter&lt;HelloReply&gt;类型的参数，该参数被用于将方法的计算结果逐个返回给调用方，可以创建一个通用的类实现此接口，将写入的消息存储为一个list，以便测试。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> TestServerStreamWriter&lt;T&gt; : IServerStreamWriter&lt;T&gt;<span style="color: #000000;">
+{
+    </span><span style="color: #0000ff;">public</span> WriteOptions WriteOptions { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+    </span><span style="color: #0000ff;">public</span> List&lt;T&gt; Responses { <span style="color: #0000ff;">get</span>; } = <span style="color: #0000ff;">new</span> List&lt;T&gt;<span style="color: #000000;">();
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> Task WriteAsync(T message)
+    {
+        </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.Responses.Add(message);
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> Task.CompletedTask;
+    }
+}</span></pre>
+</div>
+<p>测试时，向数据库表中插入两条记录，然后测试对比，看接口方法是否返回两条记录。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span>  <span style="color: #0000ff;">async</span><span style="color: #000000;"> Task SayHellos(){            
+            </span><span style="color: #0000ff;">var</span> db =<span style="color: #000000;"> TestTools.CreateDbContext();
+
+            </span><span style="color: #0000ff;">var</span> students = <span style="color: #0000ff;">new</span> List&lt;Student&gt;<span style="color: #000000;">{
+                </span><span style="color: #0000ff;">new</span> Student{Name=<span style="color: #800000;">"</span><span style="color: #800000;">1</span><span style="color: #800000;">"</span><span style="color: #000000;">},
+                </span><span style="color: #0000ff;">new</span> Student{Name=<span style="color: #800000;">"</span><span style="color: #800000;">2</span><span style="color: #800000;">"</span><span style="color: #000000;">}
+            };
+            db.AddRange(students);
+            db.SaveChanges();
+
+            </span><span style="color: #0000ff;">var</span> service = <span style="color: #0000ff;">new</span><span style="color: #000000;"> GreeterService(logger, db);
+            </span><span style="color: #0000ff;">var</span> request = <span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">world</span><span style="color: #800000;">"</span><span style="color: #000000;">};
+            
+            </span><span style="color: #0000ff;">var</span> sw = <span style="color: #0000ff;">new</span> TestServerStreamWriter&lt;HelloReply&gt;<span style="color: #000000;">();
+            </span><span style="color: #0000ff;">await</span><span style="color: #000000;"> service.SayHellos(request, sw, scc);
+            
+            </span><span style="color: #0000ff;">var</span> expected =<span style="color: #000000;"> students.Count;
+            </span><span style="color: #0000ff;">var</span> actual =<span style="color: #000000;"> sw.Responses.Count;
+            Assert.Equal(expected, actual);
+}</span></pre>
+</div>
+<h3>客户端流的测试</h3>
+<p>与服务器流类似，客户端流方法也有一个参数类型为IAsyncStreamReader&lt;HelloRequest&gt;，简单实现一个类用于测试。</p>
+<p>该类通过直接将客户端要传入的数据通过IEnumable&lt;T&gt;参数传入，模拟客户端的流式请求多个数据。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> TestStreamReader&lt;T&gt; : IAsyncStreamReader&lt;T&gt;<span style="color: #000000;">
+{
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">readonly</span> IEnumerator&lt;T&gt;<span style="color: #000000;"> _stream;
+
+    </span><span style="color: #0000ff;">public</span> TestStreamReader(IEnumerable&lt;T&gt;<span style="color: #000000;"> list){
+        _stream </span>=<span style="color: #000000;"> list.GetEnumerator();
+    }
+
+    </span><span style="color: #0000ff;">public</span> T Current =&gt;<span style="color: #000000;"> _stream.Current;
+
+    </span><span style="color: #0000ff;">public</span> Task&lt;<span style="color: #0000ff;">bool</span>&gt;<span style="color: #000000;"> MoveNext(CancellationToken cancellationToken)
+    {
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> Task.FromResult(_stream.MoveNext());
+    }
+}</span></pre>
+</div>
+<p>正常流程测试代码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">[Fact]
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Sum_NormalInput_ReturnSum()
+        {
+            </span><span style="color: #0000ff;">var</span> service = <span style="color: #0000ff;">new</span> GreeterService(<span style="color: #0000ff;">null</span>, <span style="color: #0000ff;">null</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">var</span> data = <span style="color: #0000ff;">new</span> List&lt;HelloRequest&gt;<span style="color: #000000;">{
+                </span><span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">1</span><span style="color: #800000;">"</span><span style="color: #000000;">},
+                </span><span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">2</span><span style="color: #800000;">"</span><span style="color: #000000;">},
+            };
+            </span><span style="color: #0000ff;">var</span> stream = <span style="color: #0000ff;">new</span> TestStreamReader&lt;HelloRequest&gt;<span style="color: #000000;">(data);
+
+            </span><span style="color: #0000ff;">var</span> response =<span style="color: #000000;"> service.Sum(stream, scc).Result;
+            </span><span style="color: #0000ff;">var</span> expected = <span style="color: #800000;">"</span><span style="color: #800000;">sum is 3</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">var</span> actual =<span style="color: #000000;"> response.Message;
+            Assert.Equal(expected, actual);
+        }</span></pre>
+</div>
+<p>参数错误的测试代码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">[Fact]
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Sum_BadInput_ThrowException()
+        {
+            </span><span style="color: #0000ff;">var</span> service = <span style="color: #0000ff;">new</span> GreeterService(<span style="color: #0000ff;">null</span>, <span style="color: #0000ff;">null</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">var</span> data = <span style="color: #0000ff;">new</span> List&lt;HelloRequest&gt;<span style="color: #000000;">{
+                </span><span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">1</span><span style="color: #800000;">"</span><span style="color: #000000;">},
+                </span><span style="color: #0000ff;">new</span> HelloRequest{Name=<span style="color: #800000;">"</span><span style="color: #800000;">abc</span><span style="color: #800000;">"</span><span style="color: #000000;">},
+            };
+            </span><span style="color: #0000ff;">var</span> stream = <span style="color: #0000ff;">new</span> TestStreamReader&lt;HelloRequest&gt;<span style="color: #000000;">(data);
+
+            Assert.ThrowsAsync</span>&lt;ArgumentException&gt;(<span style="color: #0000ff;">async</span> () =&gt; <span style="color: #0000ff;">await</span><span style="color: #000000;"> service.Sum(stream, scc));
+        }</span></pre>
+</div>
+<h2>总结</h2>
+<p>以上代码，通过对gRPC服务依赖的关键资源进行mock或简单实现，达到了单元测试的目的。</p>
+</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 16:28</span>&nbsp;
+<a href="https://www.cnblogs.com/wjsgzcn/">wjsgzcn</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12883169" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12883169);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 598565, cb_blogApp = 'wjsgzcn', cb_blogUserGuid = '425aef0e-9984-410f-aad1-08d7e5fab1e4';
+    var cb_entryId = 12883169, cb_entryCreatedDate = '2020-05-13 16:28', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 wjsgzcn
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

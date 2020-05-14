@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="一款需要正式对外发布的产品，通常都需要经历一个较完整的测试验证过程，在整个产品质量验证阶段，一般会经历几类测试环境的验证：从产品集成阶段的测试环境-&amp;gt;验收阶段的预发布环境-&amp;gt;正式发布回归的" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>一套测试用例如何实现支持多个环境运行 - 狂师 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/minyx2_lite/bundle-minyx2_lite.min.css?v=mxJZfspzqgmSFSdBbMH8zU83VuawcFZooz2hdrdyHlI" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/minyx2_lite/bundle-minyx2_lite-mobile.min.css?v=ADiCwO2hOTdd5yYidcx7eob7ix2VJI4o_TXjEycTHjs" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/jinjiangongzuoshi/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/jinjiangongzuoshi/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/jinjiangongzuoshi/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 155245;
+        var currentBlogApp = 'jinjiangongzuoshi';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Minyx2_Lite';
+    </script>
+    
+    
+    <script src="/skins/minyx2_lite/bundle-minyx2_lite.min.js?v=z_XLIOc5JYwRKqTPu9fAWp7D8tchhGxVWGYvlAiigUQ" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    
+<div id="container">
+    <a class="minyx" href="https://www.cnblogs.com/">代码改变世界</a>
+    <ul id="topMnu">
+        <!-- 统计数据 -->
+        <li>
+            Posts - 
+425, 
+Articles - 
+0, 
+Comments - 
+67
+<!---->
+
+
+        </li>
+        <!-- 这边可以增加一些链接 -->
+        <!-- 博客园 -->
+        <li><a href="https://www.cnblogs.com/">Cnblogs</a></li>
+        <!-- 管理 -->
+        <li id="topMnu-dashboard">
+            <a id="lnkDashboard" href="https://i.cnblogs.com/">Dashboard</a>
+        </li>
+        <li>
+            
+    <a id="lnkLogin" href="https://account.cnblogs.com/signin/?returnUrl=https://www.cnblogs.com/jinjiangongzuoshi/">Login</a>
+
+
+        </li>
+    </ul>
+
+    <script type="text/javascript">
+        var m = window.__blog.topMenuRendered;
+        if (m) { m(__$("topMnu")); }
+    </script>
+
+    <div id="header">
+        <ul id="menu">
+            <!-- 首页，当前section加上current类 -->
+            <li id="menu-home" class="current">
+                <a id="lnkHome" href="https://www.cnblogs.com/jinjiangongzuoshi/">Home</a></li>
+            <!-- 联系 -->
+            <li id="menu-contact">
+                <a id="lnkContact" href="https://msg.cnblogs.com/send/%E7%8B%82%E5%B8%88">Contact</a></li>
+            <!-- 相册 -->
+            <li id="menu-gallary">
+                <a id="lnkGallery" href="https://www.cnblogs.com/jinjiangongzuoshi/gallery.html">Gallery</a></li>
+            <!-- Rss订阅 -->
+            <li id="rss">
+                <a id="lnkRss" href="https://www.cnblogs.com/jinjiangongzuoshi/rss/">RSS</a></li>
+        </ul>
+        <div id="newmsg"></div>
+        <h1>
+            <!-- 主标题 -->
+            <a id="lnkBlogTitle" href="https://www.cnblogs.com/jinjiangongzuoshi/">测试开发技术</a>
+            <!-- 子标题 -->
+            <small>
+                专注测试开发技术研究、实践、分享、交流。&#xA;关注微信公众号『测试开发技术』，后台回复关键词获取对应信息：me、资料、微信、新书。
+            </small>
+        </h1>
+    </div>
+
+    <script type="text/javascript">
+        var m = window.__blog.headerRendered;
+        if (m) { m(__$("header")); }
+    </script>
+
+    <div id="wrapper">
+        <div id="content">
+            <script type="text/javascript">
+                var m = window.__blog.preRenderPosts;
+                if (m) { m(); }
+            </script>
+            <div id="post_detail">
+<div class="post" id="post">
+    <a name="top"></a>
+    <h2>
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/jinjiangongzuoshi/p/12883578.html">一套测试用例如何实现支持多个环境运行</a>
+</h2>
+    <small>
+<span id="post-date">2020-05-13 17:18</span>&nbsp;
+<a href="https://www.cnblogs.com/jinjiangongzuoshi/">狂师</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12883578" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12883578);return false;">收藏</a></small>
+    <div class="entry">
+        
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>一款需要正式对外发布的产品，通常都需要经历一个较完整的测试验证过程，在整个产品质量验证阶段，一般会经历几类测试环境的验证：从<strong>产品集成阶段的测试环境</strong>-&gt;<strong>验收阶段的预发布环境</strong>-&gt;<strong>正式发布回归的生产环境</strong>。</p>
+<p>&nbsp;</p>
+<p>由于不同环境之间或多或少存在一些差异性，为了能将这些环境差异性导致的问题充分暴露出来，测试人员需要在这些不同的环境中都要进行必要的测试验证。</p>
+<p>&nbsp;</p>
+<p>接口自动化测试作为质量保障的一种手段，除了用在测试阶段，也需要用在预发布环境和生产环境。</p>
+<p>很多时候，为了能让测试用例运行在多套环境中，不得不维护多套测试脚本、测试用例。这种方式虽然可行，但会造成大量的测试用例、测试脚本冗余，以及巨大的后期维护工作量。</p>
+<p>&nbsp;</p>
+<p>那么有没有一种方式或者说实现策略，可以实现一套接口测试用例可按照特定测试需求运行在多套环境中呢？答案<span style="color: #800000;"><strong>是肯定的</strong></span>。</p>
+<p>&nbsp;</p>
+<p>接下来，就带着大家，分别从<span style="color: #0000ff;"><strong>测试框架</strong></span>和<span style="color: #0000ff;"><strong>语言实现</strong></span>两个层面介绍如何实现一套测试自动化用例脚本运行在多个环境下（属于自动化测试实施高阶技巧）。</p>
+<div class="image-block"><img style="display: block; margin-left: auto; margin-right: auto" src="https://ask.qcloudimg.com/http-save/6490225/p179sq35c1.png?imageView2/2/w/1620" alt="" width="608" height="405"></div>
+<p>相信很多读者能感受到一个明显现象，公司规模越大，对各类环境的定义也会更加清晰、明确，环境种类也会进一步的细分。这么多环境的加持下，对自动化测试实施过程提出了一个挑战或者说是需求：<strong>自动化用例应当支持在不同环境里执行，并且对用例逻辑层透明无感。</strong></p>
+<p>&nbsp;</p>
+<p>为了实现诸如此，有些人，采取了较为&rdquo;<strong>傻瓜式</strong>&ldquo;的方式，拿下面这段代码为例。</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def test_login(self):
+    if env = "dev":
+        requests.post("https://dev.xxx.com/login", data={"username":"dev", "password":"123456"})
+        do_something()
+    elif env = "test":
+         requests.post("https://test.xxx.com/login", data={"username":"test", "password":"123456"})
+         do_something()
+    elif env = "pre":
+        requests.post("https://pre.xxx.com/login", data={"username":"pre", "password":"123456"})
+        do_something()
+    else:
+        requests.post("https://www.xxx.com/login", data={"username":"superadmin", "password":"123456"})
+        do_something()
+</pre>
+</div>
+<p>　　</p>
+<p>看完上述代码写法，有没有似曾相识的同学，如果有的话，很不幸地告诉你，你采取了最不为推荐的方法。上述示例还仅仅只是一条用例，如果自动化测试用例体量大(实际都不会小)，<strong>自动化测试用例脚本维护</strong>、<strong>代码重复量</strong>带来的灾难性可想而知。</p>
+<p><strong>仔细分析一下，要实现一套测试用例在多环境下执行，要解决哪些问题：</strong></p>
+<ul class="ul-level-0">
+<li>不同环境的服务入口地址不同，一般还会有http/https的差别</li>
+<li>不同环境需要使用不同的测试数据</li>
+<li>一些中间件，比如数据库、消息队列、缓存服务的访问地址、账号、配置有差别</li>
+<li>不同环境的第三方回调地址有差别</li>
+<li>不同环境的配置需要整体切换，不能出现在测试环境里用了生产环境的数据的问题</li>
+</ul>
+<p>&nbsp;</p>
+<p>以上都是些常见的问题，实际不同公司下，有些业务功能在实现上都还存在差异，不过这种就不在我们讨论的范围内了。</p>
+<p>&nbsp;</p>
+<p>针对上述的这些主要问题，归纳总结一下，不难发现，在不同的环境中，对于同一个接口测试来说，测试过程的逻辑基本都是一样的，而造成不同环境用例无法复用的因素最主要有两个：</p>
+<p>① <strong>所调用到的服务域名地址不同</strong>，不同环境对应的域名是不同的。比如测试环境的域名为test.xxx.com，而正式环境的域名对应为www.xxx.com。</p>
+<p>② <strong>测试数据、配置数据不同</strong>，不同环境对应的测试数据和用到的配置数据存在不同。比如测试环境对应的用户ID为123456，但在正式环境对应的用户ID可能就变成了654321。</p>
+<p>&nbsp;</p>
+<p>而针对不同环境，调用的服务域名地址不同，解决该问题的基本思路用两个关键词概括：<strong>抽象、枚举。</strong></p>
+<p>如何抽象，如何枚举，下面分别从测试框架（以Robot Frameowork框架为例）和语言实现层面（以Python语言）为大家逐一介绍。</p>
+<h1 id="1.-%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%8E%AF%E5%A2%83%E8%BF%90%E8%A1%8C%E6%80%9D%E8%B7%AF"><strong>1. 测试框架支持多环境运行思路</strong></h1>
+<p>下述以<strong>Robot Framework框架为例</strong>，介绍如何实现一套测试用例支持多个不同运行环境，不同框架实现思路皆相通，其它框架可供参考借鉴。</p>
+<p>在RF框架下，实现此类需求，总的原则是利用：<strong>外部变量文件+全局动态变量</strong>，将接口测试脚本中涉及传入域名的值统一封装抽离为一个统一的公共环境变量，并且将各个不同环境域名统一存放到一个公共环境配置变量文件中。</p>
+<p>先来看一则脚本片段截图：</p>
+<div class="image-block"><img src="https://ask.qcloudimg.com/http-save/6490225/d6idj9v9eh.png?imageView2/2/w/1620" alt="" width="667" height="213"></div>
+<p>可以看到，在调用request_post关键字发起POST请求时，需要传入域名地址${URL}、接口路径${path}、接口参数${datas}等。而对于同一个接口，不管是在哪个环境下，接口路径${path}和接口参数${datas}都应该是一样的。而对于接口地址${URL}，在不同环境中对应的值会有所不同。但从图中我们并没有发现${URL}变量定义的位置，它的值是从哪里传进来的呢？</p>
+<p>关于接口地址${URL}变量值动态引入，通常有两种方式。</p>
+<ul class="ul-level-0">
+<li>通过外部变量文件引入。</li>
+<li>通过全局动态参数引入。</li>
+</ul>
+<h2 id="1.1-%E9%80%9A%E8%BF%87%E5%A4%96%E9%83%A8%E5%8F%98%E9%87%8F%E6%96%87%E4%BB%B6%E5%BC%95%E5%85%A5"><strong>1.1 通过外部变量文件引入</strong></h2>
+<p>（1）定义好接口测试实战项目的目录结构，在Resource | Lib 目录下，创建环境配置变量文件，文件名称定义为config.py，文件内容如下：</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;"># coding=utf-8
+# 环境配置文件
+
+# 测试环境
+# URL = 'https://test.xxx.com'
+
+# 预发布环境
+# URL = 'https://pre.xxx.com'
+
+# 生产环境
+URL = 'https://www.xxx.com'
+</pre>
+</div>
+<p>　</p>
+<p>在config.py环境配置文件中，定义各个不同环境（测试环境、预发布环境、生产环境）的服务域名地址，且变量名统一为URL。在运行接口测试时，保留当前需要运行测试用例的环境地址，其他环境变量注释掉即可。</p>
+<p>&nbsp;</p>
+<p>在实际项目当中，config.py配置文件中的地址替换成真实的接口服务地址即可，例如，上述配置文件中保留了生产环境的地址，此时运行接口测试用例，则调用的为生产环境的接口测试。需要注意的是，在同一个项目下，不同环境下的接口服务地址需要采用相同的变量名称，定义好后，在Robot Framework测试脚本中直接通过${URL}变量形式来引用环境变量值。</p>
+<p>&nbsp;</p>
+<p>（2）环境配置变量文件创建好后，选择Resource | Business| 业务资源文件，在资源文件Settings配置选项中选择Add Variables添加变量文件，依次选择config.py配置文件存储路径，如图所示。</p>
+<div class="image-block"><img src="https://ask.qcloudimg.com/http-save/6490225/31b90ptqsm.png?imageView2/2/w/1620" alt="" width="656" height="172"></div>
+<p>（3）config.py变量文件导入成功后，当需要在不同环境下运行接口测试用例时，可在用例脚本不做任何变更的情况下，只需要更改config.py配置文件中的地址即可实现一键切换接口测试运行环境。</p>
+<p>&nbsp;</p>
+<h2 id="1.2%C2%A0%E5%85%A8%E5%B1%80%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%BC%95%E5%85%A5"><strong>1.2&nbsp;全局动态参数引入</strong></h2>
+<p>通过外部变量文件的形式引入，虽然可以实现在测试脚本不做任何变更的前提下完成一套用例多套环境运行的目的，但每次在不同环境运行时，需要去环境变量文件中进行调整，虽然调整幅度较小（只需要进行注释），但仍然不是那么便捷。</p>
+<p>在Robot Framework中还在一种更便捷灵活的方式来实现此目的，即通过全局参数变量引用形式来实现对应变量值的全局动态修改。而采用参数变量引用的形式来实现变量值的动态修改，也分为两种方式。</p>
+<h3 id="1)-%E7%AC%AC%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%9AArguments%E5%8F%82%E6%95%B0%E6%A0%8F"><strong>1) 第一种方式：Arguments参数栏</strong></h3>
+<p>在RIDE编辑器Run运行标签下的Arguments参数栏中增加参数变量--variable key:value。如下图所示，增加了一个变量名为URL，变量值为https://test.xxx.com。</p>
+<div class="image-block"><img src="https://ask.qcloudimg.com/http-save/6490225/nl1fqrbl9v.png?imageView2/2/w/1620" alt="" width="768" height="111"></div>
+<p>参数栏中增加变量的书写格式：</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">-v变量名:变量值或者--variable变量名:变量值。</pre>
+</div>
+<p>上图中，参数栏填入-v URL:https://test.xxx.com，对URL变量赋值为https://test.xxx.com。这样在运行接口测试用例时，会将URL对应的变量值动态修改赋值为https://test.xxx.com。此时即使环境变量文件中的URL变量为https://www.xxx.com。通过这种命令行参数变量的引入形式仍然可以实现动态修改URL值。</p>
+<p>&nbsp;</p>
+<p><strong>PS:</strong> 通过参数变量--variable key:value形式引入的变量值，为全局变量优先级最高。</p>
+<p>&nbsp;</p>
+<h3 id="2)-%E7%AC%AC%E4%BA%8C%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%9A%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><strong>2) 第二种方式：命令行参数</strong></h3>
+<p>采用Pybot或Robot命令行的形式来运行Robot Framework接口测试用例时，引入参数变量替换，例如：</p>
+<div class="cnblogs_code">
+<pre>Robot --variable URL:<span style="color: #800000;">"</span><span style="color: #800000;">https://test.xxx.com</span><span style="color: #800000;">"</span> /usr/local/rf_api || exit <span style="color: #800080;">0</span>。</pre>
+</div>
+<p>&nbsp;</p>
+<p>此种方式也是最为常用的调用形式，适合与CI持续集成系统对接。</p>
+<p>&nbsp;</p>
+<h1 id="2.-%E8%AF%AD%E8%A8%80%E5%B1%82%E9%9D%A2%E6%94%AF%E6%8C%81%E5%A4%9A%E7%8E%AF%E5%A2%83%E8%BF%90%E8%A1%8C%E6%80%9D%E8%B7%AF"><strong>2. 语言层面支持多环境运行思路</strong></h1>
+<p>以Python语言为例，从语言层面解决如何一套用例支持多环境运行，<strong>本质还是要在用例层对测试环境无感，需要把环境所用的数据抽象出来。</strong></p>
+<p>随便画了一张草图，大家凑合着看，图中所示，是一个典型的桥接模式（Bridge Pattern）：将抽象部分与实现部分分离，使它们都可以独立地变化。</p>
+<div class="image-block"><img src="https://ask.qcloudimg.com/http-save/6490225/aqzsvbkeww.png?imageView2/2/w/1620" alt="" width="672" height="457"></div>
+<p>拿上述最开始的代码示例来讲：需要抽象出<code>服务地址</code>、<code>账号</code>两个对象，用例逻辑层只允许使用这些抽象的对象，而不能直接访问具体的数据，例如改成如下：</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def test_login(self):
+    requests.post(entrypoint.URL+"/login", data={"username":data.account.username, "password":data.account.password})
+</pre>
+</div>
+<p>　</p>
+<p>而在Python中，可以利用<code>property装饰器</code>来实现简易的桥接模式（其它语言也有类似的设计模式或实现），代码示例如下：</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">from enum import Enum
+
+class Environment(Enum):
+    DEV = 0
+    TEST = 1
+    PRE = 2
+    PROD= 3
+
+class EntryPoint:
+    _ENV_URL = {
+        Environment.DEV: "https://dev.xxx.com",
+        Environment.TEST: "https://test.xxx.com",
+        Environment.PRE: "https://pre.xxx.com",
+        Environment.PROD: "https://www.xxx.com"
+    }
+
+    @property
+    def URL(self):
+        return self._ENV_URL[env]
+
+env = Environment.DEV   # 作为全局的环境变量
+</pre>
+</div>
+<p>　</p>
+<p>样例代码中，先通过继承Enum类实现了一个枚举类Environment，在枚举类中定义了各环境的常量，可以理解是为后续定义各环境具体的Key值。</p>
+<p>&nbsp;</p>
+<p>接着定义了一个EntryPoint类，并且在该类中，定义了一个存储各环境的字典，KEY名为枚举类中定义的常量。通过在URL方法 ，增加@property装饰器，可以让URL方法变成只读属性，并且通过obj.URL即可调用。</p>
+<p>&nbsp;</p>
+<p>如果需要切换环境去执行，只要更新全局变量<code>env</code>就可以实现。</p>
+<p>如果你对Python中的，Enum枚举用法和@property装饰器，还不了解或者想更深入了解这些用法，具体可参考官方文档介绍。</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;"># @property用法官方文档
+https://docs.python.org/3/library/functions.html#property
+# Enum用法官方文档
+https://docs.python.org/zh-cn/3/library/enum.html
+</pre>
+</div>
+<p>　</p>
+<p>受篇幅限制，一套自动化测试用例，不同环境对应的测试数据不同，解决思路下回再介绍，完整的自动化测试设计规范及各类实战技巧，建议可以系统性地学习：<strong>《自动化测试实战宝典：Robot Framework + Python 从小工到专家》一书中的内容。</strong></p>
+<p>&nbsp;</p>
+<p>如果觉得文章对你有所帮助，动动手<strong>点赞一下</strong>以表支持，你的肯定是我创作最大的鼓励和支持！</p>
+<div id="haloword-lookup" class="ui-widget-content">&nbsp;</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+        <div class="clear"></div>
+        <div id="blog_post_info_block">
+        <div id="blog_post_info">
+        </div>
+        <div class="clear"></div>
+        <div id="post_next_prev"></div>
+    </div>
+</div>
+    <ul class="postmetadata">
+        
+<li class="icon_cat" id="BlogPostCategory">
+分类            <a href="https://www.cnblogs.com/jinjiangongzuoshi/category/748029.html" target="_blank">接口测试</a>
+,            <a href="https://www.cnblogs.com/jinjiangongzuoshi/category/652281.html" target="_blank">自动化测试</a>
+,            <a href="https://www.cnblogs.com/jinjiangongzuoshi/category/617314.html" target="_blank">Python</a>
+,            <a href="https://www.cnblogs.com/jinjiangongzuoshi/category/569666.html" target="_blank">测试技术</a>
+</li>
+<li class="icon_bullet" id="EntryTag">
+&nbsp;</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var m = window.__blog.postRendered;
+    if (m) { m(__$("post")); }
+</script>
+<script type="text/javascript">
+    var m = window.__blog.postRenderPosts;
+    if (m) { m(); }
+</script>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 155245, cb_blogApp = 'jinjiangongzuoshi', cb_blogUserGuid = '9d83363a-e1db-e211-8d02-90b11c0b17d6';
+    var cb_entryId = 12883578, cb_entryCreatedDate = '2020-05-13 17:18', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+        </div>
+
+        <script type="text/javascript">
+            var m = window.__blog.contentRendered;
+            if (m) { m(__$("content")); }
+        </script>
+
+        <div id="sidebar">
+            <div id="about">
+                <div>
+                    <h2 id="about_title">About</h2>
+                    <div id="about_body">
+                        <div id="sidebar_news"></div>
+                        <script type="text/javascript">loadBlogNews();</script>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var m = window.__blog.aboutRendered;
+                if (m) { m(__$("about")); }
+            </script>
+            <div id="mySearchWrapper">
+                <div id="mySearch">
+                    <input type="image" src="/skins/minyx2_lite/images/btnsearch.gif" id="btnZzk"  class="submit" onclick="zzk_go();return false;"/>
+                    <label class="lb_search"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="keyword" /></label>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var m = window.__blog.searchFormRendered;
+                if (m) { m(__$("searchform")); }
+            </script>
+            <div id="sideMain">
+            </div>
+            <div id="sideRight">
+            </div>
+            <div id="sideLeft">
+            </div>            
+                <div id="sideContainer">
+                </div>
+                <script type="text/javascript">
+                    $.ajax({
+                        url: '/' + currentBlogApp + '/ajax/Minyx2_Lite_SideColumn.aspx',
+                        data: '{}',
+                        type: 'post',
+                        dataType: 'text',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data) {
+                                $("#sideContainer").html(data);
+                                $.ajax({
+                                    url: getAjaxBaseUrl() + 'TopLists.aspx',
+                                    type: 'get',
+                                    dataType: 'text',
+                                    success: function (topLists) {
+                                        if (topLists) {
+                                            $("#sideContainer").append(topLists);
+                                        }
+                                        var m = window.__blog.sideContainerRendered;
+                                        if (m) { m(__$("sideContainer")); }
+                                        window.__blog.sidebar.__layout();
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                </script>
+        </div>
+
+        <script type="text/javascript">
+            var m = window.__blog.sidebarRendered;
+            if (m) { m(__$("sidebar")); }
+        </script>
+
+        <div id="footer">
+            <p id="logoFoot">
+    <a href="http://www.spiga.com.mx/" title="Agencia Interactiva Spiga">www.spiga.com.mx</a>
+</p>
+<div class="footText">
+<p>
+Copyright &copy; 2020 狂师
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+</p>
+<p>
+<a href="http://www.cnblogs.com">博客园</a>
+</p>
+</div>
+
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var m = window.__blog.wrapperRendered;
+        if (m) { m(__$("wrapper")); }
+    </script>
+
+</div>
+<script type="text/javascript">
+    var m = window.__blog.containerRendered;
+    if (m) { m(__$("container")); }
+</script>
+
+
+    
+</body>
+</html>

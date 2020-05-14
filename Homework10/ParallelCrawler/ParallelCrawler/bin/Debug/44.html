@@ -1,0 +1,534 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="本文针对indexDB的难点问题（事务和数据库升级）做了详细的讲解，而对于indexDB的特点和使用方法只简要的介绍了一下。如果你有一些使用indexDB的经验的话，本文一定能让你有更深的收获！" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>indexDB出坑指南 - enne5w4 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=UeHyLv1TT2WTz4TwfUOiMoKNmtFvLUjUnIhFE2UmZ7I" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=XjHfryC9ctsatIZz1dHn7TsRIqmwz9c3aj_6SCfHSDM" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zhwc-5w4/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zhwc-5w4/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zhwc-5w4/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 355992;
+        var currentBlogApp = 'zhwc-5w4';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'CodingLife';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/zhwc-5w4/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/zhwc-5w4/">enne5w4</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zhwc-5w4/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/enne5w4">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/zhwc-5w4/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+7&nbsp; </span>
+<span id="stats_article_count">文章 - 
+5&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+2</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/zhwc-5w4/p/12714818.html">indexDB出坑指南</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        本文针对indexDB的难点问题（事务和数据库升级）做了详细的讲解，而对于indexDB的特点和使用方法只简要的介绍了一下。如果你有一些使用indexDB的经验的话，本文一定能让你有更深的收获！
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>对于入了前端坑的同学，indexDB绝对是需要深入学习的。</p>
+<p>本文针对indexDB的难点问题（<strong>事务</strong>和<strong>数据库升级</strong>）做了详细的讲解，而对于indexDB的特点和使用方法只简要的介绍了一下。如果你有一些使用indexDB的经验的话，本文一定能让你有更深的收获！但如果你尚需要一个详尽教程的话，为你推荐教程<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Using_IndexedDB" target="_blank">使用indexDB</a>。</p>
+<h2>indexDB的特点</h2>
+<p>优点：</p>
+<ul>
+<li>indexDB 大小取决于你的硬盘，可以说是不受限的</li>
+<li>可以直接存储任何 js 数据，包括blob（其实是支持<a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm">结构化克隆</a>的数据），不像 storage 只能存放字符串！</li>
+<li>可以创建索引，提供高性能的搜索功能！</li>
+<li>采用事务，保证数据的准确性和一致性。（绝对的黑科技，某些棘手的场景只能用它了！<br />
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<p>唯一的缺点就是太复杂了，比storage和cookie都要复杂的多！</p>
+<h2>使用indexDB</h2>
+<p>使用分为3步：<br />&nbsp;1、打开数据库DB<br />&nbsp;2、在versionChange事件中 创建表（ObjectStore），包括定义表的键，索引规则等。<br />&nbsp;3、操作数据（增删改查）</p>
+<p>操作数据又分为4步：<br />&nbsp;1、开启事务<br />&nbsp;2、获取事务中的objectStore<br />&nbsp;3、通过objectStore发起操作请求<br />&nbsp;4、定义请求的回调函数</p>
+<p>打开数据库很简单：</p>
+<div class="cnblogs_code">
+<pre>const opendbRequest = indexedDB.open("MyDatabase", version);  <span style="color: #008000;">//</span><span style="color: #008000;"> 注意：并不是直接打开数据库，而是发起了一个打开数据库的请求！</span>
+<span style="color: #000000;">
+let db;
+opendbRequest.onsuccess </span>= <span style="color: #0000ff;">function</span><span style="color: #000000;">(event) {
+  </span><span style="color: #008000;">//</span><span style="color: #008000;"> 请求的 success 回调里面就可以获取打开的数据库了：</span>
+  db = event.target.result; <span style="color: #008000;">//</span><span style="color: #008000;"> 或 opendbRequest.result</span>
+};</pre>
+</div>
+<p>当 indexDB.open 第二个参数version 的值 比 已经存在的DB的版本号大时，或者 当前不存在对应的DB 这是第一次打开数据库时，就会触发changeVersion事件，通过<code class=" language-js"><span class="token function-variable function">onupgradeneeded</span></code>设置回调。一定要记住这点！</p>
+<div class="cnblogs_code">
+<pre>opendbRequest.onupgradeneeded = e=&gt;<span style="color: #000000;">{
+    const db </span>=<span style="color: #000000;"> e.target.result
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> 只有在这个回调里面，才能定义（增删改）对象仓库及对象仓库的规则！</span>
+    <span style="color: #008000;">//</span><span style="color: #008000;"> 术语：对象仓库（objectStore） 相当于 MySQL中的表（table），mogodb中的repository（仓库）</span>
+
+    <span style="color: #008000;">//</span><span style="color: #008000;"> 创建objectStore</span>
+    <span style="color: #008000;">//</span><span style="color: #008000;"> 创建时 一定要注意定义好key的规范，key就相当于 MySQL里的主键，关于key的规范请参考推荐教程</span>
+    const objectStore = DB.createObjectStore('myObjectStore', { keyPath: 'id'<span style="color: #000000;"> });
+
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> 创建索引：</span>
+    <span style="color: #008000;">//</span><span style="color: #008000;"> 有联合索引，唯一索引，对数组字段建索引 这些强大的功能，推荐教程里都有讲解！</span>
+    objectStore.createIndex('index_name', ['field1', 'field2', 'field3'], { unique: <span style="color: #0000ff;">true</span><span style="color: #000000;"> })
+}</span></pre>
+</div>
+<p>现在我们了解了如何打开一个DB，以及如何在DB中定义 objectStore 及其规则（schedule），接下来就是往数据库的objectStore中增删改查数据了。4步如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 创建事务：</span><span style="color: #008000;">
+//</span><span style="color: #008000;"> 第一个参数指明事务所涉及的objectStores，如果只有一个objectStore，[]可以省略，本例可以直接写 'myObjectStore'</span><span style="color: #008000;">
+//</span><span style="color: #008000;"> 第二参数指明事务操作数据的方式，如不写 默认是 readonly，表示只能读数据 不能写。如果不仅仅是读，还有增删改数据，必须用 readwrite。</span><span style="color: #008000;">
+//</span><span style="color: #008000;">  请注意 readwrite 事务性能较低，并且只能有一个处于活动状态。所以除非必要，不要随意使用readwrite！</span>
+let transaction = db.transaction(['myObjectStore'],'readwrite'<span style="color: #000000;">)  
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 获取事务中的objectStore （<span style="text-decoration: underline;"><strong>注意：</strong></span>objectStore只有事务才能获取，而不能通过db直接获取）</span>
+let objectStore = transaction.objectStore('myObjectStore'<span style="color: #000000;">)
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 在事务objectStore上发起操作数据的请求：（注意</span><span style="color: #008000;">只有objectStore才能发起操作数据的请求！</span><span style="color: #008000;">）</span><span style="color: #008000;"> <br />//</span><span style="color: #008000;"> add 新增， put 不存在相同key值的，是新增；存在，是修改， </span><span style="color: #008000;"> <br />//</span><span style="color: #008000;"> delete 删除，get 查询 这两个参数只能传入特定对象的 key！如：let request = objectStore.delete(myKey)</span> <br />let request =<span> objectStore.add(modifyData) <br /></span><span style="color: #008000;">//</span><span style="color: #008000;"> 请求成功的回调</span> <br />request.onsuccess = e =&gt; <span>{<br />  console.log(</span>'添加数据成功。新数据的key是：'<span>,e.target.result) <br />}</span></pre>
+</div>
+<h2>indexDB的查询介绍</h2>
+<p>以上操作基本都是要先知道数据的key值，如delete和get都要传入一个key。但更多时候，我们并不知道key（特别是当你采用Key Generator生成key值时），比如我们也许只知道要delete或get的数据的name是&ldquo;Jeck&rdquo;，这时我们如何得到想要操作的数据的key呢。<br />我们可以通过全表查询objectStore.getAll()&nbsp;，然后逐个遍历表中的数据，但这是性能最低的查询，也是所有数据库设计中要竭力避免的查询，这里就不详述了！<br />indexDB还提供了索引查询，对于上面的情况只需对name建立一个索引，然后就可以直接查询 name为&ldquo;Jeck&rdquo;的数据了。<br />索引查询和key查询，是本节要介绍的重点。不过还是要强调一点，虽然查询的方式相当多，但都大同小异！记住下面三点将有助于你快速掌握：</p>
+<ul>
+<li>索引和key的操作形式（传递参数的形式，查询条件的形式）是一模一样的</li>
+<li>IDBIndex和ObjectStore的各种api：get, getKey, getAll, getAllKeys, openCursor,&nbsp;openKeyCursor&nbsp; 里面都可以传入条件，也可以不传，条件可以是key的或索引的特定值或范围。</li>
+<li>需要一次操作多个数据的情况很常见，但是并不提倡直接 getAll( condition )或 getAllKeys( condition ) 这样的操作，思考一下它的性能，以及占用的内存资源你就明白了&mdash;&mdash;我们更多采用的是游标（cursor）。</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<p>鉴于所有操作都基本相同，所以接下来举一个常见的使用游标且稍微有点难的查询场景！开始之前：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 回顾 前面定义的索引：（索引必须先创建再使用）</span>
+objectStore.createIndex('index_name', ['field1', 'field2', 'field3'], { unique: <span style="color: #0000ff;">true</span> })</pre>
+</div>
+<p>查询单个数据：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 单个查询：</span>
+const dbIndex = objectStore.index('index_name'<span style="color: #000000;">)
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 注意: 下面传入索引值的语法规则，v1 对应字段 field1，v2 对应字段 field2, v3 对应字段 field3</span><span style="color: #008000;">
+//</span><span style="color: #008000;"> 注意：如果索引不是unique的（unique索引get最多当然只会得到一条数据）,有可能有多条对应的数据，这时get只会得到最小key的数据。获取所有数据要使用 getAll</span>
+dbIndex.get([v1, v2, v3]).onsuccess = e =&gt;<span style="color: #000000;"> {
+    let data </span>= e.target.result; <span style="color: #008000;">//</span><span style="color: #008000;"> 得到符合条件的数据    </span>
+}</pre>
+</div>
+<p>使用IDBKeyRange查询范围内的多个数据：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 游标查询范围内的多个：</span>
+const range =<span style="color: #000000;"> IDBKeyRange.bound([min1, min2, min3], [max1, max2, max3]) <span style="color: #008000;">// 除了bound 还有 only，lowerBound, upperBound 方法，还可以指明<strong>是否排除</strong>边界值</span>
+dbIndex.openCursor(range, "prev").onsuccess </span>= e =&gt;<span style="color: #000000;"> {   <span style="color: #008000;">// 传入的 prev 表示是降序遍历游标，默认是next表示升序；如果索引不是unique的，而你又不想访问重复的索引，可以使用nextunique或prevunique，这时每次会得到key最小的那个数据</span>
+    let cursor </span>=<span style="color: #000000;"> e.target.result;
+    </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (cursor) {
+        let data </span>= cursor.value  <span style="color: #008000;">//</span><span style="color: #008000;"> 数据的处理就在这里。。。 [ 理解 cursor.key，cursor.primaryKey，cursor.value ]</span>
+        cursor.<span style="color: #0000ff;">continue</span><span style="color: #000000;">()
+    } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 游标遍历结束！</span>
+<span style="color: #000000;">    }
+}</span></pre>
+</div>
+<p>需要说明的是&nbsp;IDBKeyRange.bound([min1, min2, min3], [max1, max2, max3])&nbsp; &nbsp;到底是什么样的范围？如下：</p>
+<div class="cnblogs_code">
+<pre>max1 &gt; min1 || max1 === min1 &amp;&amp; max2 &gt; min2 || max1 === min1 &amp;&amp; max2 === min2 &amp;&amp; max3 &gt; min3 <span style="color: #339966;"> // 好好理解一下这个 bound 的含义吧 ！</span>&nbsp;</pre>
+</div>
+<h2>事务</h2>
+<p>理解事务是用好indexDB的关键！事务是在一个特定的数据库上，一组具备原子性和持久性的数据访问和数据修改的操作。</p>
+<p>考虑<span style="font-family: 楷体;">大文件断点续传-任务队列</span>的场景：<br />实现断点续传，你需要缓存上传的文件 和 这个文件的上传任务信息（任务名称，上传进度等），这样就可以下次打开browser时续传了，还可以在任务失败后重启任务了；<br />上传大文件需要很长时间，设计一个可以随时查看的任务队列，这样用户就不用一直等待了 &mdash;&mdash; 为了能让用户能随时查看，所有的任务信息需要常驻内存。<br />考虑到大文件的内存占用过大，你应该只将当前正在上传的文件放到内存中，而非所有任务的所有文件 &mdash;&mdash; 大部分的文件，应当待在indexDB缓存中，而非内存中。<br />综上所述：indexDB数据库将会有两个ObjectStore：tasks用于存放任务除了文件之外的信息，files用于存放任务要上传的文件。</p>
+<p>现在我们考虑删除任务的场景，删掉一个任务，需要同时删除tasks中的信息和files中的信息；<br />如果只成功删除了tasks，files中将额外多出永远访问不到的大文件；<br />如果只删除了files，tasks中将存在一个无法重启的<span style="color: #993366;">异常任务</span>！这都是不可取的<br />这就是一个典型的事务场景，具有原子性，不可拆分性，必须都成功！</p>
+<p>错误代码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #ff0000;">// 注意这里是错误示范，实际上开启了两个事务：删除tasks 和 files 不能保证都同时成功</span>
+const tasksStore = db.transaction('tasks', 'readwrite').objectStore('tasks'<span style="color: #000000;">)
+const filesStore </span>= db.transaction('files', 'readwrite').objectStore('files'<span style="color: #000000;">)
+tasksStore.</span><span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了任务'<span style="color: #000000;">)
+}
+filesStore.</span><span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了文件'<span style="color: #000000;">)
+}</span></pre>
+</div>
+<p>其实我们只需要做一个很简单的改变，就是声明一个事务来发送两个请求：</p>
+<div class="cnblogs_code">
+<pre>const trans = db.transaction(['tasks', 'files'], 'readwrite'<span style="color: #000000;">)
+const tasksStore </span>= trans.objectStore('tasks'<span style="color: #000000;">)
+const filesStore </span>= trans.objectStore('files'<span style="color: #000000;">)
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 下方两个操作请求共用了一个事务trans，必须同时成功，否则就失败（即使成功了的请求，数据也将会回滚）</span>
+tasksStore.<span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了任务'<span style="color: #000000;">)
+}
+filesStore.</span><span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了文件'<span style="color: #000000;">)
+}</span></pre>
+</div>
+<p>或者这样写（虽然效率低了写，但看起来更具原子性）：</p>
+<div class="cnblogs_code">
+<pre>const trans = db.transaction(['tasks', 'files'], 'readwrite'<span style="color: #000000;">)
+const tasksStore </span>= trans.objectStore('tasks'<span style="color: #000000;">)
+const filesStore </span>= trans.objectStore('files'<span style="color: #000000;">)
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 还可以这样：</span>
+tasksStore.<span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    filesStore.</span><span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+        console.log(</span>'删除成功'<span style="color: #000000;">)
+    }
+}</span></pre>
+</div>
+<h2>深入事务的生命周期</h2>
+<p>也许你觉得上面的写法都不够优雅，或者仅仅是想抽出更通用的逻辑，而想做一些封装和抽取时，你会发现事情并不是那么简单。深刻理解indexDB事务的生命周期很关键，虽然这并不容易。<br />在这里先假设你已经很熟悉js的 <a href="https://www.cnblogs.com/zhwc-5w4/p/11568583.html" target="_blank">Event Loop</a> 和 DOM Event （如果不熟悉，就先去了解一下再回来吧！），接下来一起探讨indexDB的事务生命周期。</p>
+<h3>正常情况下的生命周期</h3>
+<p>也许你已经注意到了，indexDB核心就是一个一个的请求，这种请求的处理很像ajax，与其使用回调函数来编程，为何不将其封装成更优雅的promise呢，就像下面这样？：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #ff0000;"> 1</span> <span style="color: #0000ff;">function</span><span style="color: #000000;"> request(objectStore, method, params) {
+</span><span style="color: #ff0000;"> 2</span>     <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span> Promise(resolve =&gt;<span style="color: #000000;"> {
+</span><span style="color: #ff0000;"> 3</span>         objectStore[method](params).onsuccess = e =&gt;<span style="color: #000000;"> {
+</span><span style="color: #ff0000;"> 4</span> <span style="color: #000000;">            resolve(e.target.result)
+</span><span style="color: #ff0000;"> 5</span> <span style="color: #000000;">        }
+</span><span style="color: #ff0000;"> 6</span> <span style="color: #000000;">    })
+</span><span style="color: #ff0000;"> 7</span> <span style="color: #000000;">}
+</span><span style="color: #ff0000;"> 8</span> const trans = db.transaction(['tasks', 'files'], 'readwrite'<span style="color: #000000;">)
+</span><span style="color: #ff0000;"> 9</span> const tasksStore = trans.objectStore('tasks'<span style="color: #000000;">)
+</span><span style="color: #ff0000;">10</span> const filesStore = trans.objectStore('files'<span style="color: #000000;">)
+</span><span style="color: #ff0000;">11 await request(tasksStore, 'delete', processId)
+12 // 此时事务已经结束，所以下面的请求会报错：</span>
+<span style="color: #ff0000;">13 await request(filesStore, 'delete', processId)</span></pre>
+</div>
+<p>回顾一下 js的event loop！下面直接给出事务生命周期的要点：<br />【要点】：<strong>当event loop 任务队列中没有等待处理的该事务发起的回调函数，并且正在处理的任务也不是该事务发起的回调函数，这个事务就会停止。</strong><br />参考官方：Transactions are tied very closely to the event loop. If you make a transaction and return to the event loop without using it then the transaction will become inactive. The only way to keep the transaction active is to make a request on it. When the request is finished you'll get a DOM&nbsp;event and, assuming that the request succeeded, you'll have another opportunity to extend the transaction during that callback. If you return to the event loop without extending the transaction then it will become inactive, and so on. As long as there are pending requests the transaction remains active.</p>
+<p>上面代码第11行结束后，event loop 任务队列为空，事务就会结束，第13行就会报 事务已失活的错误。我们可以把await去掉，像这样：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> request 是个异步函数，而调用是同步的，这里恰好用了异步延迟的特点，让两个请求都能在事务失活前发出。（这里不过是钻了个空子！）</span>
+request(tasksStore, 'delete'<span style="color: #000000;">, processId)
+request(filesStore, </span>'delete', processId)</pre>
+</div>
+<p>结合上面标注的【要点】，好好理解一下去掉await前后代码的本质差异，为什么前面的会失败，而后面的会成功。</p>
+<p>再看下面的例子</p>
+<div class="cnblogs_code">
+<pre><span style="color: #ff0000;">// 错误代码，这和上面await的例子本质是一样的，第一个请求结束后 事务就失活</span>
+request(tasksStore, 'delete', processId).then(() =&gt;<span style="color: #000000;"> {
+    request(filesStore, </span>'delete', processId).then(() =&gt;<span style="color: #000000;"> {
+        console.log(</span>'结束'<span style="color: #000000;">)
+    })
+})</span></pre>
+</div>
+<p>&nbsp;再回顾一下前面的代码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 正确的代码，本质和上面不带await的是一样的，不过这里与其说是钻空子，不如说是使用了异步回调的延迟技巧，</span><span style="color: #008000;">
+//</span><span style="color: #008000;"> 因为上面不带await的代码并不能直观的看出request是异步的（而这里却可以很明显的看出），极有可能会出错。</span>
+tasksStore.<span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了任务'<span style="color: #000000;">)
+}
+filesStore.</span><span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除了文件'<span style="color: #000000;">)
+}</span></pre>
+</div>
+<p>&nbsp;进一步回顾代码，以便理解 【要点】 的本质</p>
+<div class="cnblogs_code">
+<pre>tasksStore.<span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> 第一个请求的回调处理，在处理结束（return）前，又发起了一个请求，从而保证了事务的活性！</span>
+    filesStore.<span style="color: #0000ff;">delete</span>(processId).onsuccess = () =&gt;<span style="color: #000000;"> {
+        console.log(</span>'删除成功'<span style="color: #000000;">)
+    }
+}</span></pre>
+</div>
+<h3>异常情况下的生命周期</h3>
+<p>以上是所有请求都成功（success）的情况。事务还有一个特性：任何一个请求失败了，其他请求都会回滚，整个事务就失败！<br />indexDB请求中，我们最常用的回调就是onsuccess，onerror，onupgradeneeded，这些都是对应的DOM event，所以你也可以使用 addEventListener和&nbsp;removeEventListener，&hellip;&hellip; 但这里真正的重点是，DOM Event 具有传递的特性。<br />想象event 在html DOM树中的传递，event在 indexDB事务中的传递基本一样，不过只有error事件会传递！！任何一个error event 一旦被传递给事务，这个事务就会失败。</p>
+<p>按照官方的文档，你应该可以像下面这样阻止事务被回滚，但是经过测试没有任何效果：<br />参考官方：a transaction receives error events from any requests that are generated from it.&hellip;&hellip;A more subtle point here is that the default behavior of an error is to abort the transaction in which it occurred. &hellip;&hellip;Unless you handle the error by first calling&nbsp;<code>stopPropagation()</code>&nbsp;on the error event then doing something else, the entire transaction is rolled back.&nbsp;</p>
+<div class="cnblogs_code">
+<pre>let req = filesStore.<span style="color: #0000ff;">delete</span><span style="color: #000000;">(processId)
+req.onsuccess </span>= () =&gt;<span style="color: #000000;"> {
+    console.log(</span>'删除成功'<span style="color: #000000;">)
+}
+req.onerror </span>= e =&gt;<span style="color: #000000;"> {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> 你可以处理错误，但请记住：只有显式的阻止error event 向上传递，它才不会向上传递！</span>
+    <span style="color: #008000;">//</span><span style="color: #008000;"> 这和 promise的catch 不一样，你虽然处理了错误，但是没有阻止其传递，整个事务还是会失败！<br />　　 // <strong><span style="color: #ff0000;">不过，请注意：</span></strong><span style="color: #ff0000;">这只是标准，实际上（经过测试，至少在chrome上）这样是没法阻止事务失败的！</span></span>
+<span style="color: #000000;"><span style="color: #0000ff;"><strong>    e.stopPropagation()</strong></span>
+}</span></pre>
+</div>
+<h2>indexDB的数据库升级问题</h2>
+<p>当你打开数据库时，版本号参数比当前已存在的数据库版本高时，或者当前本地不存在这个数据库，就会触发versionChange升级事件，对应于onupgradeneeded 回调（前面讲过）。<br />定义db的schema（首次创建db或升级db，比如创建和删除objectStore，创建和删除索引） ，这样的事情都只能在onupgradeneeded 回调中进行！</p>
+<p>由于indexDB是运行在客户端（浏览器）的数据库，它的升级比服务端的数据库升级要复杂（的多），毕竟你可以完全掌控服务端，但用户的行为却无法预测，你需要考虑各种情况。</p>
+<h3>不能只基于上一个版本做升级</h3>
+<p>举个例子：假如你的数据库经历过两次升级，版本号由1，到2，又到现在的3了。在做2到3的升级时，你不能只写2到3这一个升级逻辑，你的逻辑必须能够适配1到3的升级，以及直接到3的创建。<br />因为用户可能是第一次打开你的网站，本地压根就不存在数据库，这时要进行直接到3的创建；<br />用户也可能在你的indexDB版本还是1的时候打开过你的网站，但直到现在版本升到3了才再次打开，这时要进行1到3的升级；<br />&hellip;&hellip;<br />以此类推，你的数据库升级代码必须足够灵活，已便适配所有场景，可以由 无、第1版、第2版&nbsp; &nbsp;。。。直接到当前的最新版！</p>
+<h3>索引升级与数据升级的问题</h3>
+<p>在增删索引时需要先得到对应的objectStore，而要得到objectStore必须先有事务，但是onupgradeneeded 时 你不能创建事务，这似乎是一个矛盾！<br />其实onupgradeneeded 时已经自带了一个 versionchange的事务，这是一个作用域覆盖了所有objectStores的事务，像这样就可以操作数据了：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;"><strong>openDBRequest</strong></span>.onupgradeneeded = (e) =&gt;<span style="color: #000000;"> {
+    objectStore </span>= <span style="color: #0000ff;"><strong>openDBRequest.transaction</strong>.</span>objectStore('myObjectStore'<span style="color: #000000;">)   
+    objectStore.createIndex(</span>'index_name', ['field1', 'field2', 'field3'], { unique: <span style="color: #0000ff;">true</span><span style="color: #000000;"> })
+}</span></pre>
+</div>
+<p>&nbsp;</p>
+<p>有些时候我们必须要在onupgradeneeded 中操作数据，已便在升级数据库的同时，升级转换已经存在了的数据！上面解决拿到objectStore的问题（操作数据必须拿到objectStore），但确实不应该在onupgradeneeded中操作数据，当你成功完成了onupgradeneeded 数据库升级后，会触发 onsuccess回调，你应该在这里面操作数据！</p>
+<h3>数据库升级面临的多窗口问题</h3>
+<p>用户可能打开了多个浏览器标签或窗口，这时所有页面链接的都是旧版的indexDB。如果用户刷新了某一个页面，从而下载了最新的代码，就会在这个页面触发数据库的升级，这时升级就会出现问题 &mdash;&mdash; 好在我们在其他页面，可以监听到数据库在请求升级，也可以主动断开链接，你可以这样：</p>
+<div class="cnblogs_code">
+<pre>openReq.onsuccess = e =&gt;<span style="color: #000000;"> {
+    console.log(</span>'db open success!'<span style="color: #000000;">)
+    db </span>=<span style="color: #000000;"> openReq.result
+    db.onversionchange</span>=e=&gt;<span style="color: #000000;">{
+        db.close()  </span><span style="color: #008000;">//</span><span style="color: #008000;"> 关闭连接</span>
+        console.log("页面内容已过期，请刷新"<span style="color: #000000;">);
+    }
+}    </span></pre>
+</div>
+<p>&nbsp;当数据库已经升级，但页面没有刷新而使用老代码在打开低版本的数据库时，这时会触发VersionError错误，你可以监听这个错误，并提示用户刷新页面！</p>
+<p>未经用户同意就直接关闭数据库的链接，可能会给用户带来不好的体验，如果不这么做，就要像下面这样给出提示：</p>
+<div class="cnblogs_code">
+<pre>openReq.onblocked = <span style="color: #0000ff;">function</span><span style="color: #000000;">(event) {  
+  console.log(</span>"请先关闭其他页面，再加载本页面！"<span style="color: #000000;">);
+};</span></pre>
+</div>
+<p style="text-align: left;">以上两种方式，你需要二选一！</p>
+<p style="text-align: center;"><span style="font-size: 18px;">（完）</span></p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 11:35</span>&nbsp;
+<a href="https://www.cnblogs.com/zhwc-5w4/">enne5w4</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12714818" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12714818);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 355992, cb_blogApp = 'zhwc-5w4', cb_blogUserGuid = '4099f7c5-21d8-4cea-e014-08d49c350eca';
+    var cb_entryId = 12714818, cb_entryCreatedDate = '2020-05-13 11:35', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 enne5w4
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

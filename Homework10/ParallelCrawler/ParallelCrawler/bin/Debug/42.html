@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="专注于为什么要进行Code Review ，将帮助团队创建Code Review 流程的最佳实践，这样就更容易避免Code Review 的错误模式。" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Code Review 常见的5个错误模式 - peida - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=UeHyLv1TT2WTz4TwfUOiMoKNmtFvLUjUnIhFE2UmZ7I" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=XjHfryC9ctsatIZz1dHn7TsRIqmwz9c3aj_6SCfHSDM" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/peida/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/peida/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/peida/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 38044;
+        var currentBlogApp = 'peida';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'CodingLife';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/peida/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/peida/">竹子-博客-架构未来</a>
+</h1>
+<h2>
+思索、感悟、践行！
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/peida/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/peida">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/peida/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+225&nbsp; </span>
+<span id="stats_article_count">文章 - 
+2&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+853</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/peida/p/12881453.html">Code Review 常见的5个错误模式</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        专注于为什么要进行Code Review ，将帮助团队创建Code Review 流程的最佳实践，这样就更容易避免Code Review 的错误模式。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>原作者：Trisha Gee</p>
+<p>Code Review 的时候，每个人都会关心最佳实践，但最坏的实践有时可能会更有启示意义。</p>
+<p>Code Review是研发团队必不可少的，但并不总是正确的。这篇文章指出了所有开发者在Code Review时或提交拉取请求时可能都会遇到的一些常见的错误模式，并对这些错误模式进行了总结：</p>
+<h2 id="错误模式：挑毛病">错误模式：挑毛病</h2>
+<p>想象一下下面的场景。代码作者花了几个小时，甚至几天的时间来创建他们认为最有效的解决方案。他们考虑了多种设计方案，并选择了看起来最相关的路径。他们考虑了现有应用程序的架构，并在适当的地方进行了修改。然后，他们将自己的解决方案以拉动请求的形式提交，或者开始了代Code Review 过程，他们收到的专家反馈是：</p>
+<ul>
+<li>&quot;你应该使用标签，而不是空格。&quot;</li>
+<li>&quot;我不喜欢这部分的大括号在哪里。&quot;</li>
+<li>&quot;你的文件末尾没有空行。&quot;</li>
+<li>&quot;你们的词库是大写的，应该用句子大写。&quot;</li>
+</ul>
+<p>虽然新的代码要与现有代码的风格保持一致是很重要的，但这些东西几乎不需要人工审核员来完成。人工审核员的成本很高，而且可以完成计算机无法完成的事情。检查是否符合风格标准是计算机可以轻松完成的事情，这就分散了代码审核的真正目的。</p>
+<p>如果开发人员在代码审核过程中看到很多这样的注释，说明这个团队要么是没有风格指南，要么是有了风格指南，但检查风格还没有实现自动化。解决的办法是使用checkstyle等工具来确保风格指南已经被遵循，或者使用sonarqube来识别常见的质量和安全问题。而不是依靠人工审核员来警告这类问题，持续集成环境可以做到这一点。</p>
+<p>有时，如果没有代码指南，或者内部代码风格随着时间的推移而变化，在不同的部分有不同的风格，那么这种自动检查可能会很困难。在这种情况下，有一些方法可以应用自动检查。例如，一个团队可以同意做一个单一的提交，应用约定的代码风格，并且不包含其他的更改。或者一个团队可以约定，当一个文件因为bug或功能而被更改时，该文件也会被更新到新的样式，而自动工具可以被配置为只检查更改过的文件。</p>
+<p>如果一个团队有多种代码样式，而它没有办法自动检查样式，也容易落入下一个陷阱。</p>
+<h2 id="错误模式：不一致的反馈">错误模式：不一致的反馈</h2>
+<p>每一个被邀请审阅代码的开发者，至少要多邀请一个意见，而且可能更多。每个人都可以同时持有不止一种意见。有时，Code Review 可能会陷入审查者之间关于不同方法的争论，比如说是使用流还是经典的for循环最好。如果团队成员对同一段代码有不同的意见，那么开发人员应该如何进行修改，结束审阅，并将代码推送到生产中？</p>
+<p>即使是一个审稿人的想法也很容易发生变化，可能是在一次审稿中，也可能是在一系列的审稿中。在一次审阅中，一个审阅者可能会催促作者确保使用O(1)读操作的数据结构，而在下一次审阅中，审阅者可能会问为什么不同的用例会有几个数据结构，并建议通过单一结构进行线性搜索来简化代码。</p>
+<p>当一个团队对自己的 &quot;最佳实践 &quot;是什么样子的没有一个明确的想法，当团队还没有弄清楚自己的优先级是什么的时候，这种情况就会出现：</p>
+<ul>
+<li>代码是否应该向着更现代的Java风格发展？还是更重要的是代码的一致性，因此，继续到处使用 &quot;经典 &quot;构造？</li>
+<li>在系统的所有部分中，对数据结构进行O(1)读操作是否重要？还是有些部分的O(n)可以接受？</li>
+</ul>
+<p>几乎所有的设计问题都可以用 &quot;这要看情况 &quot;来回答。为了对答案有一个更好的想法，开发人员需要了解他们的应用和团队的优先级。</p>
+<h2 id="错误模式：最后一分钟的设计变更">错误模式：最后一分钟的设计变更</h2>
+<p>开发者在Code Review 过程中最让人士气低落的反馈是：当评审者从根本上不同意方案的设计或架构，并强行完全重写代码时，要么通过一系列的评审来逐步完成（见下一节），要么粗暴地拒绝代码，让作者重新开始。</p>
+<p>Code Review 不是评审设计的正确时机。如果团队按照经典的 &quot;网关式 &quot; Code Review ，那么在最后一步让另一个开发人员看代码之前，代码应该是可以工作的，所有的测试都应该是通过的。在这一点上，几个小时、几天，甚至可能是几周（虽然我真的希望不是几周；Code Review 应该是小事一桩，但这是另一个话题）的努力已经花在了被审查的代码上。在Code Review 中指出底层设计是错误的，这是在浪费大家的时间。</p>
+<p>Code Review 可以作为设计审查，但如果这是Code Review 的意图，那么审查应该在实现之初就进行。然后，在开发人员还没有走得太远之前，他们可以把自己的想法勾勒出来，也许会有一些存根类和方法，以及一些有意义的名称和步骤的测试，也许还可以提交一些文字或图表，以便让团队成员对将要采取的方法进行反馈。</p>
+<p>如果团队成员在关口审查中发现了真正的展示性设计问题（也就是说，当代码完成并运行时），团队应该更新流程，以便更早地定位这些问题。这可能意味着要做其他类型的审查，比如上一段中建议的审查，白板上的想法，配对编程，或者与技术负责人讨论建议的解决方案。在最后的Code Review 中发现设计问题是对开发时间的浪费，也是对代码作者的极大打击。</p>
+<h2 id="错误模式：乒乓球-reviews">错误模式：乒乓球 Reviews</h2>
+<p>在一个理想的世界里，作者会提交代码进行评审，评审人员会提出一些明确的解决方案的意见，作者提出修改建议并重新提交代码，评审结束，代码就会被推送。但如果这样的事情经常发生，谁还能说得清 Code Review 的过程是有道理的呢？</p>
+<p>在现实生活中，经常出现的情况是这样的：</p>
+<ol>
+<li>一个Code Review开始了。</li>
+<li>一些审稿人提出了几个建议：有的小而容易，有的蓬头垢面，没有明显的解决方案，有的复杂。</li>
+<li>作者做了一些修改：至少是简单的修改，或者说是几处修改，力求让审稿人满意。作者可能会向审稿人提出问题来澄清一些事情，或者作者可能会提出意见，解释为什么没有做出特定的修改。</li>
+<li>审稿人回来后，接受一些更新，对其他的修改提出进一步的意见，找到他们不喜欢的地方，回答问题，并在审稿中与其他审稿人或作者争论他们的意见。</li>
+<li>代码作者做更多的修改，增加更多的评论和问题，以此类推。</li>
+<li>审稿人检查修改，提出更多的意见和建议，以此类推。</li>
+<li>步骤5和6重复进行，或许永远都是这样。</li>
+</ol>
+<p>在这个过程中，理论上来说，修改和批注应该向着零的方向下降，直到代码准备好为止。最郁闷的情况是，每一次迭代都会带来至少和已经结束的旧问题一样多的新问题。在这种情况下，团队就进入了 &quot;Code Review 的无限循环&quot;。发生这种情况的原因有很多：</p>
+<ul>
+<li>
+<p>如果审稿人吹毛求疵，如果审稿人给出的反馈不一致，就会出现这种情况。对于陷入这些习惯的审稿人来说，有无限多的问题需要找出，有无限多的意见需要提出。</p>
+</li>
+<li>
+<p>当审稿时没有明确的审稿目的，或者审稿时没有准则可循，就会出现这种情况，因为这样一来，每个审稿人都会觉得每一个可能出现的问题都必须找出来。</p>
+</li>
+<li>
+<p>当不清楚审稿人的评论对代码作者的要求是什么时就会发生。是不是每一条评论都意味着必须要进行修改？所有的问题是否都暗示着代码没有自证，需要改进？还是有些评论仅仅是为了教育代码作者下一次，而提出问题只是为了帮助审稿人理解和学习？</p>
+</li>
+</ul>
+<p>评论应该被理解为阻止者或不是阻止者，如果审稿人决定代码需要修改，他们需要明确说明代码作者应该采取什么行动。</p>
+<p>同样重要的是，要明白由谁来决定审核是否 &quot;完成&quot;。这可以通过任务清单上的检查项目来实现，也可以由个人授权说 &quot;足够好 &quot;来完成。通常需要有一个人能够打破僵局，解决分歧。这个人可能是高级开发人员、领导或者是架构师，甚至是团队中的代码作者，因为在团队中，他们之间的信任度很高。但是，在某些时候，需要有人说 &quot;评审结束了 &quot;或者 &quot;当这些步骤完成后，评审就结束了。&quot;</p>
+<h2 id="错误模式：幽灵审查">错误模式：幽灵审查</h2>
+<p>在这里我承认我最容易犯的反常的地方：幽灵化。无论我是审阅者还是代码作者，在代码审阅中都会出现一个点（有时就在开始的时候！），在审阅过程中，我根本就没有回应。也许有一个重要或有趣的功能被要求我审阅，所以我决定把它留到 &quot;更好的时候&quot;，等我可以 &quot;真正好好看一看 &quot;的时候再做。又或许是Review的量大，我想留出充足的时间。又或许是我是作者，在迭代（或二十次）后，我就是无法面对阅读和回复评论了，所以我决定等 &quot;等我的脑袋想好了再来&quot;。</p>
+<p>听起来是不是很熟悉？</p>
+<p>不管是什么原因，有时在审查过程中有人根本没有反应。这可能意味着在这个人看完代码之前，审查工作就已经死气沉沉了。这是一种浪费。即使有人在创建一个资产（新代码）上投入了时间，但在它投入生产之前，它并没有增加价值。事实上，当它在代码库中越来越落后于其他代码库的时候，它很可能已经腐烂了。</p>
+<p>有几个因素会导致幽灵审查。庞大的代码审核量是一个因素，因为谁愿意去翻阅几十个或几百个修改过的文件？不重视Code Review 是另一个因素，因为不重视Code Review 是真正的工作或交付成果的一部分。困难的或令人沮丧的Code Review 经历是另一个主要因素。没有人愿意停止编码（开发人员通常喜欢的东西），去参加一项耗费时间和破坏灵魂的活动。</p>
+<p>以下是解决幽灵审查的建议：</p>
+<ul>
+<li>确保Code Review 的规模要小。每个团队都要制定出自己的定义，但这将是几个小时或几天的复审工作，而不是几周的时间。</li>
+<li>确保Code Review 的目的很明确，审查人员应该找的东西很清楚。当范围是 &quot;找到代码中可能存在的任何问题 &quot;时，很难激励自己去做一件事。&quot;</li>
+<li>在开发过程中留出时间来做Code Review 。</li>
+</ul>
+<p>最后一点可能需要团队的纪律性，或者团队可能希望通过（例如）通过目标或任何用来决定开发人员的生产力的机制来奖励良好的Code Review 行为来鼓励允许时间。</p>
+<h2 id="你的团队能做什么？">你的团队能做什么？</h2>
+<p>对于研发团队，专注于创建一个行之有效的Code Review流程。我在我的博客上写过这方面的内容，但想在这里分享一下这个过程的一部分：</p>
+<ul>
+<li>在进行Code Review 时，有很多事情需要考虑，如果开发人员在每次Code Review 时都担心所有的事情，那么任何代码都几乎不可能通过评审流程。要实现一个适合所有人的Code Review 流程，最好的方法是考虑以下问题。</li>
+<li></li>
+<li>团队为什么要做审阅？当有一个明确的目的时，审查员的工作会更容易，代码作者也会从审查过程中减少讨厌的惊喜。</li>
+<li>团队成员要找的是什么？当有了目的，开发人员可以在审阅代码时创建一套更有针对性的东西来检查。</li>
+<li>谁来参与？谁来做评审，谁负责解决意见冲突，谁最终决定代码是否合格？</li>
+<li>团队何时进行复审，复审何时完成？审核可以在开发人员在代码工作的时候迭代进行，也可以在流程结束时进行。如果没有明确的指导，一个评审可能会一直进行下去，如果没有明确的指导，代码最终什么时候可以进行。</li>
+<li>团队在哪里做评审？Code Review 不需要特定的工具，所以审查可能就像作者在办公桌上带领同事看他们的代码一样简单。</li>
+</ul>
+<p>一旦回答了这些问题，你的团队就应该能够创建一个运行良好的Code Review 流程。<strong>记住：Code Review 的目的应该是让代码投入生产，而不是证明开发人员有多聪明。</strong></p>
+<h2 id="结论">结论</h2>
+<p>Code Review 的错误模式可以通过建立一个明确的Code Review 流程来消除，或者至少是缓解。许多团队认为他们应该进行Code Review ，但他们没有明确的准则，为什么要进行Code Review 。</p>
+<p>不同的团队需要不同类型的Code Review ，就像不同的应用程序有不同的业务和性能要求一样。第一步是弄清楚团队为什么需要审阅代码，然后团队就可以着手于：</p>
+<ul>
+<li>自动化的简易检查（例如，检查代码样式，识别常见的BUG，发现安全问题）。</li>
+<li>就审查的时间、审查的内容以及审查结束后由谁决定等问题制定明确的准则</li>
+<li>将Code Review 作为开发过程的一个关键工作内容</li>
+</ul>
+<p>专注于为什么要进行Code Review ，将帮助团队创建Code Review 流程的最佳实践，这样就更容易避免Code Review 的错误模式。</p>
+<p>原文：<a href="https://blogs.oracle.com/javamagazine/five-code-review-antipatterns">https://blogs.oracle.com/javamagazine/five-code-review-antipatterns</a></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 11:45</span>&nbsp;
+<a href="https://www.cnblogs.com/peida/">peida</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12881453" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12881453);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 38044, cb_blogApp = 'peida', cb_blogUserGuid = '0f3e420b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 12881453, cb_entryCreatedDate = '2020-05-13 11:45', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 peida
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script language="javascript" type="text/javascript" src="http://js.users.noscript.cnitblog.com/1910329.js"></script>
+<noscript><a href="http://www.noscript.cnitblog.com/?1910329" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.noscript.cnitblog.com/1910329.asp" style="border:none" />统计代码</a></noscript>
+
+<script src="https://s137.cnzz.com/stat.php?id=1121896&web_id=1121896" language="JavaScript" charset="gb2312"></script>
+
+<script src="https://s14.cnzz.com/stat.php?id=943648&web_id=943648&online=1&show=line" language="JavaScript"></script>
+    </div>
+</body>
+</html>

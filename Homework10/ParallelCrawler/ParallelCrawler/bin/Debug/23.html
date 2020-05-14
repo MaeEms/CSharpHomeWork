@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="Queue队列通常是先进先出(FIFO)，但也有特殊的非FIFO，如本文也分析的PriorityQueue。 Queue接口 Queue接口定义的方法： 添加元素接口： 1. add(E e) 往队列" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Queue-PriorityQueue源码解析 - Griez - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=UeHyLv1TT2WTz4TwfUOiMoKNmtFvLUjUnIhFE2UmZ7I" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=XjHfryC9ctsatIZz1dHn7TsRIqmwz9c3aj_6SCfHSDM" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/wolf-bin/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/wolf-bin/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/wolf-bin/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 404114;
+        var currentBlogApp = 'wolf-bin';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'CodingLife';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/wolf-bin/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/wolf-bin/">wolf_lb</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/wolf-bin/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Griez">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/wolf-bin/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+28&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+1</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/wolf-bin/p/12883943.html">Queue-PriorityQueue源码解析</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>Queue队列通常是先进先出(FIFO)，但也有特殊的非FIFO，如本文也分析的PriorityQueue。</p>
+<h2 id="queue接口">Queue接口</h2>
+<p>Queue接口定义的方法：</p>
+<p><img src="https://img2020.cnblogs.com/blog/1306925/202005/1306925-20200513175307394-1064891006.png" alt=""></p>
+<p>添加元素接口：</p>
+<ol>
+<li>add(E e)  -&gt; 往队列添加一个元素，如果队列已满抛出IllegalStateException异常。</li>
+<li>offer(E e) -&gt; 往队列添加一个元素，true成功，false失败，和add区别在与不会因为队列已满抛异常。</li>
+</ol>
+<p>删除元素接口：</p>
+<ol>
+<li>remove() -&gt; 删除队列头元素并返回该元素，如果队列为空抛出NoSuchElementException异常。</li>
+<li>E poll() -&gt; 删除队列头元素并返回该元素，如果队列为空返回null（与remove不同）。</li>
+</ol>
+<p>获取队列头元素接口：</p>
+<ol>
+<li>E element() -&gt; 返回队列头部元素（没有删除），如果队列为空抛出NoSuchElementException异常。</li>
+<li>E peek() -&gt; 返回队列头部元素（没有删除），如果队列为空返回null。</li>
+</ol>
+<h2 id="queue常用的实现类">Queue常用的实现类</h2>
+<p><img src="https://img2020.cnblogs.com/blog/1306925/202005/1306925-20200513175330082-376605157.png" alt=""></p>
+<p>上图中列出的是Queue平时常用的实现类：</p>
+<ol>
+<li>ArrayBlockingQueue -&gt; 有边界的数组形式实现的阻塞队列。</li>
+<li>LinkedBlockingQueue -&gt; 有边界的链表形式实现的阻塞队列。</li>
+<li>PriorityQueue -&gt; 无边界的二叉堆形式实现的优先级队列。</li>
+<li>DelayQueue -&gt; 无边界的优先级形式实现的延迟队列。</li>
+</ol>
+<h2 id="priorityqueue">PriorityQueue</h2>
+<p>PriorityQueue是基于二叉堆形式实现的无界队列。队列中元素类型必须是可比较的，构造函数如果没有传入Comparator默认是自然排序。</p>
+<h3 id="priorityqueue结构">PriorityQueue结构</h3>
+<p><img src="https://img2020.cnblogs.com/blog/1306925/202005/1306925-20200513175349378-1458740.png" alt=""></p>
+<p>PriorityQueue继承了AbstractQueue，AbstractQueue实现Queue接口，即PriorityQueue拥有Queue的方法和特征。</p>
+<p>Object[] queue：存放队列元素。</p>
+<p>int DEFAULT_INITIAL_CAPACITY：默认的队列大小，默认值为11。</p>
+<p>int size：PriorityQueue队列中元素个数。</p>
+<p>int modCount：PriorityQueue队列修改次数。</p>
+<p>Comparator&lt;? super E&gt; comparator：队列元素排序比较器。</p>
+<p>int MAX_ARRAY_SIZE：队列最大值(Integer.MAX_VALUE - 8)，VM的保留了8字节的 header words。</p>
+<h3 id="priorityqueue示例">PriorityQueue示例</h3>
+<pre><code class="language-java">package com.juc.queue;
+
+import java.util.PriorityQueue;
+/**
+ * Created on 2020/5/10 23:29.
+ * @author Griez
+ */
+public class PriorityQueueTest {
+    public static final PriorityQueue&lt;Integer&gt; QUEUE = new PriorityQueue&lt;&gt;();
+    public static void main(String[] args) {
+        for (int i = 10; i &gt; 0 ; i--) {
+            QUEUE.offer(i);
+        }
+        for (int i = 0; i &lt; 10; i++) {
+            System.out.println(QUEUE.poll());
+        }
+    }
+}
+</code></pre>
+<p>创建一个存放Integer的PriorityQueue，采用默认的自然排序。并倒序的往PriorityQueue添加10-1。然后从PriorityQueue头部出队列并输出，输出结果是1-10升序。如果是让我们实现应该是入队时用插叙排序好并存放在queue数组中，但是这样实现往queue数组中添加和删除元素移动次数是不是最优的呢？接下来我们看一下Josh Bloch, Doug Lea是怎么样实现的。</p>
+<h3 id="priorityqueue添加元素解析">PriorityQueue添加元素解析</h3>
+<h4 id="javautilpriorityqueueoffer">java.util.PriorityQueue#offer</h4>
+<pre><code class="language-java">public boolean offer(E e) {
+    if (e == null)  //《1》不能为空
+        throw new NullPointerException();
+    modCount++;		// 《2》修改次数加1
+    int i = size;
+    if (i &gt;= queue.length) // 默认11
+        grow(i + 1); // 《3》数组扩容
+    size = i + 1;
+    if (i == 0)		// 《4》直接把e赋值给0下标元素（顶部元素）
+        queue[0] = e;
+    else
+        siftUp(i, e);	// 《5》筛选顶部元素
+    return true;
+}
+</code></pre>
+<blockquote>
+<p>《1》添加的元素不能为空，即PriorityQueue队列不可能存在null元素。</p>
+<p>《2》修改次数加1。</p>
+<p>《3》如果当前PriorityQueue元素数量大于等于数组容量需要对queue进行扩容操作。</p>
+<p>《4》如果当前PriorityQueue为空，直接把e赋值给queue数组0下标（顶部元素）。</p>
+<p>《5》通过二叉堆，筛选顶部元素。</p>
+</blockquote>
+<h4 id="javautilpriorityqueuegrow">java.util.PriorityQueue#grow</h4>
+<pre><code class="language-java">private void grow(int minCapacity) {
+    int oldCapacity = queue.length;
+    // Double size if small; else grow by 50%
+    // 《1》根据现有的容量选择增长倍数
+    int newCapacity = oldCapacity + ((oldCapacity &lt; 64) ?
+                                     (oldCapacity + 2) :
+                                     (oldCapacity &gt;&gt; 1)); 
+    // overflow-conscious code
+    // 《2》如果《1》计算出的容量比最大大，则以传入容量为准
+    if (newCapacity - MAX_ARRAY_SIZE &gt; 0)
+        newCapacity = hugeCapacity(minCapacity);
+    queue = Arrays.copyOf(queue, newCapacity);
+}
+</code></pre>
+<blockquote>
+<p>《1》根据现有的容量选择增长倍数，如果现在的容量小于64，则容量直接增长一倍再加2；否则增长50%。</p>
+<p>《2》如果《1》计算出的容量比最大大，则以传入容量为准。</p>
+</blockquote>
+<h4 id="javautilpriorityqueuesiftup">java.util.PriorityQueue#siftUp</h4>
+<pre><code class="language-java">private void siftUp(int k, E x) {
+    if (comparator != null)
+        siftUpUsingComparator(k, x);
+    else
+        siftUpComparable(k, x);
+}
+</code></pre>
+<blockquote>
+<p>如果构造PriorityQueue时传有特定比较器，就按特定比较器方式设置顶部元素，否则按默认自然比较器方式设置。</p>
+</blockquote>
+<h4 id="javautilpriorityqueuesiftupcomparable">java.util.PriorityQueue#siftUpComparable</h4>
+<pre><code class="language-java">private void siftUpComparable(int k, E x) {
+    Comparable&lt;? super E&gt; key = (Comparable&lt;? super E&gt;) x; //《1》
+    while (k &gt; 0) {
+        int parent = (k - 1) &gt;&gt;&gt; 1; //《2》
+        Object e = queue[parent];  //《3》
+        if (key.compareTo((E) e) &gt;= 0) //《4》
+            break;
+        queue[k] = e;  //《5》
+        k = parent;
+    }
+    queue[k] = key; //《6》
+}
+</code></pre>
+<blockquote>
+<p>《1》添加的元素必须是Comparable子类，可比较的。</p>
+<p>《2》计算父节点下标。</p>
+<p>《3》得到父节点元素。</p>
+<p>《4》跟父节点元素作比较，如果要添加的元素大于父节点元素则退出。</p>
+<p>《5》把父节点的元素移动到数组下标k处，然后把父节点下标赋值给k，循环《1》 - 《4》步骤。</p>
+<p>《6》经过前面步骤最终确认需要添加的元素在queue下标，并存入数组。</p>
+</blockquote>
+<p><img src="https://img2020.cnblogs.com/blog/1306925/202005/1306925-20200513175417071-1929679883.png" alt=""></p>
+<blockquote>
+<p>添加10 - 8 该方法体现的数据结构。</p>
+</blockquote>
+<p><img src="https://img2020.cnblogs.com/blog/1306925/202005/1306925-20200513175435563-512196276.png" alt=""></p>
+<blockquote>
+<p>添加7整个过程，用堆数据结构添加7的过程只交换了两次数据位置。如果用插叙排序这种极端情况所有数据都需要移动。</p>
+</blockquote>
+<p>最小二叉堆特性是根节点元素值永远是最小的。</p>
+<h3 id="priorityqueue删除元素解析">PriorityQueue删除元素解析</h3>
+<h4 id="javautilpriorityqueuepoll">java.util.PriorityQueue#poll</h4>
+<pre><code class="language-java">public E poll() {
+    if (size == 0) //《1》
+        return null;
+    int s = --size; //《2》
+    modCount++; //《3》
+    E result = (E) queue[0];//《4》
+    E x = (E) queue[s];//《5》
+    queue[s] = null;
+    if (s != 0)
+        siftDown(0, x);//《6》
+    return result;
+}
+</code></pre>
+<blockquote>
+<p>《1》如果队列为空，返回null。</p>
+<p>《2》队列元素总数减1。</p>
+<p>《3》修改次数加1。</p>
+<p>《4》把堆头部元素取出，后面直接返回该元素。</p>
+<p>《5》获取queue最后一个元素并把该位置设置null。</p>
+<p>《6》重新筛选最小值为头部元素。</p>
+</blockquote>
+<h4 id="javautilpriorityqueuesiftdown">java.util.PriorityQueue#siftDown</h4>
+<pre><code class="language-java">private void siftDown(int k, E x) {
+    if (comparator != null)
+        siftDownUsingComparator(k, x);
+    else
+        siftDownComparable(k, x);
+}
+</code></pre>
+<blockquote>
+<p>如果构造PriorityQueue时传有特定比较器，就按特定比较器方式设置顶部元素，否则按默认自然比较器方式设置。</p>
+</blockquote>
+<h4 id="javautilpriorityqueuesiftdowncomparable">java.util.PriorityQueue#siftDownComparable</h4>
+<pre><code class="language-java">private void siftDownComparable(int k, E x) {
+    Comparable&lt;? super E&gt; key = (Comparable&lt;? super E&gt;)x;
+    int half = size &gt;&gt;&gt; 1; //《1》       // loop while a non-leaf
+    while (k &lt; half) {
+        int child = (k &lt;&lt; 1) + 1; //《2》 // assume left child is least
+        Object c = queue[child];//《3》
+        int right = child + 1;//《4》
+        if (right &lt; size &amp;&amp;
+            ((Comparable&lt;? super E&gt;) c).compareTo((E) queue[right]) &gt; 0) //《5》
+            c = queue[child = right];
+        if (key.compareTo((E) c) &lt;= 0)//《6》
+            break;
+        queue[k] = c;//《7》
+        k = child;
+    }
+    queue[k] = key;//《8》
+}
+</code></pre>
+<blockquote>
+<p>《1》无符号右移1位，取size的一半。</p>
+<p>《2》得到二叉堆的左子节点下标。</p>
+<p>《3》获取左子节点元素。</p>
+<p>《4》右子节点下标。</p>
+<p>《5》右子节点下标小于队列元素总数，并且左子节点元素比右子节点元素大时，把右子节点元素赋值给c，把右子节点下标赋值给child。</p>
+<p>《6》需要交换的元素key小于或等于子节点元素c，则退出循环。</p>
+<p>《7》把子节点c设置到queue下标为k的位置，并把child赋值给k，然后重复《1》-《6》步骤。</p>
+<p>《8》找到key合适的位置并设置该元素。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>PriorityQueue使用二叉堆数据结构保证了队列头部元素永远是最小的，在添加和删除的过程元素移动次数比插叙排序插入少。队列元素是使用数组queue保存，在多线程的情况对数组queue并发操作存在安全问题。</p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 17:56</span>&nbsp;
+<a href="https://www.cnblogs.com/wolf-bin/">Griez</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12883943" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12883943);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 404114, cb_blogApp = 'wolf-bin', cb_blogUserGuid = '3bb3daca-3441-4ded-0856-08d52f269006';
+    var cb_entryId = 12883943, cb_entryCreatedDate = '2020-05-13 17:56', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Griez
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

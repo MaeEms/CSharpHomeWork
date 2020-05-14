@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="ReentrantLock：实现了Lock接口，是一个可重入锁，并且支持线程公平竞争和非公平竞争两种模式，默认情况下是非公平模式。ReentrantLock算是synchronized的补充和替代方案" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>JUC之ReentrantLock源码分析 - 快乐的小乐 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/coffee/bundle-coffee.min.css?v=KPz7rj-c2sTAV1_ck1aDmbZcuCG3KBhyLnfvzf6nn94" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/coffee/bundle-coffee-mobile.min.css?v=na9bpAY4yh7uEWCcrXj3vfJM3VBse8YtU6-5fUUQPz0" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zzw-blog/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zzw-blog/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zzw-blog/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 360067;
+        var currentBlogApp = 'zzw-blog';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'coffee';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a href="https://www.cnblogs.com/zzw-blog/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/zzw-blog/">快乐的小乐</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="navigator">
+			
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+	<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zzw-blog/">
+首页</a>
+</li>
+	<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+	<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%BF%AB%E4%B9%90%E7%9A%84%E5%B0%8F%E4%B9%90">
+联系</a></li>
+	<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+	<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/zzw-blog/rss/">
+订阅</a>
+	
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/zzw-blog/rss/">
+    <img src="/skins/coffee/images/xml.gif" alt="订阅" />
+</a></li>
+</ul>
+
+
+
+			<div class="blogStats">
+				
+				<!--done-->
+随笔- 
+15&nbsp;
+文章- 
+1&nbsp;
+评论- 
+8&nbsp;
+
+
+
+				
+			</div><!--end: blogStats -->
+		</div><!--end: navigator 博客导航栏 -->
+		<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class = "postTitle">
+			
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/zzw-blog/p/12870196.html">JUC之ReentrantLock源码分析</a>
+
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p><strong>ReentrantLock</strong>：实现了Lock接口，是一个可重入锁，并且支持线程公平竞争和非公平竞争两种模式，默认情况下是非公平模式。ReentrantLock算是synchronized的补充和替代方案。</p>
+<p><em><strong>公平竞争</strong>：遵从先来后到的规则，先到先得</em><br /><em><strong>非公平竞争</strong>：正常情况下是先到先得，但是允许见缝插针。即持有锁的线程刚释放锁，等待队列中的线程刚准备获取锁时，突然半路杀出个程咬金，抢到了锁，等待队列中等待获取锁的线程只能干瞪眼，接着等抢到锁的线程释放锁</em></p>
+<p>ReentrantLock与synchronized比较：<br />　　1、ReentrantLock底层是通过将阻塞的线程保存在一个FIFO队列中，synchronized底层是阻塞的线程保存在锁对象的阻塞池中<br />　　2、ReentrantLock是通过代码机制进行加锁，所以需要手动进行释放锁，synchronized是JAVA关键字，加锁和释放锁有JVM进行实现<br />　　3、ReentrantLock的加锁和释放锁必须在方法体内执行，但是可以不用同一个方法体，synchronized可以在方法体内作为方法块，也可以在方法声明上<br />　　4、synchronized进行加锁时，如果获取不到锁就会直接进行线程阻塞，等待获取到锁后再往下执行。ReentrantLock既可以阻塞线程等待获取锁，也可以设置等待获取锁的时间，超过等待获取时间就放弃获取锁，不再阻塞线程</p>
+<p>ReentrantLock源码分析：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/**</span><span style="color: #008000;"> Synchronizer providing all implementation mechanics </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">private</span> <span style="color: #0000ff;">final</span><span style="color: #000000;"> Sync sync;
+
+</span><span style="color: #008000;">/**</span><span style="color: #008000;">
+ * Base of synchronization control for this lock. Subclassed
+ * into fair and nonfair versions below. Uses AQS state to
+ * represent the number of holds on the lock.
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">abstract</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">class</span> Sync <span style="color: #0000ff;">extends</span><span style="color: #000000;"> AbstractQueuedSynchronizer {
+    ....
+}
+
+</span><span style="color: #008000;">/**</span><span style="color: #008000;">
+ * Sync object for non-fair locks
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">class</span> NonfairSync <span style="color: #0000ff;">extends</span><span style="color: #000000;"> Sync {
+    ....
+}
+
+</span><span style="color: #008000;">/**</span><span style="color: #008000;">
+ * Sync object for fair locks
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">class</span> FairSync <span style="color: #0000ff;">extends</span><span style="color: #000000;"> Sync {
+    ....
+}</span></pre>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;从省略细节的源码中我们可以很清晰的看到，ReentrantLock内部定义了三个内部类，全部直接或者间接的继承AbstractQueuedSynchronizer，ReentrantLock有一个属性sync，默认情况下为NonfairSync类型，即为非公平锁。实际上ReentrantLock的所有操作都是有sync这个属性进行的，ReentrantLock只是一层外皮。</p>
+<p>ReentrantLock既然实现类Lock接口，我们就先以加锁、解锁进行分析：<br />1、加锁（非公平）：</p>
+<div class="cnblogs_code">
+<pre> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> lock() {
+        sync.lock();
+}</span></pre>
+</div>
+<p>就像上面说的一样，ReentrantLock的功能都是靠底层sync进行实现，ReentrantLock的加锁很简单，就一句话使用sync的lock()方法，我们直接看源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> lock() {
+    </span><span style="color: #0000ff;">if</span> (compareAndSetState(0, 1<span style="color: #000000;">))
+        setExclusiveOwnerThread(Thread.currentThread());
+    </span><span style="color: #0000ff;">else</span><span style="color: #000000;">
+        acquire(</span>1<span style="color: #000000;">);
+}
+
+</span><span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> compareAndSetState(<span style="color: #0000ff;">int</span> expect, <span style="color: #0000ff;">int</span><span style="color: #000000;"> update) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> See below for intrinsics setup to support this</span>
+    <span style="color: #0000ff;">return</span> unsafe.compareAndSwapInt(<span style="color: #0000ff;">this</span><span style="color: #000000;">, stateOffset, expect, update);
+}
+
+</span><span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setExclusiveOwnerThread(Thread thread) {
+    exclusiveOwnerThread </span>= thread;
+}</pre>
+</div>
+<p>sync的lock()方法也是比较简单的，先通过CAS试图将AQS的state由0变为1。如果成功，表示该线程获取锁成功（设值时没有线程在持有锁），就将当前线程设置为锁的拥有者（这就是前面所说得<span style="color: #ff0000;">见缝插针</span>，后面还有）；如果失败，只表示设置值没有成功，不表示该线程获取锁失败（因为有可能是重入加锁），开始调用AQS的acquire(int)方法进行获取锁，我们直接看acquire(int)方法</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span> acquire(<span style="color: #0000ff;">int</span><span style="color: #000000;"> arg) {
+    </span><span style="color: #0000ff;">if</span> (!tryAcquire(arg) &amp;&amp;<span style="color: #000000;">
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+}</span></pre>
+</div>
+<p>这是AQS定义的模板方法，由AQS的子类去重写tryAcquire(int) 方法，由AQS去调用，进行尝试获取锁。如果获取锁成功，方法直接结束；如果获取锁失败，就将当前线程进行阻塞并加入到FIFO的CLH队列中。我们先看ReentrantLock内部类是如何重写tryAcquire(int)方法的</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> tryAcquire(<span style="color: #0000ff;">int</span><span style="color: #000000;"> acquires) {<br />　　// 直接调用父类nonfairTryAcquire(int)方法
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> nonfairTryAcquire(acquires);
+}
+</span><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> nonfairTryAcquire(<span style="color: #0000ff;">int</span><span style="color: #000000;"> acquires) {
+    </span><span style="color: #0000ff;">final</span> Thread current =<span style="color: #000000;"> Thread.currentThread();
+    </span><span style="color: #0000ff;">int</span> c =<span style="color: #000000;"> getState();
+    </span><span style="color: #0000ff;">if</span> (c == 0<span style="color: #000000;">) {
+        </span><span style="color: #0000ff;">if</span> (compareAndSetState(0<span style="color: #000000;">, acquires)) {
+            setExclusiveOwnerThread(current);
+            </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+        }
+    }
+    </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (current ==<span style="color: #000000;"> getExclusiveOwnerThread()) {
+        </span><span style="color: #0000ff;">int</span> nextc = c +<span style="color: #000000;"> acquires;
+        </span><span style="color: #0000ff;">if</span> (nextc &lt; 0) <span style="color: #008000;">//</span><span style="color: #008000;"> overflow</span>
+            <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span> Error("Maximum lock count exceeded"<span style="color: #000000;">);
+        setState(nextc);
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>我们直接看sync声明的nonfairTryAcquire(int)方法，先获取保存的state，如果值为0，表示当前没有线程持有锁，处理和前面的一致，直接<span style="color: #ff0000;">见缝插针</span>，通过CAS尝试直接设置值，设值失败就表示获取锁失败了，直接返回失败结果；如果state不是0，表示锁被线程持有，就比较下持有锁的线程是否是当前线程，如果是，表示线程重入持有锁，进行state值的累加。如果不是，直接返回持有锁失败结果。tryAcquire(int)方法获取锁失败后，会去执行AQS声明的acquireQueued(Node, int)方法将当前线程封装到CLH队列的节点Node中，并进行阻塞。我们先看看AQS是将当前线程封装到Node中都做了什么操作</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span><span style="color: #000000;"> Node addWaiter(Node mode) {
+    Node node </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Node(Thread.currentThread(), mode);
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> Try the fast path of enq; backup to full enq on failure</span>
+    Node pred =<span style="color: #000000;"> tail;
+    </span><span style="color: #0000ff;">if</span> (pred != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+        node.prev </span>=<span style="color: #000000;"> pred;
+        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 将队尾的node改为新建的node</span>
+        <span style="color: #0000ff;">if</span><span style="color: #000000;"> (compareAndSetTail(pred, node)) {
+            pred.next </span>=<span style="color: #000000;"> node;
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> node;
+        }
+    }
+    enq(node);
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> node;
+}</span></pre>
+</div>
+<p>将当前线程装进Node实例中，并设置改Node为独享模式。然后获取队尾的Node实例，因为走到这一步的时候有两种获取锁失败的场景：1、竞争锁时，没有线程持有锁；2、竞争锁时，已有别的线程持有锁。所以会先判断下队尾Node是否为null，如果为空，表示是第一种场景获取锁失败，如果不为空，这是第二种场景获取锁失败。先看第2种场景的处理流程，直接将队尾的Node设置为新建Node实例的prev（表示在队列中的前一个Node节点），然后通过CAS尝试将新建的Node节点设置为队尾（这个时候用CAS是因为有可能存在多线程竞争），如果设置队尾成功，就将前任队尾的next节点设置为新建的node节点；如果设置队尾失败（多线程竞争才会出现），和场景1进行相同的处理，先看源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span> Node enq(<span style="color: #0000ff;">final</span><span style="color: #000000;"> Node node) {
+    </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (;;) {
+        Node t </span>=<span style="color: #000000;"> tail;
+        </span><span style="color: #0000ff;">if</span> (t == <span style="color: #0000ff;">null</span>) { <span style="color: #008000;">//</span><span style="color: #008000;"> Must initialize</span>
+            <span style="color: #0000ff;">if</span> (compareAndSetHead(<span style="color: #0000ff;">new</span><span style="color: #000000;"> Node()))
+                tail </span>=<span style="color: #000000;"> head;
+        } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+            node.prev </span>=<span style="color: #000000;"> t;
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (compareAndSetTail(t, node)) {
+                t.next </span>=<span style="color: #000000;"> node;
+                </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> t;
+            }
+        }
+    }
+}</span></pre>
+</div>
+<p>处理很简单，先获取队尾，如果获取的队尾为null，表示上一步场景1过来的，通过CAS将队首设置为一个空的Node节点（该节点表示正在持有锁的线程封装的Node，仅仅是代表，没有实值），并将队尾和队首指向同一个节点；如果获取的队尾不为null，将队尾设置为参数Node的上一个节点，并通过CAS尝试将参数Nodo设置为队尾，如果设置成功，将新队尾设置为前任队尾的next节点，并直接返回；如果设置失败，往复循环，直到成功为止。</p>
+<p>通过前面对addWaiter(Node)源码的分析，我们可以清楚的了解到addWaiter方法将当前线程封装到CLH队列的独享模式的Node节点中，并通过CAS将当前线程的Node节点设置为队尾。下面我们接着看acquireQueued(final Node node, int arg)方法会做什么处理</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> acquireQueued(<span style="color: #0000ff;">final</span> Node node, <span style="color: #0000ff;">int</span><span style="color: #000000;"> arg) {
+    </span><span style="color: #0000ff;">boolean</span> failed = <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">try</span><span style="color: #000000;"> {
+        </span><span style="color: #0000ff;">boolean</span> interrupted = <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (;;) {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;"> 获取前任节点</span>
+            <span style="color: #0000ff;">final</span> Node p =<span style="color: #000000;"> node.predecessor();
+            </span><span style="color: #0000ff;">if</span> (p == head &amp;&amp;<span style="color: #000000;"> tryAcquire(arg)) {
+                setHead(node);
+                p.next </span>= <span style="color: #0000ff;">null</span>; <span style="color: #008000;">//</span><span style="color: #008000;"> help GC</span>
+                failed = <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+                </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> interrupted;
+            }
+            </span><span style="color: #0000ff;">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;<span style="color: #000000;">
+                parkAndCheckInterrupt())
+                interrupted </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+        }
+    } </span><span style="color: #0000ff;">finally</span><span style="color: #000000;"> {
+        </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (failed)
+            cancelAcquire(node);
+    }
+}</span></pre>
+</div>
+<p>先获取参数Node节点的前任节点，如果前任节点是队首时，会去再次调用tryAcquire(int)方法去尝试持有锁，如果成功持有锁，就将参数Node直接设置为队首，同时将前任队首的next节点设置为null（去除引用，利于GC），然后直接返回当前线程是否要进行中断操作。如果前任节点不是队首或者再次尝试持有锁失败，会先调用shouldParkAfterFailedAcquire(Node pre, Node node)进行判断是否需要进行线程阻塞，如果需要线程阻塞再调用parkAndCheckInterrupt()进行线程阻塞（该方法返回值表示该线程是否是中断状态）。线程阻塞后会等待前任节点释放锁时唤醒结束阻塞，线程结束阻塞后会循环再次去获取锁。但是如果结束阻塞后去获取锁时，有新的线程<span style="color: #ff0000;">见缝插针<span style="color: #333333;">直接</span></span>获取到锁了，那就只能再次在队列中进行阻塞了。其实shouldParkAfterFailedAcquire和parkAndCheckInterrupt看方法名称就能猜个大概了，我们还是直接先看shouldParkAfterFailedAcquire(Node pre, Node node)方法的源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">boolean</span><span style="color: #000000;"> shouldParkAfterFailedAcquire(Node pred, Node node) {
+    </span><span style="color: #0000ff;">int</span> ws =<span style="color: #000000;"> pred.waitStatus;
+    </span><span style="color: #0000ff;">if</span> (ws ==<span style="color: #000000;"> Node.SIGNAL)
+        </span><span style="color: #008000;">/*</span><span style="color: #008000;">
+         * 这个节点已经设置了状态，请求释放信号通知它，这样它就可以安全地进行阻塞了。
+         </span><span style="color: #008000;">*/</span>
+        <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">if</span> (ws &gt; 0<span style="color: #000000;">) {
+        </span><span style="color: #008000;">/*</span><span style="color: #008000;">
+         * 此时前任被取消了，跳过前任并重试。
+         </span><span style="color: #008000;">*/</span>
+        <span style="color: #0000ff;">do</span><span style="color: #000000;"> {
+            node.prev </span>= pred =<span style="color: #000000;"> pred.prev;
+        } </span><span style="color: #0000ff;">while</span> (pred.waitStatus &gt; 0<span style="color: #000000;">);
+        pred.next </span>=<span style="color: #000000;"> node;
+    } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+        </span><span style="color: #008000;">/*</span><span style="color: #008000;">
+         * 等待状态必须为0或传播。将节点状态设置为SIGNAL，告诉前任节点后面节点需要释放信号通知，但先不进行阻塞。呼叫者将需要重试，以确保它不能在阻塞前获得锁。
+         </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+        compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
+    }
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>先获取前任节点的waitStatus（等待状态），1.如果前任节点的等待状态为Node.SIGNAL（表示后面的节点需要前任节点释放锁时进行通知，结束后面节点的阻塞），直接返回true，执行后面的阻塞流程；2.1如果前任节点的等待转态值大于0，表示前任节点被取消了（争夺锁的线程因过了设定时间，获取锁失败，从队列中删除节点的时候，Node节点会被设为取消状态），跳过前任节点，往前找，直到找到不是取消状态的节点，直接将找到的有效前任节点的next节点设置为当前节点；2.2如果前任节点不是取消状态（可能是初始值0、等待状态或者传播状态），通过CAS尝试将前任节点的waitStatus设置为Node.SIGNAL（不管设置成功与否，都直接返回false，后面会再次循环执行，用来确保该节点的线程在阻塞前一定不会获取到锁，因为存在见缝插针去争取持有锁的线程）。shouldParkAfterFailedAcquire方法返回true，会进行线程阻塞，返回false，调用层会进行循环让当前线程再次获取一次锁，失败后再次被调用进行清洗已经取消的节点或者进行前任节点的等待状态设置为Node.SIGNAL。</p>
+<p>下面我们再来看看parkAndCheckInterrupt()方法的源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span><span style="color: #000000;"> parkAndCheckInterrupt() {
+    LockSupport.park(</span><span style="color: #0000ff;">this</span><span style="color: #000000;">);
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> Thread.interrupted();
+}</span></pre>
+</div>
+<p>parkAndCheckInterrupt()方法的内容很简单，使用LockSupport的park(Object blocker)方法进行线程阻塞，有兴趣的同学可以自行去深入了解，等待前任节点调用调用LockSupport的unpark(Thread thread)唤醒该线程。然后在该线程结束阻塞后返回该线程是否是中断的状态。</p>
+<p>至此，非公平锁获取锁的流程就分析完了，总结下<span style="font-size: 18px;"><strong>非公平锁加锁流程</strong></span>：</p>
+<p><span style="font-size: 18px;"><strong>　　1.不管线程有没有被持有，先尝试获取锁<br /></strong></span><span style="font-size: 18px;"><strong>　　2.锁未被持有，直接获取锁。2.1获取锁成功，结束；2.2获取锁失败，封装成CLH队列的Node节点，并进行线程阻塞<br /></strong></span><span style="font-size: 18px;"><strong>　　</strong></span><span style="font-size: 18px;"><strong>3.锁被持有。3.1线程重入加锁，进行state累加，等待释放锁时进行减除；3.2封装成CLH队列的Node节点，并进行线程阻塞</strong></span></p>
+<p>2、定长时间加锁（非公平）</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">boolean</span> tryLock(<span style="color: #0000ff;">long</span><span style="color: #000000;"> timeout, TimeUnit unit)
+        </span><span style="color: #0000ff;">throws</span><span style="color: #000000;"> InterruptedException {
+    </span><span style="color: #0000ff;">return</span> sync.tryAcquireNanos(1<span style="color: #000000;">, unit.toNanos(timeout));
+}</span></pre>
+</div>
+<p>没什么可说的，依然是使用sync进行操作，我们直接看sync的实现源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> tryAcquireNanos(<span style="color: #0000ff;">int</span> arg, <span style="color: #0000ff;">long</span><span style="color: #000000;"> nanosTimeout)
+        </span><span style="color: #0000ff;">throws</span><span style="color: #000000;"> InterruptedException {
+    </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (Thread.interrupted())
+        </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> InterruptedException();
+    </span><span style="color: #0000ff;">return</span> tryAcquire(arg) ||<span style="color: #000000;">
+        doAcquireNanos(arg, nanosTimeout);
+}</span></pre>
+</div>
+<p>这里直接先判断当前线程是否是中断状态（可能是因为ReentrantReadWriteLock中的WriteLock也会使用才进行判断），如果是中断状态，直接抛异常。我们这边肯定不会是中断状态的啦，接着往下走，调用tryAcquire(int)方法尝试获取锁，忘了过程的同学请往前翻。如果获取锁成功，那就直接结束。获取锁失败时，执行doAcquireNanos(int arg, long nanosTimeout)方法以独占定时模式获取锁。我们直接看源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">boolean</span> doAcquireNanos(<span style="color: #0000ff;">int</span> arg, <span style="color: #0000ff;">long</span><span style="color: #000000;"> nanosTimeout)
+        </span><span style="color: #0000ff;">throws</span><span style="color: #000000;"> InterruptedException {
+    </span><span style="color: #0000ff;">if</span> (nanosTimeout &lt;= 0L<span style="color: #000000;">)
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">long</span> deadline = System.nanoTime() +<span style="color: #000000;"> nanosTimeout;
+    </span><span style="color: #0000ff;">final</span> Node node =<span style="color: #000000;"> addWaiter(Node.EXCLUSIVE);
+    </span><span style="color: #0000ff;">boolean</span> failed = <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">try</span><span style="color: #000000;"> {
+        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (;;) {
+            </span><span style="color: #0000ff;">final</span> Node p =<span style="color: #000000;"> node.predecessor();
+            </span><span style="color: #0000ff;">if</span> (p == head &amp;&amp;<span style="color: #000000;"> tryAcquire(arg)) {
+                setHead(node);
+                p.next </span>= <span style="color: #0000ff;">null</span>; <span style="color: #008000;">//</span><span style="color: #008000;"> help GC</span>
+                failed = <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+                </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+            }
+            nanosTimeout </span>= deadline -<span style="color: #000000;"> System.nanoTime();
+            </span><span style="color: #0000ff;">if</span> (nanosTimeout &lt;= 0L<span style="color: #000000;">)
+                </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;<span style="color: #000000;">
+                nanosTimeout </span>&gt;<span style="color: #000000;"> spinForTimeoutThreshold)
+                LockSupport.parkNanos(</span><span style="color: #0000ff;">this</span><span style="color: #000000;">, nanosTimeout);
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (Thread.interrupted())
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> InterruptedException();
+        }
+    } </span><span style="color: #0000ff;">finally</span><span style="color: #000000;"> {
+        </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (failed)
+            cancelAcquire(node);
+    }
+}</span></pre>
+</div>
+<p>同样是先创建一个Node节点并放置到CLH队列的队尾，然后同样的是开始进行循环处理，不同的地方是，定长获取锁使用了LockSupport.pargNanos(Object blocker, long nanos)进行阻塞一段时间，如果在线程阻塞未自动结束时，前一个节点释放了锁，该节点一样会被解除阻塞去争夺锁，如果不幸被别的线程<span style="color: #ff0000;">见缝插针</span>抢去了锁，那就接着去阻塞定长时间（这个定长时间是根据最初设定的时间和当前时间的差值），等待锁的释放。如果超过了定长时间还是没有获取到锁，就会调用cacelAcquire(Node node)去删除该节点。</p>
+<p>3、公平竞争加锁</p>
+<p>公平锁对象FairSync的lock()方法直接调用了acquire(int)方法，前面我们分析了，acquire(int)方法会先调用tryAcquire(int)方法去尝试获取锁，根据返回结果去判断是否需要加入到队列中。下面我们直接FairSync的源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">class</span> FairSync <span style="color: #0000ff;">extends</span><span style="color: #000000;"> Sync {
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">long</span> serialVersionUID = -3000897897090466540L<span style="color: #000000;">;
+
+    </span><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> lock() {
+        acquire(</span>1<span style="color: #000000;">);
+    }
+
+    </span><span style="color: #008000;">/**</span><span style="color: #008000;">
+     * Fair version of tryAcquire.  Don't grant access unless
+     * recursive call or no waiters or is first.
+     </span><span style="color: #008000;">*/</span>
+    <span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> tryAcquire(<span style="color: #0000ff;">int</span><span style="color: #000000;"> acquires) {
+        </span><span style="color: #0000ff;">final</span> Thread current =<span style="color: #000000;"> Thread.currentThread();
+        </span><span style="color: #0000ff;">int</span> c =<span style="color: #000000;"> getState();
+        </span><span style="color: #0000ff;">if</span> (c == 0<span style="color: #000000;">) {
+            </span><span style="color: #0000ff;">if</span> (!hasQueuedPredecessors() &amp;&amp;<span style="color: #000000;">
+                compareAndSetState(</span>0<span style="color: #000000;">, acquires)) {
+                setExclusiveOwnerThread(current);
+                </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+            }
+        }
+        </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (current ==<span style="color: #000000;"> getExclusiveOwnerThread()) {
+            </span><span style="color: #0000ff;">int</span> nextc = c +<span style="color: #000000;"> acquires;
+            </span><span style="color: #0000ff;">if</span> (nextc &lt; 0<span style="color: #000000;">)
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span> Error("Maximum lock count exceeded"<span style="color: #000000;">);
+            setState(nextc);
+            </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+        }
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+    }
+}</span></pre>
+</div>
+<p>源码的逻辑比较清晰简单，先判断当前锁是否是空闲状态（state是否是0），如果是空闲的，就去尝试获取锁，返回争夺结果；如果不是空闲的，判断是否是线程重入，如果是就累加state，返回成功，如果不是重入，直接返回失败。如果tryAcquire方法返回了false，那么就会将该线程封装到CLH队列的Node中并进行线程阻塞，后面的流程和非公平锁时一致的。</p>
+<p>总结下<span style="font-size: 18px;"><strong>公平锁加锁的流程</strong></span>：<br /><strong><span style="font-size: 18px;">　　1.</span></strong><span style="font-size: 18px;"><strong>锁未被持有，尝试直接获取锁。2.1获取锁成功，结束；2.2获取锁失败，封装成CLH队列的Node节点，并进行线程阻塞<br /></strong><strong>　　</strong><strong>2.锁被持有。2.1线程重入加锁，进行state累加，等待释放锁时进行减除；2.2封装成CLH队列的Node节点，并进行线程阻塞</strong></span></p>
+<p>4、释放锁：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> unlock() {
+    sync.release(</span>1<span style="color: #000000;">);
+}</span></pre>
+</div>
+<p>ReentrantLock的释放锁直接调用的sync属性的release(int)方法，实际是直接调用的AbstractQueuedSynchronizer的release(int)方法，我们直接看源码</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> release(<span style="color: #0000ff;">int</span><span style="color: #000000;"> arg) {
+    </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (tryRelease(arg)) {
+        Node h </span>=<span style="color: #000000;"> head;
+        </span><span style="color: #0000ff;">if</span> (h != <span style="color: #0000ff;">null</span> &amp;&amp; h.waitStatus != 0<span style="color: #000000;">)
+            unparkSuccessor(h);
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>依然是同样的配方，调用子类重写的tryRelease(int)方法去真正释放锁，如果释放成功，而且队列中有节点在等待队首释放锁后进行通知，就会调用unparkSuccessor(Node node)去解除下一个节点的线程阻塞状态，让下一个线程去获取锁。</p>
+<p>我们先看看子类重写的tryRelease(int)方法</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span> tryRelease(<span style="color: #0000ff;">int</span><span style="color: #000000;"> releases) {
+    </span><span style="color: #0000ff;">int</span> c = getState() -<span style="color: #000000;"> releases;
+    </span><span style="color: #0000ff;">if</span> (Thread.currentThread() !=<span style="color: #000000;"> getExclusiveOwnerThread())
+        </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> IllegalMonitorStateException();
+    </span><span style="color: #0000ff;">boolean</span> free = <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+    </span><span style="color: #0000ff;">if</span> (c == 0<span style="color: #000000;">) {
+        free </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+        setExclusiveOwnerThread(</span><span style="color: #0000ff;">null</span><span style="color: #000000;">);
+    }
+    setState(c);
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> free;
+}</span></pre>
+</div>
+<p>源码比较简单，先比较当前线程是否是持有锁的线程，如果不是，直接抛异常，说明调用者使用不规范，没有先去获取锁。然后进行state的减除，先判断此时state是否为0，为0表示线程完全释放了锁。如果为0，就将锁的持有者变为null。不管最后有没有完全释放锁都会将state设置成新值。</p>
+<p>我们再看看unparkSuccessor(Node node)都做了什么</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> unparkSuccessor(Node node) {
+    </span><span style="color: #0000ff;">int</span> ws =<span style="color: #000000;"> node.waitStatus;
+    </span><span style="color: #0000ff;">if</span> (ws &lt; 0<span style="color: #000000;">)
+        compareAndSetWaitStatus(node, ws, </span>0<span style="color: #000000;">);
+
+    Node s </span>=<span style="color: #000000;"> node.next;
+    </span><span style="color: #0000ff;">if</span> (s == <span style="color: #0000ff;">null</span> || s.waitStatus &gt; 0<span style="color: #000000;">) {
+        s </span>= <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">for</span> (Node t = tail; t != <span style="color: #0000ff;">null</span> &amp;&amp; t != node; t =<span style="color: #000000;"> t.prev)
+            </span><span style="color: #0000ff;">if</span> (t.waitStatus &lt;= 0<span style="color: #000000;">)
+                s </span>=<span style="color: #000000;"> t;
+    }
+    </span><span style="color: #0000ff;">if</span> (s != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+        LockSupport.unpark(s.thread);
+}</span></pre>
+</div>
+<p>此时参数node代表的head，如果head的waitStatus小于0，表示后面节点需要在等待通知锁被释放的信号，先将head的waitStatus改为0，然后去看看head的next节点是存在并且next节点的waitStatus小于0,。如果next节点为null或者waitStatus大于0，就从队尾tail节点依次往前找，找到head节点后第一个waitStatus不大于0的节点，然后结束该节点的线程阻塞状态；如果head的next节点存在并且waitStatus不大于0，直接解除head的next节点线程阻塞状态。</p>
+<p>总结下<span style="font-size: 18px;"><strong>锁释放过程：</strong></span><br /><span style="font-size: 18px;"><strong>　　1.先判断当前线程是否可以进行锁释放</strong></span><br /><span style="font-size: 18px;"><strong>　　2.state减除，如果减除后的state为0，就将锁的持有者设为空，并解除下一个等待节点的线程阻塞状态</strong></span></p>
+<p>为了加深印象，我专门还花了三个流程图，一起看看</p>
+<p><img src="https://img2020.cnblogs.com/blog/1149423/202005/1149423-20200512165747210-359634845.jpg" alt=""></p>
+<p>到这里基本上ReentrantLock的主要功能点都说完了，还有一个Condition功能没说，接着搞起来。</p>
+<p><span style="font-size: 18px;"><strong>ReentrantLock的Condition：</strong></span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">ReentrantLock方法：
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;"> Condition newCondition() {
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> sync.newCondition();
+}
+
+Sync内部类方法:
+</span><span style="color: #0000ff;">final</span><span style="color: #000000;"> ConditionObject newCondition() {
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ConditionObject();
+}</span></pre>
+</div>
+<p>还是一如既往的配方，ReentrantLock的newCondition依然用的是sync属性去实现功能，Sync也简单，直接就是创建一个AbstractQueuedSynchronizer的内部列ConditionObject的实例。我们直接去看ConditionObject的源码去分析</p>
+<p>Condition主要是wait()、signal()两个方法，我们先来看wait()方法</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span> await() <span style="color: #0000ff;">throws</span><span style="color: #000000;"> InterruptedException {
+    </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (Thread.interrupted())
+        </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> InterruptedException();
+    Node node </span>=<span style="color: #000000;"> addConditionWaiter();
+    </span><span style="color: #0000ff;">int</span> savedState =<span style="color: #000000;"> fullyRelease(node);
+    </span><span style="color: #0000ff;">int</span> interruptMode = 0<span style="color: #000000;">;
+    </span><span style="color: #0000ff;">while</span> (!<span style="color: #000000;">isOnSyncQueue(node)) {
+        LockSupport.park(</span><span style="color: #0000ff;">this</span><span style="color: #000000;">);
+        </span><span style="color: #0000ff;">if</span> ((interruptMode = checkInterruptWhileWaiting(node)) != 0<span style="color: #000000;">)
+            </span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+    }
+    </span><span style="color: #0000ff;">if</span> (acquireQueued(node, savedState) &amp;&amp; interruptMode !=<span style="color: #000000;"> THROW_IE)
+        interruptMode </span>=<span style="color: #000000;"> REINTERRUPT;
+    </span><span style="color: #0000ff;">if</span> (node.nextWaiter != <span style="color: #0000ff;">null</span>) <span style="color: #008000;">//</span><span style="color: #008000;"> clean up if cancelled</span>
+<span style="color: #000000;">        unlinkCancelledWaiters();
+    </span><span style="color: #0000ff;">if</span> (interruptMode != 0<span style="color: #000000;">)
+        reportInterruptAfterWait(interruptMode);
+}</span></pre>
+</div>
+<p>分析之前先说明下，ConditionObject中同样保存的有CLH队列，和外部类AbstractQueuedSynchronizer相似。</p>
+<p>我们通过await()方法的源码简单分析下：<br />　　1、首先调用了addConditionWaiter()方法将当前线程封装到Node.CONDITION模式的Node中，放入到ConditionObject的CLH队列中，顺便去除了一些队列中waitStatus不是Node.CONDITION的节点。<br />　　2、调用fullyRelease(Node node)去完全释放掉锁，并去解除AbstractQueuedSynchronizer中队列的head节点，方法返回节点完全释放前的state值<br />　　3、循环：对当前节点进行线程阻塞，直到被其他线程使用signal()或者signalAll()方法解除线程阻塞状态<br />　　4、将节点加入到AbstractQueuedSynchronizer的CLH队列中，等待争夺锁</p>
+<p>整体上Condition的wait()方法的内容就这么多，源码也比较简单，有兴趣的可以自己深入看看。</p>
+<p>现在看下signal()的源码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> signal() {
+    </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">isHeldExclusively())
+        </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> IllegalMonitorStateException();
+    Node first </span>=<span style="color: #000000;"> firstWaiter;
+    </span><span style="color: #0000ff;">if</span> (first != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+        doSignal(first);
+}
+
+</span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> doSignal(Node first) {
+    </span><span style="color: #0000ff;">do</span><span style="color: #000000;"> {
+        </span><span style="color: #0000ff;">if</span> ( (firstWaiter = first.nextWaiter) == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            lastWaiter </span>= <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+        first.nextWaiter </span>= <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+    } </span><span style="color: #0000ff;">while</span> (!transferForSignal(first) &amp;&amp;<span style="color: #000000;">
+             (first </span>= firstWaiter) != <span style="color: #0000ff;">null</span><span style="color: #000000;">);
+}
+
+</span><span style="color: #0000ff;">final</span> <span style="color: #0000ff;">boolean</span><span style="color: #000000;"> transferForSignal(Node node) {
+    </span><span style="color: #0000ff;">if</span> (!compareAndSetWaitStatus(node, Node.CONDITION, 0<span style="color: #000000;">))
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+
+    Node p </span>=<span style="color: #000000;"> enq(node);
+    </span><span style="color: #0000ff;">int</span> ws =<span style="color: #000000;"> p.waitStatus;
+    </span><span style="color: #0000ff;">if</span> (ws &gt; 0 || !<span style="color: #000000;">compareAndSetWaitStatus(p, ws, Node.SIGNAL))
+        LockSupport.unpark(node.thread);
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>signal()方法的主要工作还是放在了doSignal(Node first)方法和transferForSignal(Node node)两个方法上。在doSignal(Node first)方法中，获取到ConditionObject的CLH队列的队首，然后调用transferForSignal(Node node)方法先将节点的waitStatus改为0，然后将节点放入到AbstractQueuedSynchronizer的CLH队列队尾，如果前任队尾的waitStatus大于0或者将前任队尾的waitStatus改为Node.SIGNAL失败时，直接解除节点的线程阻塞状态，结束wait()方法中的循环，调用acquireQueued(Node node, int savedState)去尝试抢夺锁，因为此时当前线程仍然持有锁，所以节点最后还是会被线程阻塞。因为此时节点node已经从ConditionObject的CLH队列迁移到了AQS的CLH队列队尾，即使if条件不满足，不能解除node节点的线程阻塞状态，等到前任队尾节点释放锁时还是会解除node节点的线程阻塞状态。</p>
+<p>Condition还有await(long time, TimeUnit unit)、signalAll()等等其它方法，原理差不多，这里就不一一赘述了。至此，ReentrantLock的知识点基本上也说的差不多了。</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+		</div>
+		<div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 10:40</span>&nbsp;
+<a href="https://www.cnblogs.com/zzw-blog/">快乐的小乐</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12870196" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12870196);return false;">收藏</a></div>
+	</div>
+	
+	
+</div><!--end: topics 文章、评论容器-->
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 360067, cb_blogApp = 'zzw-blog', cb_blogUserGuid = '2d556ebe-3624-e711-9fc1-ac853d9f53cc';
+    var cb_entryId = 12870196, cb_entryCreatedDate = '2020-05-13 10:40', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="calendar"><div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script></div>
+			
+			<DIV id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</DIV>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 快乐的小乐
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

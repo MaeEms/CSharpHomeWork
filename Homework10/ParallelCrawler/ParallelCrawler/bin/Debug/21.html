@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="目录 序言 不同返回值的构造函数 深入 new 调用函数原理 总结 参考 1.序言 在 &amp;quot;深入理解JS中的对象（一）：原型、原型链和构造函数&amp;quot; 中，我们分析了JS中是否一切皆对象以" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>深入理解JS中的对象（二）：new 的工作原理 - forcheng - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/summergarden/bundle-summergarden.min.css?v=PLBkMGouGIdma65PPHnfQmphsbyGuIrnWQ-UochvQcc" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/summergarden/bundle-summergarden-mobile.min.css?v=qqfeWJjwG2yHc4G3o4D_aAh8NdA2Uspy5vjuqwOEq0c" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/forcheng/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/forcheng/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/forcheng/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 268575;
+        var currentBlogApp = 'forcheng';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'summerGarden';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a href="https://www.cnblogs.com/forcheng/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/forcheng/">forcheng</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+
+			<ul id="navList">
+				<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+				<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/forcheng/">
+首页</a>
+</li>
+				<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+				<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/forcheng">
+联系</a></li>
+				<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+				<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/forcheng/rss/">
+订阅</a>
+				
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/forcheng/rss/">
+    <img src="/skins/summergarden/images/xml.gif" alt="订阅" />
+</a></li>
+			</ul>
+
+
+
+		<div class="blogStats">
+			
+			<!--done-->
+随笔 - 
+53&nbsp;
+文章 - 
+1&nbsp;
+评论 - 
+11&nbsp;
+
+
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class = "postTitle">
+			
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/forcheng/p/12883983.html">深入理解JS中的对象（二）：new 的工作原理</a>
+
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p><strong>目录</strong></p>
+<ul>
+<li>序言</li>
+<li>不同返回值的构造函数</li>
+<li>深入 new 调用函数原理</li>
+<li>总结</li>
+<li>参考</li>
+</ul>
+<br />
+<p><strong>1.序言</strong></p>
+<p>在 <a href="https://www.cnblogs.com/forcheng/p/12866827.html">深入理解JS中的对象（一）：原型、原型链和构造函数</a> 中，我们分析了JS中是否一切皆对象以及对象的原型、原型链和构造函数。在谈到构造函数时，应该有注意到箭头函数是不能作为构造函数的，也就是不能使用 new 关键字调用箭头函数，这是为什么呢？我们将在本篇深入讨论剖析对象的构造（new）的工作原理。</p>
+<br />
+<p><strong>2.不同返回值的构造函数</strong></p>
+<p>先看几个示例：</p>
+<p>（1）没有 return 的构造函数</p>
+<pre><code class="language-js">function Foo(x) {
+  this.x = x
+}
+
+var foo = new Foo(10)
+
+console.log(foo.x) // 10
+</code></pre>
+<br />
+<p>（2） return 一个 object 的构造函数</p>
+<pre><code class="language-js">function Foo(x) {
+  this.x = x
+  
+  return { y: 20 }
+}
+
+var foo = new Foo(10)
+
+console.log(foo) // { y: 20 }
+console.log(foo.x) // undifined
+console.log(foo.y) // 20
+</code></pre>
+<br />
+<p>（3） return 一个非 object 的构造函数</p>
+<pre><code class="language-js">function Foo(x) {
+  this.x = x
+  
+  return 20
+}
+
+var foo = new Foo(10)
+
+console.log(foo.x) // 10
+</code></pre>
+<br />
+<p>简单分析一下：</p>
+<p>第（1）中情况中，在构造函数中，没有任何显式的 return，最终返回的是 this 值。</p>
+<p>第（2）种情况中，在构造函数中，似乎this被舍弃掉了，最终返回的是显式 return 的 object。</p>
+<p>第（3）中情况中，在构造函数中，虽然显式 return 了一个非对象的 number，但似乎被舍弃掉了，最终返回的是 this 值。</p>
+<p>从上述情况可以得出，构造函数显式的返回了对象类型的值，会影响最终创建的对象。要弄明白这是为什么，我们就需要明白 new 调用函数到底做了些什么操作。</p>
+<br />
+<p><strong>3.深入 new 调用函数原理</strong></p>
+<p>我们来看看 EcmaScript 5.1标准的规定，了解一下 <a href="https://yanhaijing.com/es5/#163">new 运算符</a> 的规范。</p>
+<p>针对有无参数进行执行提供了两种规范，由于两者区别很小，这里只选取无参规范分析：</p>
+<blockquote>
+<p>产生式 NewExpression : new NewExpression 按照下面的过程执行 :</p>
+<ol>
+<li>令 ref 为解释执行 NewExpression 的结果 .</li>
+<li>令 constructor 为 GetValue(ref).</li>
+<li>如果 Type(constructor) is not Object ，抛出一个 TypeError 异常 .</li>
+<li>如果 constructor 没有实现 [[Construct]] 内部方法 ，抛出一个 TypeError 异常 .</li>
+<li>返回调用 constructor 的 [[Construct]] 内部方法的结果 , 按无参数传入参数列表 ( 就是一个空的参数列表 ).</li>
+</ol>
+</blockquote>
+<p>简单解析：</p>
+<p>第1~3步，主要是从引用类型中得到一个对象真正的值（constructor），并判断其类型是不是一个对象。</p>
+<p>第4步，判断构造函数是否实现了  [[Construct]] 内部方法，如果没有则抛出异常。</p>
+<p>第5步，调用构造函数的 [[Construct]] 内部方法，并返回其结果。</p>
+<br />
+<p><strong>解答第一个问题：箭头函数为什么不能作为构造函数？</strong></p>
+<p>箭头函数刚好符合上述第4步中的情况，其没有实现 <code>[[Construct]]</code>方法，以下来自ES6中 <a href="https://exploringjs.com/es6/ch_arrow-functions.html">Arrow functions</a> 规范参考：</p>
+<blockquote>
+<p>An arrow function is different from a normal function in only two ways:</p>
+<ul>
+<li>The following constructs are lexical: <code>arguments</code>, <code>super</code>, <code>this</code>, <code>new.target</code></li>
+<li>It can’t be used as a constructor: Normal functions support <code>new</code> via the internal method <code>[[Construct]]</code> and the property <code>prototype</code>. Arrow functions have neither, which is why <code>new (() =&gt; {})</code> throws an error.</li>
+</ul>
+</blockquote>
+<p>在浏览器中测试用 new 调用箭头函数报错，如下图：</p>
+<p><img src="https://img2020.cnblogs.com/blog/898684/202005/898684-20200513175835591-749369788.png" alt="new 调用箭头函数报错"></p>
+<br />
+<p><strong>解答第二个问题：为什么构造函数显式的返回了对象类型的值会影响最终创建的对象？</strong></p>
+<p>从 new 运算符的规范来看，用 new 调用函数 F，相当于触发 F 的 [[Construct]] 内部方法，所以我们需要再看看 EcmaScript 5.1标准中的 [[Construct]] 的<a href="https://yanhaijing.com/es5/#241">规范</a>：</p>
+<blockquote>
+<p>当以一个可能的空的参数列表调用函数对象 F 的 [[Construct]] 内部方法，采用以下步骤：</p>
+<ol>
+<li>令 obj 为新创建的 ECMAScript 原生对象。</li>
+<li>依照 8.12 设定 obj 的所有内部属性。</li>
+<li>设定 obj 的 [[Class]] 内部属性为 &quot;Object&quot;。</li>
+<li>设定 obj 的 [[Extensible]] 内部属性为 true。</li>
+<li>令 proto 为以参数 &quot;prototype&quot; 调用 F 的 [[Get]] 内部属性的值。</li>
+<li>如果 Type(proto) 是 Object，设定 obj 的 [[Prototype]] 内部属性为 proto。</li>
+<li>如果 Type(proto) 不是 Object，设定 obj 的 [[Prototype]] 内部属性为 15.2.4 描述的标准内部的 Object 的 prototype 对象。</li>
+<li>以 obj 为 this 值， 传递给 [[Construct]] 的参数列表为 args，调用 F 的 [[Call]] 内部方法，令 result 为调用结果。</li>
+<li>如果 Type(result) 是 Object，则返回 result。</li>
+<li>返回 obj</li>
+</ol>
+</blockquote>
+<p>简单解析：</p>
+<p>第1~7步，主要创建了一个原生对象 obj，并给这个 obj 设定各种属性（包括 [[Prototype]] 内部属性，即对象的原型）。</p>
+<p>第8步，相当于 result = <code>F.[[Call]].apply(obj, args)</code>，为了更清楚 [[Call]] 内部方法做了些什么，将在下面从规范层次做出解读。</p>
+<p>第9、10步，就是判断 result 的类型是不是对象？如果是对象，则返回 result；如果不是，则返回 obj。</p>
+<br />
+<p>EcmaScript 5.1标准中的 [[Call]] 的<a href="https://yanhaijing.com/es5/#240">规范</a>：</p>
+<blockquote>
+<p>当用一个 this 值，一个参数列表调用函数对象 F 的 [[Call]] 内部方法，采用以下步骤：</p>
+<ol>
+<li>用 F 的 [[FormalParameters]] 内部属性值，参数列表 args，10.4.3 描述的 this 值来建立 函数代码 的一个新执行环境，令 funcCtx 为其结果。</li>
+<li>令 result 为 FunctionBody（也就是 F 的 [[Code]] 内部属性，即函数 F 自身）解释执行的结果。如果 F 没有 [[Code]] 内部属性或其值是空的 FunctionBody，则 result 是 (normal, undefined, empty)。</li>
+<li>退出 funcCtx 执行环境，恢复到之前的执行环境。</li>
+<li>如果 result.type 是 throw 则抛出 result.value。</li>
+<li>如果 result.type 是 return 则返回 result.value。</li>
+<li>否则 result.type 必定是 normal。返回 undefined。</li>
+</ol>
+</blockquote>
+<p>简单解析：首先，创建根据相关参数和属性创建一个新的执行上下文，然后执行函数 F 的代码，并令 result 为其调用结果， 然后退出当前执行上下文，最后根据 result.type 返回对应的值。（实质上就是执行了一遍函数，返回其结果）</p>
+<br />
+<p>因此，我们可以对上面所列举的三个不同返回值的构造函数的示例一个合理的解释了：</p>
+<p>new 调用构造函数，如果构造函数中显式的 return 了值并且其类型是一个对象，那么这个值将替代创建的原生对象 obj 作为最终返回值，否则最终将返回创建的原生对象 obj。</p>
+<br />
+<p><strong>4.总结</strong></p>
+<p>new 调用函数 F：</p>
+<ol>
+<li>获取函数 F 引用的真正的值 constructor，如果其不是对象或其没有实现  [[Construct]] 内部方法，都会抛出异常</li>
+<li>返回调用 constructor 的 [[Construct]] 内部方法的结果
+<ol>
+<li>新创建一个 ES 原生对象 obj</li>
+<li>为 obj 设置各种属性（包括原型属性等）</li>
+<li>令 result = <code>constructor.[[Call]].apply(obj, args) </code>，其中 args 是传递给 [[Construct]] 的参数列表，[[Call]] 相当于函数 F 自身</li>
+<li>如果 result 的类型是对象，则返回 result，否则返回 obj</li>
+</ol>
+</li>
+</ol>
+<br />
+<p><strong>5.参考</strong></p>
+<p><a href="https://www.cnblogs.com/TomXu/archive/2012/02/06/2330609.html">深入理解JavaScript系列（18）：面向对象编程之ECMAScript实现（推荐）</a></p>
+<p><a href="https://juejin.im/post/5b397b526fb9a00e5d7999a4">详解 JS 中 new 调用函数原理</a></p>
+<p><a href="https://yanhaijing.com/es5">ECMAScript5.1中文版</a></p>
+<p><a href="https://exploringjs.com/es6/ch_arrow-functions.html">ES6 - Arrow functions</a></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+		</div>
+		<div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 18:01</span>&nbsp;
+<a href="https://www.cnblogs.com/forcheng/">forcheng</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12883983" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12883983);return false;">收藏</a></div>
+	</div>
+	
+	
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 268575, cb_blogApp = 'forcheng', cb_blogUserGuid = 'e7786e4b-5cdc-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 12883983, cb_entryCreatedDate = '2020-05-13 18:01', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="calendar"><div id="calendar"><div id="blog-calendar" style="display:none"></div></div>                
+                    <script>loadBlogDefaultCalendar();</script></div>
+			
+			<DIV id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</DIV>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 forcheng
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

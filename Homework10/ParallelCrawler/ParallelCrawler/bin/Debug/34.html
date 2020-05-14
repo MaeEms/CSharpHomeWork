@@ -1,0 +1,294 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="服务注册 注册中⼼作为一般的RPC/Web服务中的底层设施提供了服务进程元数据（IP, Port, Interface, Group,Method等）存储，被Watch的功能，每个服务进程均需接⼊同⼀" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>基于Kubernetes服务发现机制的探讨Non Service - YOYOFx - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/custom/bundle-custom.min.css?v=1ssrnY3Il79Ok472qeVrpxlSprSXcHhYPgZC5S3wtVM" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/maxzhang1985/custom.css?v=uJU3S2rH&#x2B;iN1tuqQO/3oV24KGyw=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=-Yh290MhQyDeXLmvKTSses9H6-49lqbpXFh55zvS0w8" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/maxzhang1985/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/maxzhang1985/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/maxzhang1985/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 77852;
+        var currentBlogApp = 'maxzhang1985';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Custom';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/maxzhang1985/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/maxzhang1985/">YOYOFx</a>
+</h1>
+<h2>
+专注于企业开发、设计模式、微服务、框架设计。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/maxzhang1985/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/YOYOFx">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/maxzhang1985/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+53&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+263</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/maxzhang1985/p/12882770.html">基于Kubernetes服务发现机制的探讨Non Service</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h1 id="服务注册">服务注册</h1>
+<p>注册中⼼作为一般的RPC/Web服务中的底层设施提供了服务进程元数据（IP, Port, Interface, Group,Method等）存储，被Watch的功能，每个服务进程均需接⼊同⼀组持久化的K/V介质集群（⽐如: zookeeper,etcdv3等)。各进程均需将本进程的元数据存储于注册中⼼，并且能够Watch到其他服务进程的元数据变化（包括创建，更新等）。</p>
+<h1 id="kubernetes">Kubernetes</h1>
+<p>Kubernetes作为容器集群化管理⽅案管理资源的维度可主观的分为服务进程管理和服务接⼊管理。服务进程管理，主要体现⽅式为Pod设计模式加控制器模式，控制器保证具有特定标签（Kubernetes-Label）的Pod保持在恒定的数量（多删，少补）。服务接⼊管理，主要为Kubernetes-Service，该Service默认为具有特定标签（KubernetesLabel）的Pod统⼀提供⼀个VIP（Kubernetes-ClusterIP）所有需要请求该组Pod的请求都会按照round-robin的负载策略转发到真正提供服务的Pod。并且CoreDNS为该Kubernetes-Service提供集群内唯⼀的域名。</p>
+<h1 id="service-与-rpcweb服务存在的冲突点">Service 与 RPC/Web服务存在的冲突点</h1>
+<ul>
+<li>Kubernetes-Service标准的资源对象具有的服务描述字段 中并未提供完整的服务进程元数据字段因此，⽆法直接使⽤Kubernetes-Service进⾏服务注册与发现。</li>
+<li>RPC/Web服务的服务注册是基于每个进程的，每个服务进程均需进⾏独⽴的注册。</li>
+<li>Kubernetes-Service默认为服务创建VIP，提供round-robin的负载策略也与RPC/Web服务⾃有的负载策略形成了冲突。</li>
+</ul>
+<h1 id="抛弃service对象，选择pod对象进⾏注册">抛弃Service对象，选择Pod对象进⾏注册</h1>
+<ul>
+<li>Kubernetes-Service与RPC/Web服务现有架构的冲突导致RPC/Web服务在选择服务注册与发现的时候只能选择放弃该资源对象。</li>
+<li>RPC/Web服务既然选择了每个RPC/Web服务进程独⽴注册，因此RPC/Web服务选择将该进程具有的独有的元数据写⼊运⾏该RPC/Web服务进程的Pod在Kubernetes中的Pod资源对象的描述信息中。</li>
+<li>每个运⾏RPC/Web服务进程的Pod将本进程的元数据写⼊Kubernetes-Pod Annotations字段。为了避免与其他使⽤Annotations字段的Operator或者其他类型的控制器（Istio）的字段冲突，使⽤Key为 app.io/annotation value为具体存储的K/V对的数组的json编码后的base64<br>
+编码。</li>
+</ul>
+<h2 id="样例：">样例：</h2>
+<pre><code class="language-yml">apiVersion: v1
+kind: Pod
+metadata:
+ annotations:
+    app.io/annotation: 5LiN55So55yL5LqG5bCx5piv5LiA5Liq5paH5pys5Y2P6K6u
+</code></pre>
+<p>由于每个RPC/Web服务的Pod均只负责注册本进程的元数据，因此Annotations字段⻓度也不会因为运⾏RPC/Web服务进程的Pod数量增加⽽增加。</p>
+<h1 id="服务发现">服务发现</h1>
+<p>解决掉了服务注册问题，接下来需要解决的是服务发现的问题。Kubernetes Api-Server提供了Watch的功能，可以观察特定namespace甚⾄整个集群内各类资源的变化。RPC/Web服务为了避免RPC/Web服务进程watch到与RPC/Web服务进程⽆关的Pod的变化，RPC/Web服务将watch的条件限制在当前Pod所在的namespace，以及 watch 具有 app.io/label Value为app.io-value 的Pod。在Watch到对应Pod的变化后实时更新本地Cache，并通过Registry提供的Subscribe通知建⽴在注册中⼼之上的服务集群管理，或者其他功能。</p>
+<h1 id="⼯作流程">⼯作流程</h1>
+<ul>
+<li>
+<p>启动RPC/Web服务的Deployment或其他类型控制器使⽤Kubernetes Downward-Api将本Pod所在namespace通过环境变量的形式注⼊RPC/Web服务进程。</p>
+</li>
+<li>
+<p>RPC/Web服务进程的Pod启动后通过环境变量获得当前的namespace以及该Pod名称， 调⽤<br>
+Kubernetes-Apiserver PATCH 功能为本Pod添加Key为app.io/label Value为app.io-value的label。</p>
+</li>
+<li>
+<p>RPC/Web服务进程调⽤Kubernetes-Apiserver 将本进程的元数据通过PATCH接⼝写⼊当前Pod的Annotations字段。</p>
+</li>
+<li>
+<p>RPC/Web服务进程 LIST 当前namespace下其他具有同样标签的Pod，并解码对应的Annotations字段获取其他Pod的信息。</p>
+</li>
+<li>
+<p>RPC/Web服务进程 WATCH 当前namespace下其他具有同样标签的Pod的Annotations的字段变化。</p>
+</li>
+</ul>
+<h1 id="总结">总结</h1>
+<p>Kubernetes已经为其承载的服务提供了⼀套服务发现，服务注册，以及服务集群管理机制,⽽传统基于注册中心的服务，同时也拥有⾃成体系的服务集群管理。这两个功能点形成了冲突，在⽆法调谐两者的情况，如果选择保持⾃有的服务集群管理系，放弃Kubernetes-Service功能，将元数据直接写⼊到Kubernetes Pod内，依赖Kubernetes提供的Watch功能提供维护服务集群状态，也是不错的选择。</p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 15:43</span>&nbsp;
+<a href="https://www.cnblogs.com/maxzhang1985/">YOYOFx</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12882770" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12882770);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 77852, cb_blogApp = 'maxzhang1985', cb_blogUserGuid = 'bf24928a-26e2-df11-ac81-842b2b196315';
+    var cb_entryId = 12882770, cb_entryCreatedDate = '2020-05-13 15:43', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 YOYOFx
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script src="https://blog-static.cnblogs.com/files/xuange306/mouse.min.js"></script>
+<script type="text/javascript">
+   $.shuicheMouse({
+        type:11,
+        color:"rgba(187,67,128,1)"
+    })
+</script>
+
+    </div>
+</body>
+</html>

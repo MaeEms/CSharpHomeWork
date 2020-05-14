@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta property="og:description" content="摘要：本篇主要介绍了项目中用于商业兴趣建模的DSSM双塔模型。作为推荐领域中大火的双塔模型，因为效果不错并且对工业界十分友好，所以被各大厂广泛应用于推荐系统中。通过构建user和item两个独立的子网" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>广告行业中那些趣事系列10：推荐系统中不得不说的DSSM双塔模型 - 数据拾光者 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/wilson0068/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/wilson0068/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/wilson0068/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 580376;
+        var currentBlogApp = 'wilson0068';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/wilson0068/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/wilson0068/">数据拾光者</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/wilson0068/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E6%95%B0%E6%8D%AE%E6%8B%BE%E5%85%89%E8%80%85">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/wilson0068/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+21&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+0</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/wilson0068/p/12881258.html">广告行业中那些趣事系列10：推荐系统中不得不说的DSSM双塔模型</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        摘要：本篇主要介绍了项目中用于商业兴趣建模的DSSM双塔模型。作为推荐领域中大火的双塔模型，因为效果不错并且对工业界十分友好，所以被各大厂广泛应用于推荐系统中。通过构建user和item两个独立的子网络，将训练好的两个“塔”中的user embedding 和item embedding各自缓存到内存数据库中。线上预测的时候只需要在内存中计算相似度运算即可。DSSM双塔模型是推荐领域不中不得不会的重要模型。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <div class="Post-RichTextContainer">
+<div class="RichText ztext Post-RichText">
+<p><img src="https://img2020.cnblogs.com/blog/837835/202005/837835-20200513111919783-660130369.jpg" alt=""></p>
+<p>摘要：本篇主要介绍了项目中用于商业兴趣建模的DSSM双塔模型。作为推荐领域中大火的双塔模型，因为效果不错并且对工业界十分友好，所以被各大厂广泛应用于推荐系统中。通过构建user和item两个独立的子网络，将训练好的两个&ldquo;塔&rdquo;中的user embedding 和item embedding各自缓存到内存数据库中。线上预测的时候只需要在内存中计算相似度运算即可。DSSM双塔模型是推荐领域不中不得不会的重要模型。</p>
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p>目录</p>
+<p>01 为什么要学习DSSM双塔模型</p>
+<p>02 DSSM模型理论知识</p>
+<p>03 推荐领域中的DSSM双塔模型</p>
+<p>04 实战广告推荐的双塔模型</p>
+<p>05 总结</p>
+<p>&nbsp;</p>
+<p><strong>01 为什么要学习DSSM双塔模型</strong></p>
+<p>我们标签组主要的服务对象是广告主，服务目标是为广告主提供更好的广告转换效果。这里涉及到两种建模：一种是自然兴趣建模，根据用户操作终端行为获得user-item关联，给不同的数据源打标获得item-tag关联，最后将上面两种关联进行join操作得到user-tag的关联实现给用户打上兴趣标签，这里相当于是从标签维度为广告主推荐人群；另一种就是商业兴趣建模，在自然兴趣建模的基础上，从广告维度为广告主推荐人群，那么就需要目前大火的DSSM双塔模型了。</p>
+<p>拿上一篇讲的Youtube视频推荐系统举例，一般推荐系统中有两个流程：第一步是召回模型，主要是进行初筛操作，从海量视频资源池中初步选择一部分用户可能感兴趣的视频数据子集，从数量上看可能是从千万级别筛选出百级别；第二步是精排模型，主要作用是对上面找到的百级别的视频子集进一步精筛，从数量上看可能是从百级别筛选出几十级别。然后根据得分高低排序，生成一个排序列表作为用户的候选播放列表从而完成视频推荐任务。</p>
+<p>我们广告推荐领域中使用的DSSM双塔模型是从广告维度为广告主推荐一定数量的人群，从数量上看是从百亿级别人群中找出百万级人群用于投放广告，所以是召回模型。</p>
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p><strong>02 DSSM模型理论知识</strong></p>
+<p>1. DSSM模型的原理</p>
+<p>DSSM(Deep Structured Semantic Models)也叫深度语义匹配模型，最早是微软发表的一篇应用于NLP领域中计算语义相似度任务的文章。</p>
+<p>DSSM深度语义匹配模型原理很简单：获取搜索引擎中的用户搜索query和doc的海量曝光和点击日志数据，训练阶段分别用复杂的深度学习网络构建query侧特征的query embedding和doc侧特征的doc embedding，线上infer时通过计算两个语义向量的cos距离来表示语义相似度，最终获得语义相似模型。<strong>这个模型既可以获得语句的低维语义向量表达sentence embedding，还可以预测两句话的语义相似度</strong>。</p>
+<p>2. DSSM深度语义匹配模型整体结构<br />DSSM模型总的来说可以分成三层结构，分别是输入层、表示层和匹配层。结构如下图所示：</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic4.zhimg.com/80/v2-6efbbce0b1a70af4f850d4c8c6f82a43_720w.jpg" alt="" width="772" data-size="normal" data-rawwidth="772" data-rawheight="460" data-original="https://pic4.zhimg.com/v2-6efbbce0b1a70af4f850d4c8c6f82a43_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-6efbbce0b1a70af4f850d4c8c6f82a43_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图1 DSSM模型结构图
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p>2.1 输入层</p>
+<p>输入层主要的作用就是把文本映射到低维向量空间转化成向量提供给深度学习网络。NLP领域里中英文有比较大的差异，在输入层处理方式不同。</p>
+<p>(1) 英文场景</p>
+<p>英文的输入层通过Word
+   
+Hashing方式处理，该方法基于字母的n-gram，主要作用是减少输入向量的维度。举例说明，假如现在有个词boy，开始和结束字符分别用#表示，那么输入就是(#boy#)。将词转化为字母n-gram的形式，如果设置n为3，那么就能得到(#bo,boy,oy#)三组数据，将这三组数据用n-gram的向量来表示。</p>
+<p>使用Word Hashing方法存在的问题是可能造成冲突。因为两个不同的词可能有相同的n-gram向量表示。下图是在不同的英语词典中分别使用2-gram和3-gram进行Word Hashing时的向量空间以及词语碰撞统计：</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic1.zhimg.com/80/v2-944b37762be11070779fed05282d6b88_720w.jpg" alt="" width="703" data-size="normal" data-rawwidth="703" data-rawheight="170" data-original="https://pic1.zhimg.com/v2-944b37762be11070779fed05282d6b88_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-944b37762be11070779fed05282d6b88_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图2 不同词典下n-gram向量空间和词语碰撞统计
+<p>可以看出在50W词的词典中如果使用2-gram，也就是两个字母的粒度来切分词，向量空间压缩到1600维，产生冲突的词有1192个(这里的冲突是指两个词的向量表示完全相同，因为单词储量实在有限，本来想找几个例子说明下，结果没找到)。如果使用3-gram向量空间压缩到3W维，产生冲突的词只有22个。综合下来论文中使用3-gram切分词。</p>
+<p>(2) 中文场景</p>
+<p>中文输入层和英文有很大差别，首先要面临的是分词问题。如果要分词推荐jieba或者北大pkuseg，不过现在很多模型已经不进行分词了，比如BERT中文的预训练模型就直接使用单字作为最小粒度了。</p>
+<p>2.2 表示层</p>
+<p>DSSM模型表示层使用的是BOW(bag of words)词袋模型，没有考虑词序的信息。不考虑词序其实存在明显的问题，因为一句话可能词相同，但是语义则相差十万八千里，比如&ldquo;我爱女朋友&rdquo;和&ldquo;女朋友爱我&rdquo;可能差距蛮大的(这个小伙伴们自己体会)。</p>
+<p>下图是DSSM表示层的结构：</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic1.zhimg.com/80/v2-f9fde0b1862e12cdd5e3c1c71a16708c_720w.jpg" alt="" width="918" data-size="normal" data-rawwidth="918" data-rawheight="401" data-original="https://pic1.zhimg.com/v2-f9fde0b1862e12cdd5e3c1c71a16708c_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-f9fde0b1862e12cdd5e3c1c71a16708c_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图3 DSSM模型表示层结构图
+<p>最下面的Term Vector到Word Hashing将词映射到3W维的向量空间中。然后分别经过两层300维度的隐藏层，最后统一输出128维度的向量。</p>
+<p>2.3 匹配层</p>
+<p>现在我们把query和doc统一转换成了两个128维的语义向量，接下来如何计算它们的语义相似度呢？通过cos函数计算这两个向量的余弦相似度就可以了，公式如下：</p>
+
+<img class="content_image lazy" src="https://pic2.zhimg.com/80/v2-38fd24eec274291d407612bf377436cd_720w.jpg" alt="" width="393" data-size="normal" data-rawwidth="393" data-rawheight="73" data-actualsrc="https://pic2.zhimg.com/v2-38fd24eec274291d407612bf377436cd_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图4 cos余弦计算公式
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p><strong>3. DSSM模型的优缺点</strong></p>
+<p>先说说DSSM模型的优点：</p>
+<ul>
+<li>解决了LSA、LDA、Autoencoder等方法存在的字典爆炸问题，从而降低了计算复杂度。因为英文中词的数量要远远高于字母n-gram的数量；</li>
+<li>中文方面使用字作为最细切分粒度，可以复用每个字表达的语义，减少分词的依赖，从而提高模型的泛化能力；</li>
+<li>字母的n-gram可以更好的处理新词，具有较强的鲁棒性；</li>
+<li>使用有监督的方法，优化语义embedding的映射问题；</li>
+<li>省去了人工特征工程；</li>
+<li>采用有监督训练，精度较高。传统的输入层使用embedding的方式(比如Word2vec的词向量)或者主题模型的方式(比如LDA的主题向量)做词映射，再把各个词的向量拼接或者累加起来。由于Word2vec和LDA都是无监督训练，会给模型引入误差。</li>
+
+</ul>
+<p>再说说DSSM模型的缺点：</p>
+<ul>
+<li>Word Hashing可能造成词语冲突；</li>
+<li>采用词袋模型，损失了上下文语序信息。这也是后面会有CNN-DSSM、LSTM-DSSM等DSSM模型变种的原因；</li>
+<li>搜索引擎的排序由多种因素决定，用户点击时doc排名越靠前越容易被点击，仅用点击来判断正负样本，产生的噪声较大，模型难以收敛；</li>
+<li>效果不可控。因为是端到端模型，好处是省去了人工特征工程，但是也带来了端到端模型效果不可控的问题。</li>
+
+</ul>
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p><strong> 03 推荐领域中的DSSM双塔模型</strong></p>
+<p>1.  从NLP领域跨界到推荐领域的DSSM</p>
+<p>DSSM深度语义匹配模型最早是应用于NLP领域中计算语义相似度任务。因为语义匹配本身是一种排序问题，和推荐场景不谋而合，所以DSSM模型被自然的引入到推荐领域中。<strong>DSSM模型分别使用相对独立的两个复杂网络构建用户相关特征的user embedding和item相关特征的item embedding，所以称为双塔模型</strong>。下面来一张酷炫的双塔图镇楼：</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic4.zhimg.com/80/v2-8678c409b1302af21fc0b4fb022d5147_720w.jpg" alt="" width="1080" data-size="normal" data-rawwidth="1080" data-rawheight="678" data-original="https://pic4.zhimg.com/v2-8678c409b1302af21fc0b4fb022d5147_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-8678c409b1302af21fc0b4fb022d5147_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图5 酷炫双塔图
+<p>2. 朴素的DSSM双塔模型，2015</p>
+<p>双塔模型最大的特点是user和item是独立的两个子网络，对工业界十分友好。将两个塔各自缓存，线上预测的时候只需要在内存中进行相似度运算即可。下面是2015年朴素的DSSM双塔模型结构：</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic4.zhimg.com/80/v2-e14071d865ed733c5ea8dacb545ae1ab_720w.jpg" alt="" width="866" data-size="normal" data-rawwidth="866" data-rawheight="628" data-original="https://pic4.zhimg.com/v2-e14071d865ed733c5ea8dacb545ae1ab_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-e14071d865ed733c5ea8dacb545ae1ab_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图6 朴素的DSSM双塔模型
+<p>3.  百度的双塔模型</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic1.zhimg.com/80/v2-d6c709b8304d4f3d64f084d8a891a828_720w.jpg" alt="" width="752" data-size="normal" data-rawwidth="752" data-rawheight="476" data-original="https://pic1.zhimg.com/v2-d6c709b8304d4f3d64f084d8a891a828_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-d6c709b8304d4f3d64f084d8a891a828_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图7 百度的双塔模型
+<p>百度的双塔模型分别使用复杂的网络对用户相关的特征和广告相关的特征进行embedding，分别形成两个独立的塔，在最后的交叉层之前用户特征和广告特征之间没有任何交互。这种方案就是训练时引入更多的特征完成复杂网络离线训练，然后将得到的user
+  embedding和item  
+embedding存入redis这一类内存数据库中。线上预测时使用LR、浅层NN等轻量级模型或者更方便的相似距离计算方式。这也是业界很多大厂采用的推荐系统的构造方式。</p>
+<p>4. 谷歌的双塔模型，2019</p>
+<p>2019年谷歌推出自己的双塔模型，文章的核心思想是：在大规模的推荐系统中，利用双塔模型对user-item对的交互关系进行建模，从而学习【用户，上下文】向量和【item】向量的关联。针对大规模流数据，提出in-batch
+   
+softmax损失函数与流数据频率估计方法更好的适应item的多种数据分布。利用双塔模型构建Youtube视频推荐系统，对于用户侧的塔根据用户观看视频特征构建user
+  embedding，对于视频侧的塔根据视频特征构建video emebdding。两个塔分别是相互独立的网络。</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic4.zhimg.com/80/v2-a33e79cf2fa472a329de9ad5e8fbb783_720w.jpg" alt="" width="1080" data-size="normal" data-rawwidth="1080" data-rawheight="570" data-original="https://pic4.zhimg.com/v2-a33e79cf2fa472a329de9ad5e8fbb783_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-a33e79cf2fa472a329de9ad5e8fbb783_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图8 谷歌的双塔模型
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p><strong>04 实战广告推荐的双塔模型</strong></p>
+<p>1. 广告推荐业务场景</p>
+<p>讲了上面一大堆，就是为了这一节构建咱们广告推荐的DSSM双塔模型。对应到咱们的广告业务就是构建DSSM双塔模型，用户侧输入用户对广告的历史行为特征(包括点击、下载、付费等)从而得到固定长度的user
+  embedding，同理广告侧输入广告特征得到相同长度的ad  
+embedding，分别存入redis内存数据库中。线上infer时给定一个广告ad，然后分别和全量用户求相似度，找到&ldquo;距离最近&rdquo;的user子集，对这部分人群投放广告从而完成广告推荐任务。</p>
+<p>2. 广告推荐的DSSM双塔模型结构</p>
+<p>模型整体结构如下图所示，也分成三层：输入层、表示层和匹配层。</p>
+
+<img class="origin_image zh-lightbox-thumb lazy" src="https://pic4.zhimg.com/80/v2-27971a100117b00fa8ff77f7fbeac5af_720w.jpg" alt="" width="849" data-size="normal" data-rawwidth="849" data-rawheight="564" data-original="https://pic4.zhimg.com/v2-27971a100117b00fa8ff77f7fbeac5af_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-27971a100117b00fa8ff77f7fbeac5af_b.jpg" data-lazy-status="ok"></div>
+<div class="RichText ztext Post-RichText">图9 广告推荐的DSSM双塔模型结构
+<p>2.1 输入层</p>
+<p>模型训练分成两座不同的&ldquo;塔&rdquo;分别进行，其实也就是两个不同的神经网络。其中一座塔是用于生成user
+   
+embedding。输入用户特征训练数据，用户特征包括用户稠密特征和用户稀疏特征，其中用户稠密特征进行one-hot编码操作，用户稀疏特征进行embedding降维到低维空间(64或者32维)，然后进行特征拼接操作。广告侧和用户侧类似。</p>
+<p>关于里面的特征，不在于你要什么，而在于你有什么。整个工程超级复杂的就是这块的特征工作。这里不再赘述。</p>
+<p>2.2 表示层</p>
+<p>得到拼接好的特征之后会提供给各自的深度学习网络模型。用户特征和广告特征经过各自的两个全连接层后转化成了固定长度的向量，这里得到了维度相同的user
+  embedding和ad  
+embedding。各塔内部的网络层数和维度可以不同，但是输出的维度必须是一样的，这样才能在匹配层进行运算。项目中user  
+embedding和ad embedding 维度都是32。</p>
+<p>2.3 匹配层</p>
+<p>模型训练好了之后会分别得到user  
+embedding和ad embedding，将它们存储到redis这一类内存数据库中。如果要为某个特定的广告推荐人群，则将该广告的ad  
+embedding分别和所有人群的user  
+embedding计算cos相似度。选择距离最近的N个人群子集作为广告投放人群，这样就完成了广告推荐任务。模型训练过程中将cos函数得到的结果进入sigmoid函数和真实标签计算logloss，查看网络是否收敛。模型评估主要使用auc指标。</p>
+<p>小结下，本节讲了下我们使用DSSM双塔模型完成广告推荐任务。模型整体结构分成输入层、表示层和匹配层。首先在输入层处理数据获取特征；然后在表示层通过深度学习网络得到user embedding和ad embedding；最后在匹配层进行广告推荐。</p>
+<p>3. 一点思考</p>
+<p>DSSM双塔模型有很多变种，比如CNN-DSSM、LSTM-DSSM等等。项目中表示层使用了两层全连接网络来作为特征抽取器。现在深度学习领域公认最强的特征抽取器是Transformer，后续是否可以加入Transformer。</p>
+<p class="ztext-empty-paragraph">&nbsp;</p>
+<p><strong>总结</strong></p>
+<p>本篇主要介绍了项目中用于商业兴趣建模的DSSM双塔模型。作为推荐领域中大火的双塔模型，最大的特点是效果不错并且对工业界十分友好，所以被各大厂广泛应用于推荐系统中。通过构建user和item两个独立的子网络，将训练好的两个塔中的user
+  embedding 和item  
+embedding各自缓存到内存数据库中。线上预测的时候只需要在内存中进行相似度运算即可。首先，讲了下DSSM语义匹配模型的理论知识，最早是应用于NLP领域中用于语义相似度任务；然后，因为都是排序问题，所以引入到推荐领域。从朴素的DSSM双塔模型到各大长的双塔模型；最后，讲了下我们使用DSSM双塔模型实战到广告推荐场景。</p>
+<p><strong>参考资料</strong></p>
+<p>【1】LearningDeep Structured Semantic Models for Web Search using Clickthrough Data</p>
+<p>【2】Sampling-bias-corrected neural modeling for largecorpus  item recommendations</p>
+<p>最新最全的文章请关注我的微信公众号：数据拾光者。</p>
+<p><img src="https://img2020.cnblogs.com/blog/837835/202005/837835-20200513111859389-285742537.png" alt=""></p>
+
+</div>
+
+</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 11:21</span>&nbsp;
+<a href="https://www.cnblogs.com/wilson0068/">数据拾光者</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12881258" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12881258);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 580376, cb_blogApp = 'wilson0068', cb_blogUserGuid = '3225b54b-748b-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 12881258, cb_entryCreatedDate = '2020-05-13 11:21', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 数据拾光者
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

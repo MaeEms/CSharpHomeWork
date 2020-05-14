@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="随着 .NET 5 发布日期的日益临近，其对应的 C# 新版本已确定为 C# 9.0，其中新增加的特性（或语法糖）也已基本锁定，本系列文章将向大家展示它们。" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>C# 9.0 新特性预览 - 空参数校验 - Rwing - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/minyx2_lite/bundle-minyx2_lite.min.css?v=mxJZfspzqgmSFSdBbMH8zU83VuawcFZooz2hdrdyHlI" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/minyx2_lite/bundle-minyx2_lite-mobile.min.css?v=ADiCwO2hOTdd5yYidcx7eob7ix2VJI4o_TXjEycTHjs" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Rwing/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Rwing/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Rwing/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 26999;
+        var currentBlogApp = 'Rwing';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Minyx2_Lite';
+    </script>
+    
+    
+    <script src="/skins/minyx2_lite/bundle-minyx2_lite.min.js?v=z_XLIOc5JYwRKqTPu9fAWp7D8tchhGxVWGYvlAiigUQ" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<div id="container">
+    <a class="minyx" href="https://www.cnblogs.com/">代码改变世界</a>
+    <ul id="topMnu">
+        <!-- 统计数据 -->
+        <li>
+            Posts - 
+28, 
+Articles - 
+0, 
+Comments - 
+367
+<!---->
+
+
+        </li>
+        <!-- 这边可以增加一些链接 -->
+        <!-- 博客园 -->
+        <li><a href="https://www.cnblogs.com/">Cnblogs</a></li>
+        <!-- 管理 -->
+        <li id="topMnu-dashboard">
+            <a id="lnkDashboard" href="https://i.cnblogs.com/">Dashboard</a>
+        </li>
+        <li>
+            
+    <a id="lnkLogin" href="https://account.cnblogs.com/signin/?returnUrl=https://www.cnblogs.com/Rwing/">Login</a>
+
+
+        </li>
+    </ul>
+
+    <script type="text/javascript">
+        var m = window.__blog.topMenuRendered;
+        if (m) { m(__$("topMnu")); }
+    </script>
+
+    <div id="header">
+        <ul id="menu">
+            <!-- 首页，当前section加上current类 -->
+            <li id="menu-home" class="current">
+                <a id="lnkHome" href="https://www.cnblogs.com/Rwing/">Home</a></li>
+            <!-- 联系 -->
+            <li id="menu-contact">
+                <a id="lnkContact" href="https://msg.cnblogs.com/send/Rwing">Contact</a></li>
+            <!-- 相册 -->
+            <li id="menu-gallary">
+                <a id="lnkGallery" href="https://www.cnblogs.com/Rwing/gallery.html">Gallery</a></li>
+            <!-- Rss订阅 -->
+            <li id="rss">
+                <a id="lnkRss" href="https://www.cnblogs.com/Rwing/rss/">RSS</a></li>
+        </ul>
+        <div id="newmsg"></div>
+        <h1>
+            <!-- 主标题 -->
+            <a id="lnkBlogTitle" href="https://www.cnblogs.com/Rwing/">Rwing</a>
+            <!-- 子标题 -->
+            <small>
+                
+            </small>
+        </h1>
+    </div>
+
+    <script type="text/javascript">
+        var m = window.__blog.headerRendered;
+        if (m) { m(__$("header")); }
+    </script>
+
+    <div id="wrapper">
+        <div id="content">
+            <script type="text/javascript">
+                var m = window.__blog.preRenderPosts;
+                if (m) { m(); }
+            </script>
+            <div id="post_detail">
+<div class="post" id="post">
+    <a name="top"></a>
+    <h2>
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/Rwing/p/csharp-9-0-preview-null-arg-checking.html">C# 9.0 新特性预览 - 空参数校验</a>
+</h2>
+    <small>
+<span id="post-date">2020-05-12 23:21</span>&nbsp;
+<a href="https://www.cnblogs.com/Rwing/">Rwing</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12879623" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12879623);return false;">收藏</a></small>
+    <div class="entry">
+        
+    <div id="cnblogs_post_description" style="display: none">
+        随着 .NET 5 发布日期的日益临近，其对应的 C# 新版本已确定为 C# 9.0，其中新增加的特性（或语法糖）也已基本锁定，本系列文章将向大家展示它们。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h1 id="c-90-新特性预览---空参数校验">C# 9.0 新特性预览 - 空参数校验</h1>
+<p><a name="8mj2h"></a></p>
+<h3 id="前言">前言</h3>
+<p>随着 .NET 5 发布日期的日益临近，其对应的 C# 新版本已确定为 C# 9.0，其中新增加的特性（或语法糖）也已基本锁定，本系列文章将向大家展示它们。<br /><br>
+<a name="6j6hs"></a></p>
+<h3 id="目录">目录</h3>
+<p>[<a href="https://www.cnblogs.com/Rwing/p/csharp-9-0-preview-target-typed-new.html">C# 9.0 新特性预览 - 类型推导的 new</a>]<br />[<a href="https://www.cnblogs.com/Rwing/p/csharp-9-0-preview-null-arg-checking.html">C# 9.0 新特性预览 - 空参数校验</a>]<br />[C# 9.0 新特性预览 - Lambda 中的弃元]<br />[C# 9.0 新特性预览 - Record 类型]<br />[C# 9.0 新特性预览 - 模式匹配的改善]<br />[C# 9.0 新特性预览 - 其他小的变化]<br /></p>
+<p><a name="hBn6a"></a></p>
+<h3 id="简便的空参数校验-simplified-null-argument-checking">简便的空参数校验 (Simplified Null Argument Checking)</h3>
+<p><a name="lzn7o"></a></p>
+<h4 id="目的">目的</h4>
+<p>这个特性主要是为了更简便的检查方法的参数是否为 null 并抛出 ArgumentNullExceptiony 异常。<br>
+<a name="9jfO0"></a></p>
+<h4 id="语法">语法</h4>
+<p>语法很简单，在参数名后加个叹号即可：</p>
+<pre><code class="language-csharp">void M(string name!) {
+    ...
+}
+</code></pre>
+<p>以上代码会被翻译为：</p>
+<pre><code class="language-csharp">void M(string name) {
+    if (name is null) {
+        throw new ArgumentNullException(nameof(name));
+    }
+    ...
+}
+</code></pre>
+<p>想必有些同学已经从上面代码看出来了，这个生成的空校验，只是校验参数是否为 null，这也就意味着它无法在值类型上使用，以下代码将报错：</p>
+<pre><code class="language-csharp">// Error: 无法在值类型参数上使用!操作符
+void G&lt;T&gt;(T arg!) where T : struct {
+
+}
+</code></pre>
+<p>当然，可空的值类型是可以的，但是编译器会提示一条警告，提示你在可空类型上进行了空检查：</p>
+<pre><code class="language-csharp">// Warning: 将显式null检查与可为null的类型结合使用
+void M(int? x!) { 
+}
+</code></pre>
+<p>类似的，在参数拥有默认值的情况下，也会提示警告</p>
+<pre><code class="language-csharp">// Warning: 参数 'x' 进行了空检查但是它默认为空
+void M(string x! = null) { 
+}
+</code></pre>
+<p><a name="059hP"></a></p>
+<h4 id="构造方法的场景">构造方法的场景</h4>
+<p>在构造方法的场景下，空参数校验将发生在任何其他代码的前面，包括：</p>
+<ul>
+<li>对其他构造方法的链式调用，即 this() 或 base()</li>
+<li>在构造方法内的隐式字段初始化</li>
+</ul>
+<p>举个例子：</p>
+<pre><code class="language-csharp">class C {
+    string field = GetString();
+    C(string name!): this(name) {
+        ...
+    }
+}
+</code></pre>
+<p>以上代码会大致翻译为以下伪代码：</p>
+<pre><code class="language-csharp">class C {
+    C(string name)
+        if (name is null) {
+            throw new ArgumentNullException(nameof(name));
+        }
+        field = GetString();
+        :this(name);
+        ...
+}
+</code></pre>
+<p><a name="tjrQy"></a></p>
+<h4 id="lambda-的场景">Lambda 的场景</h4>
+<p>这个特性在 lambda 中也可以使用</p>
+<pre><code class="language-csharp">void G() {
+    Func&lt;string, string&gt; s = x! =&gt; x;
+}
+</code></pre>
+<p><a name="6sVHu"></a></p>
+<h4 id="不可以使用的场景">不可以使用的场景</h4>
+<p>这个特性只能用于有方法体的方法中，也就意味着它不能用于抽象方法、接口、委托和部分方法。<br />以下代码编译器会报错：</p>
+<pre><code class="language-csharp">interface C
+{
+    public int M(string x!);// ERROR
+}
+</code></pre>
+<p>不能用于属性。因为属性 setter 中的 value 是隐式的，不会出现在参数列表中，所以此特性不适用于属性。</p>
+<pre><code class="language-csharp">string FirstName! { get; set; } // ERROR
+</code></pre>
+<p>不能用于 out / ref / in 的参数</p>
+<pre><code class="language-csharp">public void M(out string x!) {} // ERROR
+</code></pre>
+<p><a name="U9INU"></a></p>
+<h3 id="参考">参考</h3>
+<p>[<a href="https://github.com/dotnet/csharplang/blob/master/proposals/null-arg-checking.md">Proposal: Simplified Null Argument Checking</a>]<br />[<a href="https://github.com/dotnet/roslyn/blob/features%2Fparam-nullchecking/src/Compilers/CSharp/Test/Semantic/Semantics/NullCheckedParameterTests.cs">Unit test: NullCheckedParameterTests.cs</a>]<br />[<a href="https://github.com/dotnet/csharplang/blob/master/meetings/2019/LDM-2019-07-10.md#param">LDM-2019-07-10.md</a>]</p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+        <div class="clear"></div>
+        <div id="blog_post_info_block">
+        <div id="blog_post_info">
+        </div>
+        <div class="clear"></div>
+        <div id="post_next_prev"></div>
+    </div>
+</div>
+    <ul class="postmetadata">
+        
+<li class="icon_cat" id="BlogPostCategory">
+分类            <a href="https://www.cnblogs.com/Rwing/category/200198.html" target="_blank">01.文章</a>
+</li>
+<li class="icon_bullet" id="EntryTag">
+标签            <a href="https://www.cnblogs.com/Rwing/tag/C%23%209.0/">C# 9.0</a>
+,            <a href="https://www.cnblogs.com/Rwing/tag/C%23/">C#</a>
+</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var m = window.__blog.postRendered;
+    if (m) { m(__$("post")); }
+</script>
+<script type="text/javascript">
+    var m = window.__blog.postRenderPosts;
+    if (m) { m(); }
+</script>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 26999, cb_blogApp = 'Rwing', cb_blogUserGuid = '96753d0b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 12879623, cb_entryCreatedDate = '2020-05-12 23:21', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+        </div>
+
+        <script type="text/javascript">
+            var m = window.__blog.contentRendered;
+            if (m) { m(__$("content")); }
+        </script>
+
+        <div id="sidebar">
+            <div id="about">
+                <div>
+                    <h2 id="about_title">About</h2>
+                    <div id="about_body">
+                        <div id="sidebar_news"></div>
+                        <script type="text/javascript">loadBlogNews();</script>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var m = window.__blog.aboutRendered;
+                if (m) { m(__$("about")); }
+            </script>
+            <div id="mySearchWrapper">
+                <div id="mySearch">
+                    <input type="image" src="/skins/minyx2_lite/images/btnsearch.gif" id="btnZzk"  class="submit" onclick="zzk_go();return false;"/>
+                    <label class="lb_search"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="keyword" /></label>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var m = window.__blog.searchFormRendered;
+                if (m) { m(__$("searchform")); }
+            </script>
+            <div id="sideMain">
+            </div>
+            <div id="sideRight">
+            </div>
+            <div id="sideLeft">
+            </div>            
+                <div id="sideContainer">
+                </div>
+                <script type="text/javascript">
+                    $.ajax({
+                        url: '/' + currentBlogApp + '/ajax/Minyx2_Lite_SideColumn.aspx',
+                        data: '{}',
+                        type: 'post',
+                        dataType: 'text',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data) {
+                                $("#sideContainer").html(data);
+                                $.ajax({
+                                    url: getAjaxBaseUrl() + 'TopLists.aspx',
+                                    type: 'get',
+                                    dataType: 'text',
+                                    success: function (topLists) {
+                                        if (topLists) {
+                                            $("#sideContainer").append(topLists);
+                                        }
+                                        var m = window.__blog.sideContainerRendered;
+                                        if (m) { m(__$("sideContainer")); }
+                                        window.__blog.sidebar.__layout();
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                </script>
+        </div>
+
+        <script type="text/javascript">
+            var m = window.__blog.sidebarRendered;
+            if (m) { m(__$("sidebar")); }
+        </script>
+
+        <div id="footer">
+            <p id="logoFoot">
+    <a href="http://www.spiga.com.mx/" title="Agencia Interactiva Spiga">www.spiga.com.mx</a>
+</p>
+<div class="footText">
+<p>
+Copyright &copy; 2020 Rwing
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+</p>
+<p>
+<a href="http://www.cnblogs.com">博客园</a>
+</p>
+</div>
+
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var m = window.__blog.wrapperRendered;
+        if (m) { m(__$("wrapper")); }
+    </script>
+
+</div>
+<script type="text/javascript">
+    var m = window.__blog.containerRendered;
+    if (m) { m(__$("container")); }
+</script>
+
+
+    
+</body>
+</html>

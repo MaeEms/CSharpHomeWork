@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="一、前言 这几天为了更详细地了解 ，我开始阅读 的官方文档。说实话，之前很少阅读官方文档，就算是读，也是读别人翻译好的。但是最近由于准备春招，需要了解很多知识点的细节，网上几乎搜索不到，只能硬着头皮去" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Spring方法注入的使用与实现原理 - 特务依昂 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/tuyang1129/custom.css?v=sbPOP5mjDvhiWlp4&#x2B;s1hD6JyZt0=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/tuyang1129/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/tuyang1129/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/tuyang1129/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 426004;
+        var currentBlogApp = 'tuyang1129';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/tuyang1129/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/tuyang1129/">特务依昂</a>
+</h1>
+<h2>
+世界是个球，前方总有路。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/tuyang1129/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E7%89%B9%E5%8A%A1%E4%BE%9D%E6%98%82">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/tuyang1129/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+96&nbsp; </span>
+<span id="stats_article_count">文章 - 
+13&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+6</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/tuyang1129/p/12882500.html">Spring方法注入的使用与实现原理</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h1 id="一、前言">一、前言</h1>
+<p>  这几天为了更详细地了解<code>Spring</code>，我开始阅读<code>Spring</code>的官方文档。说实话，之前很少阅读官方文档，就算是读，也是读别人翻译好的。但是最近由于准备春招，需要了解很多知识点的细节，网上几乎搜索不到，只能硬着头皮去读官方文档。虽然我读的这个<code>Spring</code>文档也是中文版的，但是很明显是机翻，十分不通顺，只能对着英文版本，两边对照着看，这个过程很慢，也很吃力。但是这应该是一个程序员必须要经历的过程吧。</p>
+<p>  在读文档的时候，我读到了一个叫做方法注入的内容，这是我之前学习<code>Spring</code>所没有了解过的。所以，这篇博客就参照文档中的描述，来讲一讲这个方法注入是什么，在什么情况下使用，以及简单谈一谈它的实现原理。</p>
+<br>
+<h1 id="二、正文">二、正文</h1>
+<h2 id="21-问题分析">2.1 问题分析</h2>
+<p>  在说方法注入之前，我们先来考虑一种实际情况，通过实际案例，来引出我们为什么需要方法注入。在我们的<code>Spring</code>程序中，可以将<code>bean</code>的依赖关系简单分为四种：</p>
+<ol>
+<li>单例<code>bean</code>依赖单例<code>bean</code>；</li>
+<li>多例<code>bean</code>依赖多例<code>bean</code>；</li>
+<li>多例<code>bean</code>依赖单例<code>bean</code>；</li>
+<li>单例<code>bean</code>依赖多例<code>bean</code>；</li>
+</ol>
+<p>  前三种依赖关系都很好解决，<code>Spring</code>容器会帮我们正确地处理，唯独第四种——单例<code>bean</code>依赖多例<code>bean</code>，<code>Spring</code>容器无法帮我们得到想要的结果。为什么这么说呢？我们可以通过<code>Spring</code>容器工作的方式来分析。</p>
+<p>  我们知道，<code>Spring</code>中<code>bean</code>的作用域默认是单例的，每一个<code>Spring</code>容器，只会创建这个类型的一个实例对象，并缓存在容器中，所以对这个<code>bean</code>的请求，拿到的都是同一个<code>bean</code>实例。而对于每一个<code>bean</code>来说，容器只会为它进行一次依赖注入，那就是在创建这个<code>bean</code>，为它初始化的时候。于是我们可以开始考虑上面说的第四种依赖情况了。假设一个单例<code>bean A</code>，它依赖于多例<code>bean B</code>，<code>Spring</code>容器在创建<code>A</code>的时候，发现它依赖于<code>B</code>，且<code>B</code>是多例的，于是容器会创建一个新的<code>B</code>，然后将它注入到<code>A</code>中。<code>A</code>创建完成后，由于它是单例的，所以会被缓存在容器中。之后，所有访问<code>A</code>的代码，拿到的都是同一个<code>A</code>对象。而且，由于容器只会为<code>bean</code>执行一次依赖注入，所以我们通过<code>A</code>访问到的<code>B</code>，永远都是同一个，尽管<code>B</code>被配置为了多例，但是并没有用。为什么会这样？因为多例的含义是，我们每次向<code>Spring</code>容器请求多例<code>bean</code>，都会创建一个新的对象返回。而<code>B</code>虽然是多例，但是我们是通过<code>A</code>访问<code>B</code>，并不是通过容器访问，所以拿到的永远是同一个<code>B</code>。这时候，单例<code>bean</code>依赖多例<code>bean</code>就失败了。</p>
+<p>  那要如何解决这个问题呢？解决方案应该不难想到。我们可以放弃让<code>Spring</code>容器为我们注入<code>B</code>，而是编写一个方法，这个方法直接向<code>Spring</code>容器请求<code>B</code>；然后在<code>A</code>中，每次想要获取<code>B</code>时，就调用这个方法获取，这样每次获取到的<code>B</code>就是不一样的了。而且我们这里可以借助<code>ApplicationContextAware</code>接口，将<code>context</code>对象（也就是容器）存储在<code>A</code>中，这样就可以方便地调用<code>getBean</code>获取<code>B</code>了。比如，<code>A</code>的代码可以是这样：</p>
+<pre><code class="language-java">class A implements ApplicationContextAware {
+    // 记录容器的引用
+    private ApplicationContext context;
+    // A依赖的多例对象B
+    private B b;
+
+    /**
+     * 这是一个回调方法，会在bean创建时被调用
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        this.context = applicationContext;
+    }
+
+    public B getB() {
+        // 每次获取B时，都向容器申请一个新的B
+        b = context.getBean(B.class);
+        return b;
+    }
+}
+</code></pre>
+<p>  但是，上面的做法真的好吗？答案显然是不好。<code>Spring</code>的一个很大的优点就是，它侵入性很低，我们在自己编写的代码中，几乎看不到<code>Spring</code>的组件，一般只会有一些注解。但是上面的代码中，却直接耦合了<code>Spring</code>容器，将容器存储在类中，并显式地调用了容器的方法，这不仅增加了<code>Spring</code>的侵入性，也让我们的代码变得不那么容易管理，也变得不再优雅。而<code>Spring</code>提供的<strong>方法注入</strong>机制，就是用了实现和上面类似的功能，但是更加地优雅，侵入性更低。下面我们就来看一看。</p>
+<br>
+<h2 id="22-方法注入的功能">2.2 方法注入的功能</h2>
+<p>  什么是方法注入？其实方法注入和<code>AOP</code>非常类似，<code>AOP</code>用来对我们定义的方法进行增强，而<strong>方法注入，则是用来覆盖我们定义的方法</strong>。通过<code>Spring</code>提供的方法注入机制，我们可以对类中定义的方法进行替换，比如说上面的<code>getB</code>方法，正常情况下，它的实现应该是这样的：</p>
+<pre><code class="language-java">public B getB() {
+    return b;
+}
+</code></pre>
+<p>  但是，为了实现每次获取<code>B</code>时，能够让<code>Spring</code>容器创建一个新的<code>B</code>，我们在上面的代码中将它修改成了下面这个样子：</p>
+<pre><code class="language-java">public B getB() {
+    // 每次获取B时，都向容器申请一个新的B
+    b = context.getBean(B.class);
+    return b;
+}
+</code></pre>
+<p>  但是，我们之前也说过，这种方式并不好，因为这直接依赖于<code>Spring</code>容器，增加了耦合性。而方法注入可以帮助我们解决这一点。方法注入能帮我们完成上面的替换，而且这种替换是隐式地，由<code>Spring</code>容器自动帮我们替换。我们并不需要修改编写代码的方式，仍然可以将<code>getB</code>方法写成第一种形式，而<code>Spring</code>容器会自动帮我们替换成第二种形式。这样就可以在不增加耦合的情况下，实现我们的目的。</p>
+<br>
+<h2 id="23-方法注入的实现原理">2.3 方法注入的实现原理</h2>
+<p>  那方法注入的实现原理是什么呢？我之前说过，方法注入和<code>AOP</code>类似，不仅仅是功能类似，实际上它们的实现方式也是一样的。<strong>方法注入的实现原理，就是通过CGLib的动态代理</strong>。关于<code>AOP</code>的实现原理，可以参考我的这篇博客：<a href="https://www.cnblogs.com/tuyang1129/p/12878549.html">浅析Spring中AOP的实现原理——动态代理</a>。</p>
+<p>  如果我们为一个类的方法，配置了方法注入，那么在<code>Spring</code>容器创建这个类的对象时，实际上创建的是一个代理对象。<code>Spring</code>会使用<code>CGLib</code>操作这个类的字节码，生成类的一个子类，然后覆盖需要修改的那个方法，而在创建对象时，创建的就是这个子类（代理类）的对象。而具体覆盖成什么样子，取决于我们的配置。比如说<code>Spring</code>提供了一个具体的方法注入机制——<strong>查找方法注入</strong>，这种方法注入，可以将方法替换为一个查找方法，它的功能就是去<code>Spring</code>容器中获取一个特定的<code>Bean</code>，而获取哪一个<code>bean</code>，取决于方法的返回值以及我们指定的<code>bean</code>名称。</p>
+<p>  比如说，上面的<code>getB</code>方法，如果我们对它使用了查找方法注入，那么<code>Spring</code>容器会使用<code>CGLib</code>生成<code>A</code>类的一个子类（代理类），覆盖<code>A</code>类的<code>getB</code>方法，由于<code>getB</code>方法的返回值是<code>B</code>类型，于是这个方法的功能就变成了去<code>Spring</code>容器中获取一个<code>B</code>，当然，我们也可以通过<code>bean</code>的名称，指定这个方法查找的<code>bean</code>。下面我就通过实际代码，来演示查找方法注入。</p>
+<br>
+<h2 id="24-查找方法注入的使用">2.4 查找方法注入的使用</h2>
+<p><strong>（一）通过xml配置</strong></p>
+<p>  为了演示查找方法注入，我们需要几个具体的类，假设我们有两个类<code>User</code>和<code>Car</code>，而<code>User</code>依赖于<code>Car</code>，它们的定义如下：</p>
+<pre><code class="language-java">public class User {
+
+    private String name;
+    private int age;
+    // 依赖于car
+    private Car car;
+
+    // 为这个方法进行注入
+   	public Car getCar() {
+        return car;
+    }
+    
+	// 省略其他setter和getter，以及toString方法
+}
+
+public class Car {
+    private int speed;
+    private double price;
+
+    // 省略setter和getter，以及toString方法
+}
+</code></pre>
+<p>  好，现在有了这两个类，我们可以开始进行方法注入了。我们模拟之前说过的依赖关系——单例<code>bean</code>依赖于多例<code>bean</code>，将<code>User</code>配置为单例，而将<code>User</code>依赖的<code>Car</code>配置为多例。则配置文件如下：</p>
+<pre><code class="language-xml">&lt;!-- 将user的作用域定义为singleton --&gt;
+&lt;bean id=&quot;user&quot; class=&quot;cn.tewuyiang.pojo.User&quot; scope=&quot;singleton&quot;&gt;
+    &lt;property name=&quot;name&quot; value=&quot;aaa&quot; /&gt;
+    &lt;property name=&quot;age&quot; value=&quot;28&quot; /&gt;
+    &lt;!--
+        配置查找方法注入，替换getCar方法，让他成为从spring容器中查找car的一个工厂方法
+        name指定了需要进行方法注入的方法，而bean则指定了这个方法被覆盖后，是用来查找哪个bean的
+    --&gt;
+    &lt;lookup-method name=&quot;getCar&quot; bean=&quot;car&quot; /&gt;
+&lt;/bean&gt;
+
+&lt;!-- 将car的作用域定义为prototype --&gt;
+&lt;bean id=&quot;car&quot; class=&quot;cn.tewuyiang.pojo.Car&quot; scope=&quot;prototype&quot;&gt;
+    &lt;property name=&quot;price&quot; value=&quot;9999.35&quot; /&gt;
+    &lt;property name=&quot;speed&quot; value=&quot;100&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+<p>  好，到此为止，我们就配置完成了，下面就该测试一下通过<code>user</code>的<code>getCar</code>方法拿到的多个<code>car</code>，是不是不相同。如果方法注入没有生效，那么按理来讲，我们调用<code>getCar</code>方法返回的应该是<code>null</code>，因为我们并没有配置将car的值注入user中。但是如果方法注入生效，那么我们通过<code>getCar</code>，就可以拿到<code>car</code>对象，因为它将去<code>Spring</code>容器中获取，而且每次获取到的都不是同一个。测试方法如下：</p>
+<pre><code class="language-java">@Test
+public void testXML() throws InterruptedException {
+    // 创建Spring容器
+    ClassPathXmlApplicationContext context =
+        new ClassPathXmlApplicationContext(&quot;classpath:applicationContext.xml&quot;);
+    // 获取User对象
+    User user = context.getBean(User.class);
+    // 多次调用getCar方法，获取多个car
+    Car c1 = user.getCar();
+    Car c2 = user.getCar();
+    Car c3 = user.getCar();
+    // 分别输出car的hash值，看是否相等，以此判断是否是同一个对象
+    System.out.println(c1.hashCode());
+    System.out.println(c2.hashCode());
+    System.out.println(c3.hashCode());
+    // 输出user这个bean所属类型的父类
+    System.out.println(user.getClass().getSuperclass());
+}
+</code></pre>
+<p>  上面的测试逻辑应该很好理解，除了最后一句，为什么需要输出<code>user</code>这个<code>bean</code>所属类型的父类。因为我前面说过，方法注入通过<code>CGLib</code>动态代理实现，而<code>CGLib</code>动态代理的原理就是生成类的一个子类。我们为<code>User</code>类使用了方法注入，所以我们拿到的<code>user</code>这个<code>bean</code>，应该是一个代理<code>bean</code>，并且它的类型是<code>User</code>的子类。所以我们输出这个<code>bean</code>的父类，来判断是否和我们之前说的一样。输出结果如下：</p>
+<pre><code class="language-txt">1392906938
+708890004
+255944888
+class cn.tewuyiang.pojo.User	// 父类果然是User
+</code></pre>
+<p>  可以看到，我们果然能够通过<code>getCar</code>方法，获取到<code>bean</code>，并且每一次获取到的都不是同一个，因为<code>hashcode</code>不相等。同时，<code>user</code>这个<code>bean</code>的父类型果然是<code>User</code>，说明<code>user</code>这个<code>bean</code>确实是<code>CGLib</code>生成的一个代理<code>bean</code>。到此，也就证明了我们之前的叙述。</p>
+<br>
+<p><strong>（二）通过注解配置</strong></p>
+<p>  上面通过<code>xml</code>的配置方式，大致了解了查找方法注入的使用，下面我们再来看看使用注解，如何实现。其实使用注解的方式更加简单，我们只需要在方法上使用<code>@Lookup</code>注解即可，<code>User</code>和<code>Car</code>的配置如下：</p>
+<pre><code class="language-java">@Component
+public class User {
+    private String name;
+    private int age;
+    private Car car;
+
+    // 使用Lookup注解，告诉Spring这个方法需要使用查找方法注入
+    // 这里直接使用@Lookup，则Spring将会依据方法返回值
+    // 将它覆盖为一个在Spring容器中获取Car这个类型的bean的方法
+    // 但是也可以指定需要获取的bean的名字，如：@Lookup(&quot;car&quot;)
+    // 此时，名字为car的bean，类型必须与方法的返回值类型一致
+    @Lookup
+    public Car getCar() {
+        return car;
+    }
+    
+    // 省略其他setter和getter，以及toString方法
+    
+}
+
+@Component
+@Scope(&quot;prototype&quot;)	// 声明为多例
+public class Car {
+    private int speed;
+    private double price;
+
+    // 省略setter和getter，以及toString方法
+}
+</code></pre>
+<p>  可以看到，通过注解配置方法注入要简单的多，只需要通过一个<code>@Lookup</code>注解即可实现。测试方法与之前类似，结果也一样，我就不贴出来了。</p>
+<br>
+<p><strong>（三）为抽象方法使用方法注入</strong></p>
+<p>  实际上，方法注入还可以应用于抽象方法。既然方法注入的目的是替换原来的方法，那么原来的方法是否有实现，也就不重要了。所以方法注入也能用在抽象方法上面。但是有人可能会想一个问题：抽象方法只能在抽象类中，那这个类被定义为抽象类了，<code>Spring</code>容器如何为它创建对象呢？我们之前说过，使用了方法注入的类，<code>Spring</code>会使用<code>CGLib</code>生成它的一个代理类（子类），<code>Spring</code>创建的是这个代理类的对象，而不会去创建源类的对象，所以它是不是抽象的并不影响工作。如果配置了方法注入的类是一个抽象类，则方法注入机制的实现，就是去实现它的抽象方法。我们将<code>User</code>类改为抽象，如下所示：</p>
+<pre><code class="language-java">// 就算为抽象类使用了@Component，Spring容器在创建bean时也会跳过它
+@Component
+public abstract class User {
+    private String name;
+    private int age;
+    private Car car;
+
+    // 将getCar声明为抽象方法，它将会被代理类实现
+    @Lookup
+    public abstract Car getCar();
+    
+    // 省略其他setter和getter，以及toString方法
+    
+}
+
+</code></pre>
+<p>  以上方式，方法注入仍然可以工作。</p>
+<br>
+<p><strong>（四）final方法和private方法无法使用方法注入</strong></p>
+<p>  <code>CGLib</code>实现动态代理的方法是创建一个子类，然后重写父类的方法，从而实现代理。但是我们知道，<code>final</code>方法和<code>private</code>方法是无法被子类重写的。这也就意味着，如果我们为一个<code>final</code>方法或者一个<code>private</code>方法配置了方法注入，那生成的代理对象中，这个方法还是原来那个，并没有被重写，比如像下面这样：</p>
+<pre><code class="language-java">@Component
+public class User {
+    private String name;
+    private int age;
+    private Car car;
+    
+    // 方法声明为final，无法被覆盖，代理类中的getCar还是和下面一样
+    @Lookup
+    public final Car getCar() {
+        return car;
+    }
+    
+    // 省略其他setter和getter，以及toString方法
+    
+}
+
+</code></pre>
+<p>  我们依旧使用下面的测试方法，但是，在调用<code>c1.hashCode</code>方法时，抛出了空指针异常。说明<code>getCar</code>方法并没有被覆盖，还是直接返回了<code>car</code>这个成员变量。但是由于我们并没有为<code>user</code>注入<code>car</code>，所以<code>car == null</code>。</p>
+<pre><code class="language-java">@Test
+public void testConfig() throws InterruptedException {
+    AnnotationConfigApplicationContext context =
+        new AnnotationConfigApplicationContext(AutoConfig.class);
+
+    User user = context.getBean(User.class);
+    Car c1 = user.getCar();
+    Car c2 = user.getCar();
+    Car c3 = user.getCar();
+    // 运行到这里，抛出空指针异常
+    System.out.println(c1.hashCode());
+    System.out.println(c2.hashCode());
+    System.out.println(c3.hashCode());
+    user.spCar();
+    user.spCar();
+    user.spCar();
+    System.out.println(user.getClass().getSuperclass());
+}
+
+</code></pre>
+<br>
+<h1 id="三、总结">三、总结</h1>
+<p>  以上大致介绍了一下方法注入的作用，实现原理，以及重点介绍了一下查找方法注入的使用。查找方法注入可以将我们的一个方法，覆盖成为一个去<code>Spring</code>容器中查找特定<code>bean</code>的方法，从而解决单例<code>bean</code>无法依赖多例<code>bean</code>的问题。其实，方法注入能够注入任何方法，而不仅仅是查找方法，但是由于任何方法注入使用的不多，所以这篇博客就不提了，感兴趣的可以自己去<code>Spring</code>文档中了解。最后，若以上描述存在错误或不足，欢迎指正，共同进步。</p>
+<br>
+<h1 id="四、参考">四、参考</h1>
+<ul>
+<li><a href="https://www.docs4dev.com/docs/zh/spring-framework/4.3.21.RELEASE/reference/beans.html#beans-factory-method-injection">Spring-4.3.21官方文档——方法注入</a></li>
+</ul>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 15:14</span>&nbsp;
+<a href="https://www.cnblogs.com/tuyang1129/">特务依昂</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12882500" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12882500);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 426004, cb_blogApp = 'tuyang1129', cb_blogUserGuid = '103b1715-a5bf-43c8-38f4-08d54dba4453';
+    var cb_entryId = 12882500, cb_entryCreatedDate = '2020-05-13 15:14', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 特务依昂
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

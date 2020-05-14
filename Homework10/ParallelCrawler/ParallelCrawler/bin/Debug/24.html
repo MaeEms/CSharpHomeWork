@@ -1,0 +1,516 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta property="og:description" content="Vue3写一个倒计时组件 vue3 beta版本发布已有一段时间了，文档也大概看了一下，不过对于学一门技术，最好的方法还是实战，于是找了一个比较简单的组件用vue3来实现，参考的是vant的count" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Vue3语法快速入门以及写一个倒计时组件 - Runlin - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    <link id="MainCss" rel="stylesheet" href="/skins/elf/bundle-elf.min.css?v=mpcef9xxdj1doWi6glkD6lMbmGclGCSPM_FSrhFRY-A" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/elf/bundle-elf-mobile.min.css?v=Lk2wjMMUJjSLadG0Xil7JdDLDWWAvcpQmxzjUgc7cAk" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zhengrunlin/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zhengrunlin/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zhengrunlin/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 287854;
+        var currentBlogApp = 'zhengrunlin';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'elf';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/zhengrunlin/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/zhengrunlin/">Runlin</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zhengrunlin/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Runlin">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/zhengrunlin/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+29&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+97</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/zhengrunlin/p/12883726.html">Vue3语法快速入门以及写一个倒计时组件</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h1 id="vue3写一个倒计时组件">Vue3写一个倒计时组件</h1>
+<p>vue3 beta版本发布已有一段时间了，文档也大概看了一下，不过对于学一门技术，最好的方法还是实战，于是找了一个比较简单的组件用vue3来实现，参考的是vant的countdown组件。</p>
+<p>Vue Composition API文档：<br>
+<a href="https://vue-composition-api-rfc.netlify.app/api.html#setup">如果对vue3语法还不熟悉的，可以先看一下语法</a></p>
+<p>目前文档还是英文的，这里简单翻译下几个比较核心的东西：</p>
+<h2 id="setup">setup</h2>
+<p>setup函数是一个新的组件option选项，作为在组件内使用Composition API的入口。</p>
+<h3 id="1-调用时机">1. 调用时机</h3>
+<p>setup会在组件实例创建并且初始props解析后立即调用。对于生命周期这一层面，会在beforeCreate钩子之前调用。</p>
+<h3 id="2-配合template使用">2. 配合template使用</h3>
+<p>如果setup返回一个对象，那么对象的属性会被合并到当前组件的render上下文。</p>
+<p>从setup中返回的refs在template中获取值时会被自动unwrapped(猜测可能是get值时用了unref。unref也是一个新的api，val = isRef(val) ? val.value : val的语法糖)，因此在模板中取值时无需加上.value。</p>
+<h3 id="3-配合render函数使用">3. 配合render函数使用</h3>
+<p>setup里不仅可以返回一个对象，也可以直接返回一个render函数。不过要注意的是，跟template会自己unwrapped不同，在render中使用refs的值时，需要加上.value。</p>
+<h3 id="4-参数">4. 参数</h3>
+<p>setup接收两个参数，第一个是用的最多的props，第二是ctx上下文，不过是精简版，只提供了三个属性attrs，slots，emit,这三个都是写组件必不可少的。</p>
+<ul>
+<li>emit: 同父组件通信用</li>
+<li>slots: 插槽分发内容</li>
+<li>attrs: 可以用于封装高阶组件, 配合v-bind进行属性透传</li>
+</ul>
+<h3 id="5-this在setup中不可用">5. this在setup中不可用</h3>
+<p>在vue2，你可以在每一个生命周期或者方法中通过this获取当前实例，不过在setup方法中是无法获取到this的。但是，可以通过getCurrentInstance获取到当前实例。</p>
+<h2 id="reactive">reactive</h2>
+<p>传入一个对象并返回对目标源的响应式代理结果，等同于2版本的Vue.observable()。</p>
+<h2 id="ref">ref</h2>
+<p>类似reactive，但是传入的是基本值，取值时需要加上.vaule去获取，而reactive包裹的对象可以直接像对象那样去获取值。<br>
+不过当数据结构是数组或者Map时，即使数组已经被reactive包裹了，如果数组里面的某一项是ref，依然需要通过.value去获取值。</p>
+<pre><code class="language-javascript">//ref
+const count = ref(0)
+console.log(count.value);
+
+//reactive
+const state = reactive({
+  count
+})
+console.log(state.count);
+
+//reactive with array
+const arr = reactive([ref(0),3,5])
+// need .value here
+console.log(arr[0].value)
+
+</code></pre>
+<h2 id="computed">computed</h2>
+<p>接收一个回调函数作为getter，或者传入带有getter和setter对象 。一个computed会返回一个对象，有多个computed时就需要调用多次</p>
+<pre><code class="language-javascript">const plusOne = computed(() =&gt; count.value + 1)
+const plusTwo = computed({
+  get: () =&gt; count.value + 1,
+  set: val =&gt; {
+    count.value = val - 1
+  }
+})
+</code></pre>
+<h2 id="toref-torefs">toRef, toRefs</h2>
+<p>toRef可用于为源响应对象上的某个属性创建ref。</p>
+<pre><code class="language-javascript">export default {
+    //由于Javascript函数参数是按值传递，所以如果传递的是基本类型，传参可以理解为复制变量值。基本类型复制后俩个变量完全独立，之后任何一方改变都不会影响另一方。如果直接传递props.numner也就是10进去，函数内部跟外部是独立的，函数里面的操作无法影响到外部变量，除非你传递的是一个对象比如整个props，才能保持引用。但是如果你只需要某个属性，传整个进去也是没必要的。此时toRef就显的很有用了。toRef返回的就是一个对象，通过这个对象.value可以获取到值。
+  setup(props) {
+    // {number:10}
+    useSomeFeature(toRef(props, 'number'))
+  }
+}
+</code></pre>
+<p>toRefs可以将响应式对象转换为普通对象，其中结果对象上的每个属性都是指向原始对象中相应属性的引用。可以用于解构的时候防止丢失响应。</p>
+<h2 id="生命周期">生命周期</h2>
+<p>生命周期大部分都改了名字，写法上也稍有不同。</p>
+<ol>
+<li>需要自己import；</li>
+<li>在setup中调用；</li>
+</ol>
+<ul>
+<li>beforeCreate -&gt; use setup()</li>
+<li>created -&gt; use setup()</li>
+<li>beforeMount -&gt; onBeforeMount</li>
+<li>mounted -&gt; onMounted</li>
+<li>beforeUpdate -&gt; onBeforeUpdate</li>
+<li>updated -&gt; onUpdated</li>
+<li>beforeDestroy -&gt; onBeforeUnmount</li>
+<li>destroyed -&gt; onUnmounted</li>
+<li>errorCaptured -&gt; onErrorCaptured</li>
+</ul>
+<h2 id="语法就大概介绍这些，具体的内容还是要看看官方文档。下面看一下组件的具体代码">语法就大概介绍这些，具体的内容还是要看看官方文档。下面看一下组件的具体代码</h2>
+<pre><code class="language-javascript">&lt;script&gt;
+import { h, reactive, onMounted, onBeforeUnmount, toRef } from &quot;vue&quot;;
+import { formatTime } from &quot;./utils&quot;;
+
+export default {
+  props: {
+    time: {
+      type: Number,
+      default: 0
+    },
+    millisecond: {
+      type: Boolean,
+      default: false
+    },
+    autoStart: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup(props, { emit }) {
+    const interval = props.millisecond ? 16 : 1000;
+
+    let leftTime = toRef(props, &quot;time&quot;).value;
+    let autoStart = toRef(props, &quot;autoStart&quot;).value;
+
+    let ticker = null;
+    let timeData = reactive(formatTime(leftTime));
+
+    const updateTime = (timeData, leftTime) =&gt; {
+      const data = formatTime(leftTime);
+      Object.keys(timeData).forEach(k =&gt; {
+        timeData[k] = data[k];
+      });
+    };
+
+    const start = () =&gt; {
+      if (!ticker &amp;&amp; leftTime &gt; 0) {
+        ticker = setInterval(() =&gt; {
+          leftTime -= interval;
+          if (leftTime &lt;= 0) {
+            leftTime = 0;
+            clearInterval(ticker);
+            emit(&quot;finish&quot;);
+          } else {
+            emit(&quot;change&quot;, leftTime);
+          }
+
+          updateTime(timeData, leftTime);
+        }, interval);
+      }
+    };
+
+    const stop = () =&gt; {
+      clearInterval(ticker);
+      ticker = null;
+    };
+
+    const restart = () =&gt; {
+      clearInterval(ticker);
+      ticker = null;
+      leftTime = props.time;
+
+      emit(&quot;change&quot;, leftTime);
+      updateTime(timeData, leftTime);
+
+      start();
+    };
+
+    onMounted(() =&gt; {
+      autoStart &amp;&amp; start();
+    });
+
+    onBeforeUnmount(() =&gt; {
+      stop();
+    });
+
+    return {
+      timeData,
+      start,
+      stop,
+      restart
+    };
+  },
+  render({ $slots, timeData, millisecond }) {
+    const time = [&quot;hours&quot;, &quot;minutes&quot;, &quot;seconds&quot;, &quot;millisecond&quot;]
+      .filter(v =&gt; v != &quot;millisecond&quot; || millisecond)
+      .map(v =&gt; timeData[v])
+      .join(&quot;:&quot;);
+
+    const defaultContent = h(
+      &quot;span&quot;,
+      {
+        style: { fontSize: &quot;14px&quot;, color: &quot;#333&quot; }
+      },
+      time
+    );
+
+    return h(
+      &quot;div&quot;,
+      ($slots.default &amp;&amp; $slots.default(timeData)) || defaultContent
+    );
+  }
+};
+&lt;/script&gt;
+</code></pre>
+<p>主要的变化还是在setup，没有data，也没有methods了，都需在setup里面返回才可以使用。基本上绝大部门的代码都写在setup里面，包括事件，生命周期等， 当然这也很变量的作用域有关。也可以考虑把逻辑抽取出去，不过传参的时候，需要使用toRef或者toRefs，不能传基本值。</p>
+<h2 id="高阶组件">高阶组件</h2>
+<p>主要是用attrs来实现属性的绑定，但是具体是不是这样写，我还不太确定。</p>
+<pre><code class="language-javascript">&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;{{ word }}&lt;/p&gt;
+    &lt;countdown v-bind=&quot;attrs&quot;&gt;&lt;/countdown&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import Countdown from &quot;../components/countdown&quot;;
+
+export default {
+  components: {
+    Countdown
+  },
+  props: {
+    word: {
+      type: String
+    }
+  },
+  setup(props, { attrs }) {
+    return {
+      attrs
+    };
+  }
+};
+&lt;/script&gt;
+</code></pre>
+<h2 id="demo">DEMO</h2>
+<pre><code class="language-javascript">&lt;template&gt;
+  &lt;div class=&quot;home&quot;&gt;
+    &lt;p&gt;基本使用&lt;/p&gt;
+    &lt;countdown :time=&quot;66000&quot;&gt;&lt;/countdown&gt;
+
+    &lt;p&gt;毫秒数&lt;/p&gt;
+    &lt;countdown :time=&quot;44444&quot; millisecond&gt;&lt;/countdown&gt;
+
+    &lt;p&gt;获取组件实例以及方法&lt;/p&gt;
+    &lt;countdown :time=&quot;66000&quot; ref=&quot;count&quot; :auto-start=&quot;false&quot;&gt;&lt;/countdown&gt;
+    &lt;button @click=&quot;count.start()&quot;&gt;开始&lt;/button&gt;
+    &lt;button @click=&quot;count.stop()&quot;&gt;关闭&lt;/button&gt;
+    &lt;button @click=&quot;count.restart()&quot;&gt;重启&lt;/button&gt;
+
+    &lt;p&gt;使用插槽自定义样式&lt;/p&gt;
+    &lt;countdown :time=&quot;66000&quot; @change=&quot;change&quot;&gt;
+      &lt;template v-slot=&quot;timeData&quot;&gt;
+        &lt;span class=&quot;block&quot;&gt;{{ timeData.hours }}&lt;/span&gt;
+        &lt;span class=&quot;colon&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;block&quot;&gt;{{ timeData.minutes }}&lt;/span&gt;
+        &lt;span class=&quot;colon&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;block&quot;&gt;{{ timeData.seconds }}&lt;/span&gt;
+      &lt;/template&gt;
+    &lt;/countdown&gt;
+
+    &lt;p&gt;高阶组件&lt;/p&gt;
+    &lt;higher :time=&quot;8888&quot; word=&quot;测试higher&quot; /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import Countdown from &quot;../components/countdown&quot;;
+import Higher from &quot;../components/higher&quot;;
+
+import { ref, onMounted } from &quot;vue&quot;;
+export default {
+  name: &quot;Home&quot;,
+  components: {
+    Countdown,
+    Higher
+  },
+  setup() {
+    const change = () =&gt; {};
+    const count = ref(null);
+
+    onMounted(() =&gt; {
+      console.dir(count.value);
+    });
+    return {
+      change,
+      count
+    };
+  }
+};
+&lt;/script&gt;
+</code></pre>
+<h2 id="展示效果">展示效果</h2>
+<p><img src="https://deepexi-moby.oss-cn-shenzhen.aliyuncs.com/guide.jpg" alt="效果"></p>
+<h2 id="仓库地址">仓库地址</h2>
+<p><a href="https://github.com/linrunzheng/vue3-learn">https://github.com/linrunzheng/vue3-learn</a></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 17:33</span>&nbsp;
+<a href="https://www.cnblogs.com/zhengrunlin/">Runlin</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12883726" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12883726);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 287854, cb_blogApp = 'zhengrunlin', cb_blogUserGuid = '15a9b3b3-3026-e611-9fc1-ac853d9f53cc';
+    var cb_entryId = 12883726, cb_entryCreatedDate = '2020-05-13 17:33', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Runlin
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

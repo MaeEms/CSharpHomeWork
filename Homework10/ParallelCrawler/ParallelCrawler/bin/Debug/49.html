@@ -1,0 +1,520 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta property="og:description" content="本篇文章为系列文章，未读前几集的同学请猛戳这里： Spring Cloud 系列之 Config 配置中心（一）Spring Cloud 系列之 Config 配置中心（二） 本篇文章讲解 Confi" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Spring Cloud 系列之 Config 配置中心（三） - 哈喽沃德先生 - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/mrhelloworld/custom.css?v=B0i0Ojskr47vq1sTa7eeXuXMgDg=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/mrhelloworld/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/mrhelloworld/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/mrhelloworld/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 452948;
+        var currentBlogApp = 'mrhelloworld';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/mrhelloworld/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/mrhelloworld/">哈喽沃德先生</a>
+</h1>
+<h2>
+「哈喽沃德先生」公众号作者
+🔎网站：mrhelloworld.com
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/mrhelloworld/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%93%88%E5%96%BD%E6%B2%83%E5%BE%B7%E5%85%88%E7%94%9F">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/mrhelloworld/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+30&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+7</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/mrhelloworld/p/config3.html">Spring Cloud 系列之 Config 配置中心（三）</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <section id="nice" data-tool="mdnice编辑器" data-website="https://www.mdnice.com" style="font-size: 16px; padding: 0 10px; word-spacing: 0px; word-break: break-word; word-wrap: break-word; text-align: left; margin-top: -10px; line-height: 1.25; color: #2b2b2b; font-family: Optima-Regular, Optima, PingFangTC-Light, PingFangSC-light, PingFangTC-light; letter-spacing: 2px; background-image: linear-gradient(90deg, rgba(50, 0, 0, 0.04) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(50, 0, 0, 0.04) 3%, rgba(0, 0, 0, 0) 3%); background-size: 20px 20px; background-position: center center;"><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">本篇文章为系列文章，未读前几集的同学请猛戳这里：</p>
+<ul data-tool="mdnice编辑器" style="margin-top: 8px; margin-bottom: 8px; padding-left: 25px; font-size: 15px; color: #595959; list-style-type: circle;">
+<li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; font-size: 14px; font-weight: normal; color: #595959;"><a href="https://www.cnblogs.com/mrhelloworld/p/config1.html" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;">Spring Cloud 系列之 Config 配置中心（一）</a></section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; font-size: 14px; font-weight: normal; color: #595959;"><a href="https://www.cnblogs.com/mrhelloworld/p/config2.html" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;">Spring Cloud 系列之 Config 配置中心（二）</a></section></li></ul>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">本篇文章讲解 Config 如何实现配置中心加解密，配置中心用户安全认证。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h2 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 22px; display: block; border-bottom: 4px solid #40B8FA;"><span class="prefix" style="display: flex; width: 20px; height: 20px; background-size: 20px 20px; background-image: url(https://imgkr.cn-bj.ufileos.com/15fdfb3c-b350-4da9-928e-5f8c506ec325.png); margin-bottom: -22px;"></span><span class="content" style="display: flex; color: #40B8FA; font-size: 20px; margin-left: 25px;">配置中心加解密</span><span class="suffix" style="display: flex; box-sizing: border-box; width: 200px; height: 10px; border-top-left-radius: 20px; background: RGBA(64, 184, 250, .5); color: rgb(255, 255, 255); font-size: 16px; letter-spacing: 0.544px; justify-content: flex-end; float: right; margin-top: -10px; box-sizing: border-box !important; overflow-wrap: break-word !important;"></span></h2>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">考虑这样一个问题：所有的配置文件都存储在 Git 远程仓库，配置文件中的一些信息又是比较敏感的。所以，我们需要对这些敏感信息进行加密处理。主要的加密方法分为两种：一种是共享密钥加密（对称密钥加密），一种是公开密钥加密（非对称密钥加密）。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h3 data-tool="mdnice编辑器" style="padding: 0px; color: black; font-size: 17px; font-weight: bold; text-align: center; position: relative; margin-top: 20px; margin-bottom: 20px;"><span class="prefix" style="display: none;"></span><span class="content" style="border-bottom: 2px solid RGBA(79, 177, 249, .65); color: #2b2b2b; padding-bottom: 2px;"><span style="width: 30px; height: 30px; display: block; background-image: url(https://imgkr.cn-bj.ufileos.com/cdf294d0-6361-4af9-85e2-0913f0eb609b.png); background-position: center; background-size: 30px; margin: auto; opacity: 1; background-repeat: no-repeat; margin-bottom: -8px;"></span>对称加解密 Symmetric encryption</span><span class="suffix" style="display: none;"></span></h3>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">对称加密是最快速、最简单的一种加密方式，加密（encryption）与解密（decryption）用的是同样的密钥（secret key）。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>检查加密环境</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">点击链接观看：<a href="https://video.zhihu.com/video/1243855061115473920" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;">检查加密环境视频</a>（获取更多请关注公众号「哈喽沃德先生」）</p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">版本问题</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">访问 Config Server：http://localhost:8888/encrypt/status</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">检查结果如果是：<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{"description":"No key was installed for encryption service","status":"NO_KEY"}</code> 说明没有为加密服务安装密钥，也说明你使用的是较低的 JDK 版本。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">比较简单的解决办法：更换高版本 JDK，比如使用最新版的 LTS 版本 JDK-11.0.6。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">复杂的解决办法：从 Oracle 官网下载对应 JCE，下载链接：https://www.oracle.com/java/technologies/javase-jce-all-downloads.html</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">下图红色框中内容已经足够说明原因：JDK 9 以及更高版本已附带策略文件，并在默认情况下启用。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">如果你的当前环境必须使用低版本 JDK，那么请下载对应 JCE 压缩包，下载解压后把 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">local_policy.jar</code> 和 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">US_export_policy.jar</code> 文件安装到需要安装 JCE 机器上的 JDK 或 JRE 的 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">security</code> 目录下即可。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf621c44a?w=1291&amp;h=488&amp;f=png&amp;s=78404" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">配置问题</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">检查结果如果是：<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{"description":"The encryption algorithm is not strong enough","status":"INVALID"}</code> 说明服务端未配置加密。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf6748c1c?w=493&amp;h=153&amp;f=png&amp;s=17751" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Server 创建配置文件，注意必须叫 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">bootstrap.yml</code>，配置密钥信息即可。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 密钥</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">encrypt:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  key:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">example</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">重启 Config Server 访问：http://localhost:8888/encrypt/status 结果如下：</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf932eda8?w=371&amp;h=129&amp;f=png&amp;s=9314" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>加解密演示</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">点击链接观看：<a href="https://video.zhihu.com/video/1243855158876012544" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;">对称加解密视频</a>（获取更多请关注公众号「哈喽沃德先生」）</p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">配置中心服务端</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">使用 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">curl</code> 命令访问 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">/encrypt</code> 端点对属性值 root 进行加密。反向操作 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">/decrypt</code> 可解密。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;">curl http://localhost:8888/encrypt -d root
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">加密结果：bfb5cf8d7cab63e4b770b76d4e96c3a57d40f7c9df13612cb3134e2f7ed26123</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf66837f6?w=703&amp;h=113&amp;f=png&amp;s=6141" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">解密</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf685a15f?w=743&amp;h=128&amp;f=png&amp;s=6225" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">Git 仓库</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">把加密后的数据更新到 Git 远程仓库的配置文件中。值得注意的是需要在加密结果前添加 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{cipher}</code> 串，如果远程属性源包含加密的内容（以开头的值<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{cipher}</code>），则将其解密，然后再通过HTTP发送给客户端。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9bf63ea44c?w=1009&amp;h=588&amp;f=png&amp;s=51127" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">配置中心客户端</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Client 控制层添加获取配置信息代码。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">package</span> com.example.controller;
+<span/>
+<span/><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">import</span> org.springframework.beans.factory.annotation.Value;
+<span/><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">import</span> org.springframework.cloud.context.config.annotation.RefreshScope;
+<span/><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">import</span> org.springframework.web.bind.annotation.GetMapping;
+<span/><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">import</span> org.springframework.web.bind.annotation.RestController;
+<span/>
+<span/><span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@RefreshScope</span>
+<span/><span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@RestController</span>
+<span/><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">public</span> <span class="hljs-class" style="color: #B8D7A3; line-height: 26px;"><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">class</span> <span class="hljs-title" style="color: #DCDCDC; line-height: 26px;">ConfigController</span> </span>{
+<span/>
+<span/>    <span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@Value</span>(<span class="hljs-string" style="color: #D69D85; line-height: 26px;">"${name}"</span>)
+<span/>    <span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">private</span> String name;
+<span/>
+<span/>    <span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@Value</span>(<span class="hljs-string" style="color: #D69D85; line-height: 26px;">"${password}"</span>)
+<span/>    <span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">private</span> String password;
+<span/>
+<span/>    <span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@GetMapping</span>(<span class="hljs-string" style="color: #D69D85; line-height: 26px;">"/name"</span>)
+<span/>    <span class="hljs-function" style="color: #DCDCDC; line-height: 26px;"><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">public</span> String <span class="hljs-title" style="color: #DCDCDC; line-height: 26px;">getName</span><span class="hljs-params" style="color: #DCDCDC; line-height: 26px;">()</span> </span>{
+<span/>        <span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">return</span> name;
+<span/>    }
+<span/>
+<span/>    <span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">@GetMapping</span>(<span class="hljs-string" style="color: #D69D85; line-height: 26px;">"/password"</span>)
+<span/>    <span class="hljs-function" style="color: #DCDCDC; line-height: 26px;"><span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">public</span> String <span class="hljs-title" style="color: #DCDCDC; line-height: 26px;">getPassword</span><span class="hljs-params" style="color: #DCDCDC; line-height: 26px;">()</span> </span>{
+<span/>        <span class="hljs-keyword" style="color: #569CD6; line-height: 26px;">return</span> password;
+<span/>    }
+<span/>
+<span/>}
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">修改 Config Client 配置文件，重启测试。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">spring:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  cloud:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    config:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      name:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">order-service</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 配置文件名称，对应 git 仓库中配置文件前半部分</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      label:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">master</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># git 分支</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      profile:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">prod</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 指定环境</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      discovery:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        enabled:</span> <span class="hljs-literal" style="color: #569CD6; line-height: 26px;">true</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 开启</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        service-id:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">config-server</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 指定配置中心服务端的 service-id</span>
+<span/>
+<span/><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 度量指标监控与健康检查</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">management:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  endpoints:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    web:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      base-path:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">/actuator</span>    <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 访问端点根路径，默认为 /actuator</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      exposure:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        include:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">'*'</span>          <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 需要开启的端点，这里主要用到的是 refresh 这个端点</span>
+<span/>        <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;">#exclude:             # 不需要开启的端点</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">访问：http://localhost:9091/password 返回解密后的结果。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c25306d71?w=337&amp;h=98&amp;f=png&amp;s=5194" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h3 data-tool="mdnice编辑器" style="padding: 0px; color: black; font-size: 17px; font-weight: bold; text-align: center; position: relative; margin-top: 20px; margin-bottom: 20px;"><span class="prefix" style="display: none;"></span><span class="content" style="border-bottom: 2px solid RGBA(79, 177, 249, .65); color: #2b2b2b; padding-bottom: 2px;"><span style="width: 30px; height: 30px; display: block; background-image: url(https://imgkr.cn-bj.ufileos.com/cdf294d0-6361-4af9-85e2-0913f0eb609b.png); background-position: center; background-size: 30px; margin: auto; opacity: 1; background-repeat: no-repeat; margin-bottom: -8px;"></span>非对称加解密 Asymmetric encryption</span><span class="suffix" style="display: none;"></span></h3>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>对称加密和非对称加密的区别</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">对称加密算法在加密和解密时使用的是同一个密钥。只要拿到密钥，任何人都能破jie。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c34777d57?w=913&amp;h=557&amp;f=png&amp;s=111148" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">非对称加密算法需要两个密钥来进行加密和解密，这两个密钥分别是公开密钥（public key 简称公钥）和私有密钥（private key 简称私钥）。在传输过程中，即使攻击者截获了传输的密文，并得到了公钥，也无法破 jie密文，因为使用专用密钥才能破jie密文。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c26c25cd4?w=555&amp;h=421&amp;f=png&amp;s=96862" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">图片取自图解HTTP一书。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>Java-keytool 使用说明</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Keytool 用来管理私钥仓库(keystore)和与之相关的X.509证书链（用以验证与私钥对应的公钥），也可以用来管理其他信任实体。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">默认大家都配置了 Java 的环境变量，打开 CMD 窗口运行以下命令。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-meta" style="color: #9B9B9B; line-height: 26px;">#</span><span class="bash" style="line-height: 26px;"> 生成名为 config.keystore 的 keystore 文件，别名为 config，加密算法类型使用 RSA，密钥库口令和密钥口令均为：config</span>
+<span/>keytool -genkeypair -keystore config.keystore -alias config -keyalg RSA -keypass config -storepass config
+<span/></code></pre>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c2ae6aedc?w=923&amp;h=369&amp;f=png&amp;s=16180" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">此时在我的 D 盘下会生成一个 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">config.keystore</code> 文件。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>加解密演示</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">点击链接观看：<a href="https://video.zhihu.com/video/1243855271257800704" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;">非对称加解密视频</a>（获取更多请关注公众号「哈喽沃德先生」）</p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">配置中心服务端</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">将 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">config.keystore</code> 文件添加至 Config Server 项目 resources 目录中。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c282859c5?w=373&amp;h=420&amp;f=png&amp;s=15479" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">创建 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">bootstrap.yml</code> 添加非对称加解密配置。注意：值要跟 CMD 里输入的值对应不然会出错。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 非对称加解密</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">encrypt:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  key-store:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    location:</span> <span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">classpath:config.keystore</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># keystore 文件存储路径</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    alias:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">config</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 密钥对别名</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    password:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">config</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># storepass 密钥仓库</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    secret:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">config</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># keypass 用来保护所生成密钥对中的私钥</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">pom.xml 添加避免 maven 过滤文件的配置。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;">&lt;!-- build标签 常用于添加插件及编译配置 --&gt;</span>
+<span/><span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">build</span>&gt;</span>
+<span/>    <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;">&lt;!-- 读取配置文件 --&gt;</span>
+<span/>    <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resources</span>&gt;</span>
+<span/>        <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resource</span>&gt;</span>
+<span/>            <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">directory</span>&gt;</span>src/main/resources<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">directory</span>&gt;</span>
+<span/>        <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resource</span>&gt;</span>
+<span/>        <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resource</span>&gt;</span>
+<span/>            <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">directory</span>&gt;</span>src/main/java<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">directory</span>&gt;</span>
+<span/>            <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">includes</span>&gt;</span>
+<span/>                <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>**/*.xml<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>
+<span/>                <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>**/*.properties<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>
+<span/>                <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>**/*.tld<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>
+<span/>                <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>**/*.keystore<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">include</span>&gt;</span>
+<span/>            <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">includes</span>&gt;</span>
+<span/>            <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">filtering</span>&gt;</span>false<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">filtering</span>&gt;</span>
+<span/>        <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resource</span>&gt;</span>
+<span/>    <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">resources</span>&gt;</span>
+<span/><span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">build</span>&gt;</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">检查加密环境，访问：http://localhost:8889/encrypt/status 结果如下：</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c37f92315?w=369&amp;h=127&amp;f=png&amp;s=9286" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">使用 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">curl</code> 命令访问 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">/encrypt</code> 端点对属性值 root 进行加密。反向操作 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">/decrypt</code> 可解密。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;">curl http://localhost:8889/encrypt -d root
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">加密结果：</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c5bfcba57?w=858&amp;h=136&amp;f=png&amp;s=11883" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">解密</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c5ccf853f?w=863&amp;h=159&amp;f=png&amp;s=12255" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">Git 仓库</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">把加密后的数据更新到 Git 远程仓库的配置文件中。值得注意的是需要在加密结果前添加 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{cipher}</code> 串，如果远程属性源包含加密的内容（以开头的值<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">{cipher}</code>），则将其解密，然后再通过HTTP发送给客户端。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c6b4af566?w=1015&amp;h=611&amp;f=png&amp;s=53411" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h5 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 16px;"><span class="prefix" style="display: none;"></span><span class="content">配置中心客户端</span><span class="suffix" style="display: none;"></span></h5>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Client 配置文件如下。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">spring:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  cloud:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    config:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      name:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">order-service</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 配置文件名称，对应 git 仓库中配置文件前半部分</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      label:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">master</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># git 分支</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      profile:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">prod</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 指定环境</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      discovery:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        enabled:</span> <span class="hljs-literal" style="color: #569CD6; line-height: 26px;">true</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 开启</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        service-id:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">config-server</span> <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 指定配置中心服务端的 service-id</span>
+<span/>
+<span/><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 度量指标监控与健康检查</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">management:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  endpoints:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    web:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      base-path:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">/actuator</span>    <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 访问端点根路径，默认为 /actuator</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      exposure:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">        include:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">'*'</span>          <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 需要开启的端点，这里主要用到的是 refresh 这个端点</span>
+<span/>        <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;">#exclude:             # 不需要开启的端点</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">访问：http://localhost:9091/password 返回解密后的结果。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c25306d71?w=337&amp;h=98&amp;f=png&amp;s=5194" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h2 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 22px; display: block; border-bottom: 4px solid #40B8FA;"><span class="prefix" style="display: flex; width: 20px; height: 20px; background-size: 20px 20px; background-image: url(https://imgkr.cn-bj.ufileos.com/15fdfb3c-b350-4da9-928e-5f8c506ec325.png); margin-bottom: -22px;"></span><span class="content" style="display: flex; color: #40B8FA; font-size: 20px; margin-left: 25px;">配置中心用户安全认证</span><span class="suffix" style="display: flex; box-sizing: border-box; width: 200px; height: 10px; border-top-left-radius: 20px; background: RGBA(64, 184, 250, .5); color: rgb(255, 255, 255); font-size: 16px; letter-spacing: 0.544px; justify-content: flex-end; float: right; margin-top: -10px; box-sizing: border-box !important; overflow-wrap: break-word !important;"></span></h2>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">折腾了大半天终于给大家把加解密讲完了，但是如果你够仔细，你会发现此时的 Config Server 谁都可以访问，而且直接通过 Config Server 访问配置文件信息，加密的内容就会解密后直接显示在浏览器中，这岂不是又白折腾了？当然不是，我们只需要添加用户安全认证即可。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c7c9e79cc?w=587&amp;h=284&amp;f=png&amp;s=10949" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h3 data-tool="mdnice编辑器" style="padding: 0px; color: black; font-size: 17px; font-weight: bold; text-align: center; position: relative; margin-top: 20px; margin-bottom: 20px;"><span class="prefix" style="display: none;"></span><span class="content" style="border-bottom: 2px solid RGBA(79, 177, 249, .65); color: #2b2b2b; padding-bottom: 2px;"><span style="width: 30px; height: 30px; display: block; background-image: url(https://imgkr.cn-bj.ufileos.com/cdf294d0-6361-4af9-85e2-0913f0eb609b.png); background-position: center; background-size: 30px; margin: auto; opacity: 1; background-repeat: no-repeat; margin-bottom: -8px;"></span>添加依赖</span><span class="suffix" style="display: none;"></span></h3>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Server 添加 security 依赖。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;">&lt;!-- spring boot security 依赖 --&gt;</span>
+<span/><span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">dependency</span>&gt;</span>
+<span/>    <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">groupId</span>&gt;</span>
+<span/>    <span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;<span class="hljs-name" style="color: #569CD6; line-height: 26px;">artifactId</span>&gt;</span>spring-boot-starter-security<span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">artifactId</span>&gt;</span>
+<span/><span class="hljs-tag" style="color: #9B9B9B; line-height: 26px;">&lt;/<span class="hljs-name" style="color: #569CD6; line-height: 26px;">dependency</span>&gt;</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h3 data-tool="mdnice编辑器" style="padding: 0px; color: black; font-size: 17px; font-weight: bold; text-align: center; position: relative; margin-top: 20px; margin-bottom: 20px;"><span class="prefix" style="display: none;"></span><span class="content" style="border-bottom: 2px solid RGBA(79, 177, 249, .65); color: #2b2b2b; padding-bottom: 2px;"><span style="width: 30px; height: 30px; display: block; background-image: url(https://imgkr.cn-bj.ufileos.com/cdf294d0-6361-4af9-85e2-0913f0eb609b.png); background-position: center; background-size: 30px; margin: auto; opacity: 1; background-repeat: no-repeat; margin-bottom: -8px;"></span>配置文件</span><span class="suffix" style="display: none;"></span></h3>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Server 的 application.yml 添加安全认证配置。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">spring:</span>
+<span/>  <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 安全认证</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  security:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    user:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      name:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">user</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      password:</span> <span class="hljs-number" style="color: #B8D7A3; line-height: 26px;">123456</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Client 的 bootstrap.yml 添加安全认证配置。</p>
+<pre class="custom" data-tool="mdnice编辑器" style="margin-top: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;"><span style="display: block; background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; background-color: #1E1E1E; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span><code class="hljs" style="overflow-x: auto; padding: 16px; color: #DCDCDC; display: block; font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; font-size: 12px; -webkit-overflow-scrolling: touch; letter-spacing: 0px; padding-top: 15px; background: #1E1E1E; border-radius: 5px;"><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">spring:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">  cloud:</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">    config:</span>
+<span/>      <span class="hljs-comment" style="color: #57A64A; font-style: italic; line-height: 26px;"># 安全认证</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      username:</span> <span class="hljs-string" style="color: #D69D85; line-height: 26px;">user</span>
+<span/><span class="hljs-attr" style="color: #9CDCFE; line-height: 26px;">      password:</span> <span class="hljs-number" style="color: #B8D7A3; line-height: 26px;">123456</span>
+<span/></code></pre>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h3 data-tool="mdnice编辑器" style="padding: 0px; color: black; font-size: 17px; font-weight: bold; text-align: center; position: relative; margin-top: 20px; margin-bottom: 20px;"><span class="prefix" style="display: none;"></span><span class="content" style="border-bottom: 2px solid RGBA(79, 177, 249, .65); color: #2b2b2b; padding-bottom: 2px;"><span style="width: 30px; height: 30px; display: block; background-image: url(https://imgkr.cn-bj.ufileos.com/cdf294d0-6361-4af9-85e2-0913f0eb609b.png); background-position: center; background-size: 30px; margin: auto; opacity: 1; background-repeat: no-repeat; margin-bottom: -8px;"></span>测试</span><span class="suffix" style="display: none;"></span></h3>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>服务端</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Server 访问：http://localhost:8889/order-service-prod.yml 被重定向至登录页。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c9d861d4f?w=523&amp;h=369&amp;f=png&amp;s=15387" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">输入用户名和密码后，结果如下：</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9cad95e9f7?w=583&amp;h=285&amp;f=png&amp;s=10637" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<h4 data-tool="mdnice编辑器" style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 18px;"><span class="prefix" style="display: none;"></span><span class="content" style="height: 16px; line-height: 16px; font-size: 16px;"><span style="background-image: url(https://imgkr.cn-bj.ufileos.com/899e43b7-5a08-4ac6-aa00-1c45f169a65b.png); display: inline-block; width: 16px; height: 16px; background-size: 100%; background-position: left bottom; background-repeat: no-repeat; width: 16px; height: 15px; line-height: 15px; margin-right: 6px; margin-bottom: -2px;"></span>客户端</span><span class="suffix" style="display: none;"></span></h4>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Config Client 访问：http://localhost:9091/password 结果如下：</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bf9c25306d71?w=337&amp;h=98&amp;f=png&amp;s=5194" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">至此 Config 配置中心所有的知识点就讲解结束了。</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/12/172065f7c6d9e044?w=433&amp;h=133&amp;f=gif&amp;s=333013" alt="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">本文采用 <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;"><code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">知识共享「署名-非商业性使用-禁止演绎 4.0 国际」许可协议</code></a>。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">大家可以通过 <a href="https://mrhelloworld.com/categories" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;"><code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">分类</code></a> 查看更多关于 <a href="https://mrhelloworld.com/categories/spring-cloud" target="_blank" style="text-decoration: none; word-wrap: break-word; color: #40B8FA; font-weight: normal; border-bottom: 1px solid #3BAAFA;"><code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">Spring Cloud</code></a> 的文章。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"></p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">🤗 您的<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">点赞</code>和<code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">转发</code>是对我最大的支持。</p>
+<p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: #2b2b2b; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">📢 扫码关注 <code style="font-size: 14px; word-wrap: break-word; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #3594F7; background: RGBA(59, 170, 250, .1); display: inline-block; padding: 0 2px; border-radius: 2px; height: 21px; line-height: 22px;">哈喽沃德先生</code>「文档 + 视频」每篇文章都配有专门视频讲解，学习更轻松噢 ~</p>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/4/27/171b91f4ae03d737?w=500&amp;h=500&amp;f=gif&amp;s=126591" alt="" title="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+<figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px;"><img src="https://user-gold-cdn.xitu.io/2020/5/13/1720bfa2e80f83f4?w=900&amp;h=383&amp;f=png&amp;s=32004" alt="" title="" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto"></figure>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-13 11:08</span>&nbsp;
+<a href="https://www.cnblogs.com/mrhelloworld/">哈喽沃德先生</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12881143" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12881143);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 452948, cb_blogApp = 'mrhelloworld', cb_blogUserGuid = '7a76a6c1-955c-4b39-f7ea-08d604c59f99';
+    var cb_entryId = 12881143, cb_entryCreatedDate = '2020-05-13 11:08', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 哈喽沃德先生
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>

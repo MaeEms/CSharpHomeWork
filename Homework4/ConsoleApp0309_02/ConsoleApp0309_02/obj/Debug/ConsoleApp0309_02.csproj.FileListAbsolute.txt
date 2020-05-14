@@ -1,0 +1,7 @@
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\bin\Debug\ConsoleApp0309_02.exe.config
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\bin\Debug\ConsoleApp0309_02.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\bin\Debug\ConsoleApp0309_02.pdb
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\obj\Debug\ConsoleApp0309_02.csprojAssemblyReference.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\obj\Debug\ConsoleApp0309_02.csproj.CoreCompileInputs.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\obj\Debug\ConsoleApp0309_02.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework4\ConsoleApp0309_02\ConsoleApp0309_02\obj\Debug\ConsoleApp0309_02.pdb

@@ -5,3 +5,10 @@ C:\Users\75186\source\repos\Order-management System\Order-management System\obj\
 C:\Users\75186\source\repos\Order-management System\Order-management System\obj\Debug\Order-management System.csproj.CoreCompileInputs.cache
 C:\Users\75186\source\repos\Order-management System\Order-management System\obj\Debug\Order-management System.exe
 C:\Users\75186\source\repos\Order-management System\Order-management System\obj\Debug\Order-management System.pdb
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\bin\Debug\Order-management System.exe.config
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\bin\Debug\Order-management System.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\bin\Debug\Order-management System.pdb
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\obj\Debug\Order-management System.csprojAssemblyReference.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\obj\Debug\Order-management System.csproj.CoreCompileInputs.cache
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\obj\Debug\Order-management System.exe
+D:\CSharpHomeWork代码仓库\CSharpHomeWork\Homework6\Order-management System\Order-management System\obj\Debug\Order-management System.pdb

@@ -1,0 +1,456 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="2020/05/13 14:50更新 在评论的驱使下我仔细去看了下，有几处确实用到了后端接口 这三个接口是走的php后端的api，理由是能自洽的，因为涉及到不同子域了，存在跨站请求，所以需要第三方后端" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>博客园某开源主题暗藏私货？ - Akkuman - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=KCO3_f2W_TC__-jZ7phSnmoFkQuWMJH2yAgA16eE3eY" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/Akkuman/custom.css?v=Zf80M9MEeQy&#x2B;lBg6M5Pdmvqo31A=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Akkuman/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Akkuman/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Akkuman/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=SxXBSOObkBuTv6MBUEVQDUvmusUuaISLM3XNTZGbANk"></script>
+    <script>
+        var currentBlogId = 359968;
+        var currentBlogApp = 'Akkuman';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/Akkuman/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/Akkuman/">Akkuman</a>
+</h1>
+<h2>
+Had I not seen the sun, I could have borne the shade.
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/Akkuman/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Akkuman">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/Akkuman/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+120&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+31</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/Akkuman/p/12879187.html">博客园某开源主题暗藏私货？</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>2020/05/13 14:50更新</p>
+<p>在评论的驱使下我仔细去看了下，有几处确实用到了后端接口</p>
+<pre><code class="language-js">  loadBlogTalk: (page) =&gt; {
+    return forwardXmlJsonp(&quot;https://ing.cnblogs.com/u/&quot; + blogConst.blogAcc + &quot;/&quot; + page, parseTalkList);
+  },
+</code></pre>
+<pre><code class="language-js">  loadBlogSearch: (keyword) =&gt; {
+    return forwardXmlJsonp(&quot;https://zzk.cnblogs.com/s/blogpost?w=&quot; + encodeURI(&quot;blog:&quot; + blogConst.blogAcc + &quot; &quot; + keyword), parseSearchKeyWord);
+  },
+</code></pre>
+<pre><code class="language-js">  loadFollowers: (page) =&gt; {
+    let url = &quot;https://home.cnblogs.com/u/&quot; + blogConst.blogAcc + &quot;/relation/followers/&quot;;
+    if (page &amp;&amp; page &gt; 1) {
+      url += &quot;?page=&quot; + page;
+    }
+    return forwardXmlJsonp(url, parseFollowers);
+  },
+</code></pre>
+<p>这三个接口是走的php后端的api，理由是能自洽的，因为涉及到不同子域了，存在跨站请求，所以需要第三方后端来进行处理</p>
+<p>不过百度统计我还是不太能理解</p>
+<hr>
+<p>2020/05/12 22:14</p>
+<p><strong>首先说好本文只是我个人的猜测，如果有不对的地方请及时指正</strong></p>
+<h2 id="背景">背景</h2>
+<p>前些天朋友介绍，看到一个博客园主题，主题的思路很棒，具体怎么棒不表，只是后来看了看源码，发现了一些秘密的东西。</p>
+<p>源码地址<a href="https://github.com/cjunn/cnblog_theme_atum">https://github.com/cjunn/cnblog_theme_atum</a></p>
+<h2 id="发现">发现</h2>
+<h3 id="神秘的后端请求">神秘的后端请求</h3>
+<p>首先是这个主题会向主题作者的php服务器发送请求</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512214224727-858006428.png" alt=""></p>
+<p>这里我们可以看到是返回一个callback，这一般是解决跨域所采用的jsonp技术</p>
+<p>那么jsonp的具体原理是啥？</p>
+<h4 id="jsonp原理">jsonp原理</h4>
+<p>因为浏览器跨域机制的存在，如果在对方接口服务器上面并没有做cors相关的操作，那么是请求不到ajax接口数据的，jsonp技术应运而生</p>
+<p>浏览器是可以引入外域的js的，并且外域上不需要做任何跨域相关的设置，引入外域js后就可以调用该js里面的函数，所以在接口上传递一个callback，比如</p>
+<pre><code>&lt;script src=&quot;http://a.com/a.php?callback=ttt&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>然后那边返回一个js，js的内容为</p>
+<pre><code>ttt({'a': 1, 'b': 2})
+</code></pre>
+<p>那么调用ttt函数即可获得这个json数据</p>
+<h3 id="后端请求问题点">后端请求问题点</h3>
+<p>是不是到现在为止你还是觉得，好像没什么问题啊，他返回一下好像也没问题啊？</p>
+<p>但是试想一个，这个callback他是可以在后端任意替换的，比如给你加个js获取你的一些信息，甚至还可以控制你的浏览器一些行为，比如帮他点击一个啥啥啥，可以了解一下Beef</p>
+<h3 id="神秘的加密字符串">神秘的加密字符串</h3>
+<p>我看了这个主题占用cpu和内存比较低，所以花了几分钟时间翻了下源码，发现了一些奇怪的东西</p>
+<p>我在找上面所说的php请求的时候发现了这个</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512215402976-706497609.png" alt=""></p>
+<p>然后跟进去</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512215450406-1709128082.png" alt=""></p>
+<p>继续跟</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512215514784-2059829836.png" alt=""></p>
+<p>有一串加密的东西</p>
+<p>看名称像是百度统计，但是你为什么加个密，跟进这个加密函数看看</p>
+<pre><code>/**
+ *
+ *  Base64 encode / decode
+ *  http://www.webtoolkit.info
+ *
+ **/
+
+
+  // private property
+let _keyStr = &quot;&quot;
+_keyStr += &quot;AByz0r4wxs&quot;;
+
+// public method for encoding
+let encode = function (input) {
+  var output = &quot;&quot;;
+  var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+  var i = 0;
+
+  input = _utf8_encode(input);
+
+  while (i &lt; input.length) {
+    chr1 = input.charCodeAt(i++);
+    chr2 = input.charCodeAt(i++);
+    chr3 = input.charCodeAt(i++);
+
+    enc1 = chr1 &gt;&gt; 2;
+    enc2 = ((chr1 &amp; 3) &lt;&lt; 4) | (chr2 &gt;&gt; 4);
+    enc3 = ((chr2 &amp; 15) &lt;&lt; 2) | (chr3 &gt;&gt; 6);
+    enc4 = chr3 &amp; 63;
+
+    if (isNaN(chr2)) {
+      enc3 = enc4 = 64;
+    } else if (isNaN(chr3)) {
+      enc4 = 64;
+    }
+
+    output = output +
+      _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+      _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+  } // Whend
+
+  return output;
+} // End Function encode
+_keyStr += &quot;KLMCDEtuTUVWX12NOPQk&quot;;
+
+
+// public method for decoding
+let decode = function (input) {
+  var output = &quot;&quot;;
+  var chr1, chr2, chr3;
+  var enc1, enc2, enc3, enc4;
+  var i = 0;
+
+  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, &quot;&quot;);
+  while (i &lt; input.length) {
+    enc1 = _keyStr.indexOf(input.charAt(i++));
+    enc2 = _keyStr.indexOf(input.charAt(i++));
+    enc3 = _keyStr.indexOf(input.charAt(i++));
+    enc4 = _keyStr.indexOf(input.charAt(i++));
+
+    chr1 = (enc1 &lt;&lt; 2) | (enc2 &gt;&gt; 4);
+    chr2 = ((enc2 &amp; 15) &lt;&lt; 4) | (enc3 &gt;&gt; 2);
+    chr3 = ((enc3 &amp; 3) &lt;&lt; 6) | enc4;
+
+    output = output + String.fromCharCode(chr1);
+
+    if (enc3 != 64) {
+      output = output + String.fromCharCode(chr2);
+    }
+
+    if (enc4 != 64) {
+      output = output + String.fromCharCode(chr3);
+    }
+
+  } // Whend
+
+  output = _utf8_decode(output);
+
+  return output;
+} // End Function decode
+_keyStr += &quot;lmnopqYZabcdef&quot;;
+
+
+// private method for UTF-8 encoding
+let _utf8_encode = function (string) {
+  var utftext = &quot;&quot;;
+  string = string.replace(/\r\n/g, &quot;\n&quot;);
+
+  for (var n = 0; n &lt; string.length; n++) {
+    var c = string.charCodeAt(n);
+
+    if (c &lt; 128) {
+      utftext += String.fromCharCode(c);
+    } else if ((c &gt; 127) &amp;&amp; (c &lt; 2048)) {
+      utftext += String.fromCharCode((c &gt;&gt; 6) | 192);
+      utftext += String.fromCharCode((c &amp; 63) | 128);
+    } else {
+      utftext += String.fromCharCode((c &gt;&gt; 12) | 224);
+      utftext += String.fromCharCode(((c &gt;&gt; 6) &amp; 63) | 128);
+      utftext += String.fromCharCode((c &amp; 63) | 128);
+    }
+
+  } // Next n
+
+  return utftext;
+} // End Function _utf8_encode
+_keyStr += &quot;35RSJFGHIvgh&quot;;
+// private method for UTF-8 decoding
+let _utf8_decode = function (utftext) {
+  var string = &quot;&quot;;
+  var i = 0;
+  var c, c1, c2, c3;
+  c = c1 = c2 = 0;
+
+  while (i &lt; utftext.length) {
+    c = utftext.charCodeAt(i);
+
+    if (c &lt; 128) {
+      string += String.fromCharCode(c);
+      i++;
+    } else if ((c &gt; 191) &amp;&amp; (c &lt; 224)) {
+      c2 = utftext.charCodeAt(i + 1);
+      string += String.fromCharCode(((c &amp; 31) &lt;&lt; 6) | (c2 &amp; 63));
+      i += 2;
+    } else {
+      c2 = utftext.charCodeAt(i + 1);
+      c3 = utftext.charCodeAt(i + 2);
+      string += String.fromCharCode(((c &amp; 15) &lt;&lt; 12) | ((c2 &amp; 63) &lt;&lt; 6) | (c3 &amp; 63));
+      i += 3;
+    }
+
+  } // Whend
+
+  return string;
+} // End Function _utf8_decode
+_keyStr += &quot;ij6789+/=&quot;;
+
+export default {
+  i: (message) =&gt; {
+    return encode(message);
+  },
+  o: (ciphertext) =&gt; {
+    return decode(ciphertext);
+  },
+}
+</code></pre>
+<p>这个函数自己跑一下，跑出来是 <code>https://hm.baidu.com/hm.js?ae80cc662109a34c868ba6cbe3431c8d</code> 这个百度统计地址</p>
+<p>然后在初始化的时候，也就是你每次进网站的时候</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512215758604-1821583544.png" alt=""></p>
+<p>每次进网站调用这个函数 initBaiduCount()</p>
+<p>并且加了个路由守卫调用 pushBaiduCount()</p>
+<p>可能有的人不理解路由守卫是什么，路由守卫就是一个hook钩子，在你每次进入或离开路由，或者说该网站的页面时调用，比如这里是进入一个新路由的时候就调用一下，跟进去看看</p>
+<p><img src="https://img2020.cnblogs.com/blog/1106918/202005/1106918-20200512220222611-2123609203.png" alt=""></p>
+<p>这里是插入了百度统计代码</p>
+<h3 id="我的疑惑点">我的疑惑点</h3>
+<p>我不太懂百度统计是什么东西，一直认为就是一个管站点流量和访问量的，也不知道有啥其他东西</p>
+<p>我说下我觉得可疑的点</p>
+<p>我姑且认为是为了给自己的博客进行统计，但是这其中为什么大费周章去加密解密，这个我不太理解</p>
+<p>还有的是这个加密的js去掉了后缀js，这样github就没法检索分析代码了，不把代码down下来应该是只能硬找</p>
+<p>我看了下，其实并没有用到自建php服务器上的东西，最开始以为是反代博客园转化为接口，但是我看了下请求，全都是只有callback，返回的一个字符串，我实在想不到是有什么必要进行这个操作，目前看起来是没有价值的</p>
+<p>所以问题来了：</p>
+<ol>
+<li>添加了百度统计，但是大费周章加解密，看起来并不是让用户可自定义的项或者不是大大方方给人看的东西？</li>
+<li>这个php服务器主要用处是什么？目前的callback看起来是毫无意义的，还是真像我所想的，方便以后做一些事情？</li>
+</ol>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-05-12 22:14</span>&nbsp;
+<a href="https://www.cnblogs.com/Akkuman/">Akkuman</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12879187" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12879187);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 359968, cb_blogApp = 'Akkuman', cb_blogUserGuid = '3dc5feef-5df3-e611-845c-ac853d9f53ac';
+    var cb_entryId = 12879187, cb_entryCreatedDate = '2020-05-12 22:14', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Akkuman
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+</body>
+</html>
